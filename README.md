@@ -9,23 +9,25 @@ This is a workflow for analyzing Ion Mobility Mass-Spectrometry data. It compris
 Each mode has separate needs for input files, but runs a combination of the modules depicted below.
 
 ## To run ion-mob-ms
+Installation:
+1. [Download and install docker](https://docs.docker.com/get-docker/) on your operating system.
+2. For running the workflows developed in [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html).
 
-TODO: how do we install? Need to write script that installs Docker, Nextflow and any Python needed for UI front end.
+TODO: any Python needed for UI front end.
 
-## Workflow components
-The archiecture of this toolbox is shown above, with each of the scripts to run each model here.
+## Workflows component
+The architecture of this toolbox is shown above, below are it's components:           
 
-### PNNL PreProcessor Tool
-Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor).
+- [pnnl_preprocessor](docker/pnnl_preprocessor) dockerfile for [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor)
+- [proteowizard ](docker/proteowizard) dockerfile for [ProteoWizard tool](https://proteowizard.sourceforge.io/)
+- [mzmine](docker/mzmine) dockerfile for [MZMine Java Program](http://mzmine.github.io/)
+- [autoccs](docker/autoccs) dockerfile for  [AutoCCS Python script](https://github.com/PNNL-Comp-Mass-Spec/AutoCCS)
+- [ccs_comparison](docker/ccs_comparison) dockerfile for  CCS calculation.
 
-### ProteoWizard Tool
-Docker image and script to run [ProteoWizard tool](https://proteowizard.sourceforge.io/)
-
-### MZMine Tool
-Docker image and script to run [MZMine Java Program](http://mzmine.github.io/).
-
-### AutoCCS Tool
-Docker image and script to run [AutoCCS Python script](https://github.com/PNNL-Comp-Mass-Spec/AutoCCS).
+The workflows are:
+[single_field.nf](./single_field.nf)
+[slim.nf](./slim.nf)         
+[stepped_field.nf](./stepped_field.nf)
 
 ### ion-mob-UI
 This is the front-end for the entire workflow.  TODO: determine implementation and design.
