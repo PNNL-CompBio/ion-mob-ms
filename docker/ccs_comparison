@@ -1,0 +1,12 @@
+FROM python:3.8-buster
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install --upgrade pip
+RUN export LDFLAGS="-L/usr/local/opt/openssl/lib"
+
+# install dependencies and clone the repo
+
+ENTRYPOINT ["python", "-u", "SearchTargetsInCalibratedFeatures.py"]

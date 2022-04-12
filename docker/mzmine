@@ -1,0 +1,29 @@
+FROM openjdk:18-jdk-buster
+
+RUN apt-get update \
+    && apt-get install \
+    --no-install-recommends \
+    --yes  \
+    wget \
+    xdg-utils \
+    apt-utils \
+    && apt-get clean
+
+
+#RUN wget https://github.com/mzmine/mzmine3/releases/download/Development-release/mzmine-linux-installer_3.0.26-1_amd64.deb
+#RUN apt install -f /mzmine-linux-installer_3.0.26-1_amd64.deb
+
+#sudo dpkg -i /absolute/path/to/deb/file
+#sudo apt-get install -f
+# https://github.com/mzmine/mzmine3
+# docs: https://docs.google.com/document/d/1JtdNwp1y6wz_Boz8qVGESH
+
+#RUN wget https://github.com/mzmine/mzmine3/releases/download/Development-release/MZmine_Linux_portable.zip
+#
+#RUN unzip MZmine_Linux_portable.zip -d /MZmine
+
+RUN wget https://github.com/mzmine/mzmine3/archive/refs/tags/Development-release.zip
+RUN unzip Development-release.zip -d Development-release
+RUN cd /Development-release/mzmine3-Development-release/gradlew
+
+#ENTRYPOINT ["/MZmine/bin/MZmine"]
