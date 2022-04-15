@@ -5,6 +5,7 @@ ENV WINEDEBUG -all
 ENV WINEPATH "C:\pwiz"
 # sudo needed to run wine when container is run as a non-default user (e.g. -u 1234)
 # wine*_anyuser scripts are convenience scripts that work like wine/wine64 no matter what user calls them
+# apt-get -y install sudo && \wine-gecko
 RUN apt-get update && \
     apt-get -y install sudo && \
     apt-get -y clean && \
@@ -57,9 +58,10 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E03280
 RUN apt-get install -y mono-devel=5.16.0.220-0xamarin4+ubuntu1604b1 msbuild=1:16.0+xamarinxplat.2018.09.26.17.53-0xamarin3+ubuntu1604b1 dotnet-sdk-2.1
 
 # install PNNL-Preprocessor
-WORKDIR /pnnl_preprocessor
-RUN wget https://panomics.pnnl.gov/downloads/installers/PNNL-Preprocessor_4.0_2022.02.17_INSTALLER.zip
-RUN unzip PNNL-Preprocessor_4.0_2022.02.17_INSTALLER.zip
+WORKDIR /
+COPY PNNL-Preprocessor_4.0_2022.02.17.zip /
+RUN unzip PNNL-Preprocessor_4.0_2022.02.17.zip
+RUN rm PNNL-Preprocessor_4.0_2022.02.17.zip
 
 #clean unnecessary packages
 RUN  apt-get -y remove  curl \
@@ -68,4 +70,4 @@ RUN  apt-get -y remove  curl \
                         libcurl3 \
      &&  apt-get -y autoremove && apt-get clean
 # Run
-#ENTRYPOINT ["wine", "/pnnl_preprocessor/PNNL-Preprocessor_PNNL_4.0.6_02_17_2022.exe"]
+ENTRYPOINT ["wine", "/PNNL-Preprocessor_4.0_2022.02.17/PNNL-PreProcessor.exe"]
