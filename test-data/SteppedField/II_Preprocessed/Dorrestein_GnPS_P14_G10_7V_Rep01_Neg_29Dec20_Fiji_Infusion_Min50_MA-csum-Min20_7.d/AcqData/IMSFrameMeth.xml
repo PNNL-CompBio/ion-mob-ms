@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FrameMethods>
+  <FileVersion>1.1</FileVersion>
+  <FrameMethod FrameMethId="7">
+    <DefMassCalId>2</DefMassCalId>
+    <DetectorGainDeltaTo>-0.0879999995231628</DetectorGainDeltaTo>
+    <DetectorGainMode>4</DetectorGainMode>
+    <DetectorGainRatio>12</DetectorGainRatio>
+    <FragEnergy>0</FragEnergy>
+    <FragEnergyMode>1</FragEnergyMode>
+    <FragOpMode>1</FragOpMode>
+    <FrameDtPeriod>0.119768</FrameDtPeriod>
+    <FrameMsXPeriod>0.5</FrameMsXPeriod>
+    <FrameSpecAbundLimit>1161216</FrameSpecAbundLimit>
+    <FrameSpecFmtId>1</FrameSpecFmtId>
+    <FrameType>1</FrameType>
+    <ImsField>18.560290983623</ImsField>
+    <ImsGas>N2</ImsGas>
+    <ImsGateMode>1</ImsGateMode>
+    <ImsGateOpenTime>300</ImsGateOpenTime>
+    <ImsMuxProcessing>1</ImsMuxProcessing>
+    <ImsTrapMode>1</ImsTrapMode>
+    <ImsTrapTime>30000</ImsTrapTime>
+    <IonizationMode>64</IonizationMode>
+    <IonPolarity>1</IonPolarity>
+    <MaxMsBin>239504</MaxMsBin>
+    <MaxMsPerFrame>586</MaxMsPerFrame>
+    <MinMsBin>42736</MinMsBin>
+    <NumTransients>378</NumTransients>
+    <Threshold>0</Threshold>
+    <TfsPeakSpecFormatId>3</TfsPeakSpecFormatId>
+    <TfsProfileSpecFormatId>2</TfsProfileSpecFormatId>
+    <TfsStorageMode>1</TfsStorageMode>
+  </FrameMethod>
+</FrameMethods>

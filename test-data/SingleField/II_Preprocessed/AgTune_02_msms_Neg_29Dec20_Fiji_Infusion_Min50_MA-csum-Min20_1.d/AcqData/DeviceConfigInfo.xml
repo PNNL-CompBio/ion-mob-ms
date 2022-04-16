@@ -1,0 +1,94 @@
+<DeviceConfigInformation>
+  <Device>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <DisplayName>Q-TOF</DisplayName>
+  </Device>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[BASEADCINTERVAL]</ResourceID>
+    <Value>2</Value>
+    <Units />
+    <DisplayName>Base ADC Interval</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[DDEMODE]</ResourceID>
+    <Value>0</Value>
+    <Units />
+    <DisplayName>DDE Mode</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[DDEVERSION]</ResourceID>
+    <Value>0.00</Value>
+    <Units />
+    <DisplayName>DDE Version</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[DUALGAINRATIO]</ResourceID>
+    <Value>12</Value>
+    <Units />
+    <DisplayName>Dual Gain Ratio</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[MSPROCESSINGMODE]</ResourceID>
+    <Value>4</Value>
+    <Units />
+    <DisplayName>MS Processing Mode</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[NOMINALMASSRESOLUTION]</ResourceID>
+    <Value>30000</Value>
+    <Units />
+    <DisplayName>Nominal Mass Resolution</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[PREAMPOFFSETHIGAIN]</ResourceID>
+    <Value>-0.0879999995231628</Value>
+    <Units />
+    <DisplayName>Preamp Offset High Gain</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[PREAMPOFFSETLOWGAIN]</ResourceID>
+    <Value>32908</Value>
+    <Units />
+    <DisplayName>Preamp Offset Low Gain</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[TUNEFILE]</ResourceID>
+    <Value>TOFMassCalibration-250mzRange-FragileIons.tun</Value>
+    <Units />
+    <DisplayName>Tune File Name</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[TUNEMASSRANGEMAX]</ResourceID>
+    <Value>1700</Value>
+    <Units>m/z</Units>
+    <DisplayName>Tune Mass Range Max.</DisplayName>
+  </Parameter>
+  <Parameter>
+    <DeviceID>MSQTOF_1</DeviceID>
+    <ResourceName>config</ResourceName>
+    <ResourceID>REG[ACTUAL].OBJ[1].NDR[TUNEMASSRANGEMIN]</ResourceID>
+    <Value>50</Value>
+    <Units>m/z</Units>
+    <DisplayName>Tune Mass Range Min.</DisplayName>
+  </Parameter>
+</DeviceConfigInformation>

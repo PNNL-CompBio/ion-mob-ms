@@ -1,0 +1,5 @@
+RawFileName,AcquiredTime,InstrumentName,IonPolarity,Well,Cartridge,SampleType
+AgTune_01_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1,20201202T044922,IMS 11,POS,,,AgTune
+AgTune_02_msms_Neg_29Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1,20201230T071921,IMS 11,NEG,,,AgTune
+Dorrestein_GnPS_P14_G10_msms_Neg_29Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1,20201230T084948,IMS 11,NEG,,,
+Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1,20201202T045906,IMS 11,POS,,,

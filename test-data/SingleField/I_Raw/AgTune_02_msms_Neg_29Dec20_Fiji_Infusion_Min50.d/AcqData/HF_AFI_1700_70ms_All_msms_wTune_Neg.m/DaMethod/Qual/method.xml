@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MethodInfo>
+  <!--If this version is updated, ensure version number for m_AutomationMethodVersion in MethodDAQualRW -->
+  <Version>3.0</Version>
+  <!--Information for Data Analysis method information-->
+  <AutomationOption>Qual</AutomationOption>
+  <MethodOption>Copy</MethodOption>
+  <ChangeToMethod>
+  </ChangeToMethod>
+  <MethodMessage>Method was copied from D:\MassHunter\Methods\6550_Sensitivity_msms.m at </MethodMessage>
+  <MethodCopiedAt>7/27/2011 11:44:02 PM</MethodCopiedAt>
+</MethodInfo>

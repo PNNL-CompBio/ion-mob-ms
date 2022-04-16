@@ -1,0 +1,11 @@
+-------------------------- 4/15/2022 2:38:39 PM
+PNNL PreProcessor 4.0 (2021.10.27)
+Signal intensity lower threshold (counts): 50
+4/15/2022 2:43:27 PM
+Total time 287.7349927 seconds
+-------------------------- 4/15/2022 5:44:01 PM
+PNNL PreProcessor 4.0 (2022.02.18)
+Summing frames and splitting data file
+Signal intensity lower threshold (counts): 20
+4/15/2022 5:44:56 PM
+Total time 54.9574092 seconds
