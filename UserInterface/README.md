@@ -7,3 +7,6 @@ In progress: simplify and make code more scalable / easy to modify. Still a coup
 
 Current roadblocks - need list of static parameters, dynamic parameters, and required file uploads for each experiment type.
                    - need format of "nexflow run" command. I'll use string substitution to call arguments in a order specifed on back-end.
+
+
+Work for later: Work on install script for users that includes everything needed for mac and windows.
