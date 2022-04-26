@@ -2,7 +2,6 @@ User Interface
 
 This is being built in Python3.9 with the Ktinker front-end library.
 
-In progress: simplfy and compress code. Reduce lengthy hard-coded sections. Then re-design stepped field and SLIM sections.
+In progress: simplify make code more scalable / easy to modify.
 
 Current roadblock - need list of static parameters, dynamic parameters, and required file uploads for each experiment type.
-
