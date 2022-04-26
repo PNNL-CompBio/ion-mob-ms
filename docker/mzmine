@@ -4,9 +4,14 @@ RUN yum -y update
 RUN yum -y install wget unzip
 
 WORKDIR /
+
 # install mzmine
 RUN wget https://github.com/mzmine/mzmine3/releases/download/v3.0.21-beta/mzmine_linux_installer_3.0.21-beta.rpm
 RUN yum -y install mzmine_linux_installer_3.0.21-beta.rpm
+
+# install R and it's dependencies
+RUN yum install -y --skip-broken texinfo-tex pcre2-devel R
+
 #clean unnecessary packages
 RUN yum -y remove wget unzip
 

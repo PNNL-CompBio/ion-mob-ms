@@ -1,10 +1,10 @@
 push-all-images:
-	@docker push ion-mob-ms/pnnl_preprocessor:latest
+	@docker push anubhav0fnu/proteowizard:latest
 
-	@docker push ion-mob-ms/proteowizard:latest
+	@docker push anubhav0fnu/mzmine:latest
 
-	@docker push ion-mob-ms/mzmine:latest
+	@docker push anubhav0fnu/autoccs:latest
 
-	@docker push ion-mob-ms/autoccs:latest
+	@docker push anubhav0fnu/ccs_comparison:latest
 
-	@docker push ion-mob-ms/ccs_comparison:latest
+	@docker push anubhav0fnu/pnnl_preprocessor:latest

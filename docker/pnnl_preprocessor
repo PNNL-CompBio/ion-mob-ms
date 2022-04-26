@@ -3,6 +3,7 @@ FROM chambm/wine-dotnet:4.7-x64
 # .NET 4+ on Wine 64-bit with base image Ubuntu-16.04
 ENV WINEDEBUG -all
 ENV WINEPATH "C:\pwiz"
+
 # sudo needed to run wine when container is run as a non-default user (e.g. -u 1234)
 # wine*_anyuser scripts are convenience scripts that work like wine/wine64 no matter what user calls them
 # apt-get -y install sudo && \wine-gecko

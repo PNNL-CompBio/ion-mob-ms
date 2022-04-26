@@ -1,12 +1,12 @@
-FROM python:3.8-buster
+FROM continuumio/miniconda3
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+COPY environment.yml .
+RUN conda env create -f environment.yml
+RUN echo "conda activate deimos" >> ~/.bashrc
+SHELL ["/bin/bash", "--login", "-c"]
+SHELL ["conda", "run", "-n", "deimos", "/bin/bash", "-c"]
 
-RUN pip install --upgrade pip
-RUN export LDFLAGS="-L/usr/local/opt/openssl/lib"
+RUN echo "Make sure deimos is installed:"
+RUN python -c "import deimos"
 
-# install dependencies and clone the repo
-
-ENTRYPOINT ["python", "-u", "SearchTargetsInCalibratedFeatures.py"]
+# ENTRYPOINT ["python", "-u", "ccs_comparison.py"]
