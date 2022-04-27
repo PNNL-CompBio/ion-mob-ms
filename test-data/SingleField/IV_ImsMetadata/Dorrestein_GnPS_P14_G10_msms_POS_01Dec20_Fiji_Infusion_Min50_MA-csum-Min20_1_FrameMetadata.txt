@@ -1,0 +1,2 @@
+FrameId	FrameMethodId	TimeSegmentId	ActualsOffset	CycleNumber	FirstNonzeroDriftBin	FragClass	FragEnergy	FrameBaseAbund	FrameBaseDriftBin	FrameBaseMsBin	FrameScanTime	FrameSpecAbundLimit	FrameTic	ImsField	ImsPressure	ImsTemperature	ImsTrapTime	IsolationStartMz	IsolationMz	IsolationEndMz	LastNonzeroDriftBin	MassCalOffset	NumTransients
+1	1	1	0	1	1	1	NaN	17451	132	77768	1.04353333333333	2623488	8804771	18.536609780526	3.94968748092651	27.25	30000	NaN	NaN	NaN	585	0	854
