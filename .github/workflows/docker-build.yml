@@ -1,0 +1,62 @@
+name: Docker-build
+defaults:
+  run:
+    working-directory: ./
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push bmd
+        uses: docker/build-push-action@v2
+        with:
+          context: docker
+          file: docker/mzmine
+          push: true
+          tags: anubhav0fnu/mzmine:latest
+      - name: Build and push autoccs
+        uses: docker/build-push-action@v2
+        with:
+          context: docker
+          file: docker/aucoccs
+          push: true
+          tags: aunbhav0fnu/autoccs:latest
+      - name: Build and push ccs-comparison
+        uses: docker/build-push-action@v2
+        with:
+          context: docker/ccs_comparison
+          push: true
+          file: docker/ccs_comparison
+          tags: anubhav0fnu/ccs_comparison:latest
+      - name: Build and push pnnl_preprocessor
+        uses: docker/build-push-action@v2
+        with:
+          context: docker
+          file: docker/pnnl_preprocessor
+          push: true
+          tags: anubhav0fnu/pnnl_preprocessor:latest
+      #- name: docker pull
+      #  run: "docker pull sgosline/srp-analytics"
+      #- name: test LPR
+      #  run: "docker run -v $PWD:/tmp sgosline/srp-analytics --test-lpr"
+      #- name: test morpho
+      #  run: "docker run -v $PWD:/tmp sgosline/srp-analytics --test-morpho"
+      #- name: build db
+      #  run: "docker run -v $PWD:/tmp sgosline/srp-analytics"
+      #- name: validate schemas
+      #  run: "docker run -v $PWD:/tmp sgosline/srp-analytics --validate"
