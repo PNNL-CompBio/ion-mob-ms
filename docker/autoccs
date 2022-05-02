@@ -1,0 +1,17 @@
+FROM python:3.8-buster
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install --upgrade pip
+RUN export LDFLAGS="-L/usr/local/opt/openssl/lib"
+
+# install autoccs
+RUN git clone https://github.com/PNNL-Comp-Mass-Spec/AutoCCS.git
+RUN pip install -r /AutoCCS/requirements.txt
+
+# set work directory
+WORKDIR /AutoCCS
+
+# ENTRYPOINT ["python", "-u", "autoCCS.py"]
