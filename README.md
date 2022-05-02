@@ -35,6 +35,10 @@ The workflows are:
 [slim.nf](./slim.nf)         
 [stepped_field.nf](./stepped_field.nf)
 
+```
+./nextflow run single_field.nf \
+-profile docker
+```
 ### ion-mob-UI
 This is the front-end for the entire workflow.  TODO: determine implementation and design.
 
