@@ -15,4 +15,4 @@ RUN yum install -y --skip-broken texinfo-tex pcre2-devel R
 #clean unnecessary packages
 RUN yum -y remove wget unzip
 
-ENTRYPOINT ["/opt/mzmine_linux_installer/bin/MZmine"]
+# ENTRYPOINT ["/opt/mzmine_linux_installer/bin/MZmine"]

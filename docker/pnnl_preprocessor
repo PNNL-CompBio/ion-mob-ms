@@ -60,7 +60,7 @@ RUN apt-get install -y mono-devel=5.16.0.220-0xamarin4+ubuntu1604b1 msbuild=1:16
 
 # install PNNL-Preprocessor
 WORKDIR /
-COPY PNNL-Preprocessor_4.0_2022.02.17.zip /
+COPY ./PNNL-Preprocessor_4.0_2022.02.17.zip /
 RUN unzip PNNL-Preprocessor_4.0_2022.02.17.zip
 RUN rm PNNL-Preprocessor_4.0_2022.02.17.zip
 
@@ -71,4 +71,4 @@ RUN  apt-get -y remove  curl \
                         libcurl3 \
      &&  apt-get -y autoremove && apt-get clean
 # Run
-ENTRYPOINT ["wine", "/PNNL-Preprocessor_4.0_2022.02.17/PNNL-PreProcessor.exe"]
+# ENTRYPOINT ["wine", "/PNNL-Preprocessor_4.0_2022.02.17/PNNL-PreProcessor.exe"]

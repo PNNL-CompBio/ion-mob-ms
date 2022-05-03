@@ -14,4 +14,4 @@ RUN pip install -r /AutoCCS/requirements.txt
 # set work directory
 WORKDIR /AutoCCS
 
-ENTRYPOINT ["python", "-u", "autoCCS.py"]
+# ENTRYPOINT ["python", "-u", "autoCCS.py"]
