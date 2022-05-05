@@ -59,7 +59,7 @@ Download/View Results
 #SV Black = #1c1c1c
 #Standard Background = #E5E4E2
 
-# Button class
+# Button class - This is required for generating buttions in a 'for loop'.
 class My_Button(tk.Button):
     def __init__(self, master, txt, r, c, value, col):
         self.a_button = tk.Button(master, text = txt, width=5, height = 2, command = lambda: open_file(value,self.a_button), fg=col)
@@ -69,16 +69,16 @@ class My_Button(tk.Button):
         self.a_button.destroy()
 
 
+
+#Initialize All Variables
+
+# These variables are used across all three experiments and are overwritten with each pipeline generation.
 necessary_arguments = []
 necessary_arguments_colors = []
 necessary_files = set()
 global_file_dictionary = {"Raw Data": "", "mzML Data": "","Metadata": "", "Feature Data": "","config_data (Hidden)": "", "calibrant_curves": "","calibrant_data": "", "Target List": ""}
 
-#Todo - Compartmentalize the above arguments for each experiment
-
-
 #Single Field - Initalize Variables
-
 single_input_list = []
 single_entry_list = []
 single_label_list = []
@@ -88,21 +88,34 @@ selected_boxes_single = {}
 t1_l8 = ""
 t1_l10 = ""
 
-tab1_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],                              #pp_1_args
-[["PP_2_arg_1","PP_2_arg_2","PP_2_arg_3"],"#FEA95E"],                                                     #pp_2_args
-[["pw_arg_1","pw_arg_2"],"#f11b23"],                                                                      #pw_args
-[["ds_1_arg_1","ds_1_arg_2","ds_1_arg_3"],"#FFE54C"],                                                      #ds_1_args
-[["ds_2_arg_1","ds_2_arg_2","ds_2_arg_3"],"#FFE54C"],                                                     #ds_2_args
-[["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                                       #ac_1_args
-[["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                                     #ac_2_args
+#Here we can modify the arguments required for each tool. The color hex code corresponds to the tool color.
+#To modify: each checkbox requires arguments and a color. If no required aruments, nest an empty list, color within a list.
+#example with placeholders.
 
+# tab1_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],                                  #pp_1_args
+# [["PP_2_arg_1","PP_2_arg_2","PP_2_arg_3"],"#FEA95E"],                                                     #pp_2_args
+# [["pw_arg_1","pw_arg_2"],"#f11b23"],                                                                      #pw_args
+# [["ds_1_arg_1","ds_1_arg_2","ds_1_arg_3"],"#FFE54C"],                                                     #ds_1_args
+# [["ds_2_arg_1","ds_2_arg_2","ds_2_arg_3"],"#FFE54C"],                                                     #ds_2_args
+# [["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                                     #ac_1_args
+# [["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                                     #ac_2_args
+
+tab1_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],    #pp_1_args
+[[],"#FEA95E"],                                                             #pp_2_args
+[[],"#f11b23"],                                                             #pw_args
+[[],"#FFE54C"],                                                             #ds_1_args
+[[],"#FFE54C"],                                                             #ds_2_args
+[[],"#7EC4EF"],                                                             #ac_1_args
+[[],"#7EC4EF"]]                                                             #ac_2_args
+
+# Required files for each tool
 tab1_files_list = [["Raw Data"],                                                           #pp_1_args
 ["Raw Data"],                                                                              #pp_2_args
 ["Raw Data"],                                                                              #pw_args
-["mzML Data"],                                                                               #ds_1_args
-["Metadata","Feature Data", "Calibrant Data"],                                                  #ds_2_args
-["Feature Data", "config_data (Hidden)","Metadata","Target List", "Calibrant Data"],         #ac_1_args
-["Feature Data", "config_data (Hidden)","Metadata","Target List", "Calibrant Data"]]         #ac_2_args
+["mzML Data", "Metadata"],                                                                   #ds_1_args
+["Feature Data", "Calibrant Data"],                                                         #ds_2_args
+["Feature Data","Metadata","Target List", "Calibrant Data"],       #ac_1_args
+["Feature Data","Metadata","Target List", "Calibrant Data"]]       #ac_2_args
 
 #SLIM - Initalize Variables
 slim_input_list = []
@@ -114,21 +127,35 @@ selected_boxes_slim = {}
 t2_l8 = ""
 t2_l10 = ""
 
-tab2_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],                              #pp_1_args
-[["PP_2_arg_1","PP_2_arg_2","PP_2_arg_3"],"#FEA95E"],                                                 #pp_2_args
-[["pw_arg_1","pw_arg_2"],"#f11b23"],                                                                  #pw_args
-[["ds_1_arg_1","ds_1_arg_2","ds_1_arg_3"],"#FFE54C"],                                                 #ds_1_args
-[["ds_2_arg_1","ds_2_arg_2","ds_2_arg_3"],"#FFE54C"],                                                 #ds_2_args
-[["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                                 #ac_1_args
-[["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                                 #ac_2_args
 
+#Here we can modify the arguments required for each tool. The color hex code corresponds to the tool color.
+#To modify: each checkbox requires arguments and a color. If no required aruments, nest an empty list, color within a list.
+#example with placeholders.
+
+# tab2_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],                              #pp_1_args
+# [["PP_2_arg_1","PP_2_arg_2","PP_2_arg_3"],"#FEA95E"],                                                 #pp_2_args
+# [["pw_arg_1","pw_arg_2"],"#f11b23"],                                                                  #pw_args
+# [["ds_1_arg_1","ds_1_arg_2","ds_1_arg_3"],"#FFE54C"],                                                 #ds_1_args
+# [["ds_2_arg_1","ds_2_arg_2","ds_2_arg_3"],"#FFE54C"],                                                 #ds_2_args
+# [["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                                 #ac_1_args
+# [["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                                 #ac_2_args
+
+tab2_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],        #pp_1_args
+[[],"#FEA95E"],                                                                 #pp_2_args
+[[],"#f11b23"],                                                                 #pw_args
+[[],"#FFE54C"],                                                                 #ds_1_args
+[[],"#FFE54C"],                                                                 #ds_2_args
+[[],"#7EC4EF"],                                                                 #ac_1_args
+[[],"#7EC4EF"]]                                                                 #ac_2_args
+
+# Required files for each tool
 tab2_files_list = [["Raw Data"],                                                             #pp_1_args
 ["Raw Data"],                                                                                #pp_2_args
 ["Raw Data"],                                                                                #pw_args
-["mzML Data"],                                                                               #ds_1_args
-["Metadata","Feature Data", "Calibrant Data"],                                               #ds_2_args
-["Feature Data", "config_data (Hidden)","Metadata","Target List", "Calibrant Data"],         #ac_1_args
-["Feature Data", "config_data (Hidden)","Metadata","Target List", "Calibrant Data"]]         #ac_2_args
+["mzML Data", "Metadata"],                                                                    #ds_1_args
+["Feature Data", "Calibrant Data"],                                                           #ds_2_args
+["Feature Data","Metadata","Target List", "Calibrant Data"],         #ac_1_args
+["Feature Data","Metadata","Target List", "Calibrant Data"]]         #ac_2_args
 
 #Stepped Field - Initalize Variables
 step_input_list = []
@@ -140,35 +167,48 @@ selected_boxes_step = {}
 t3_l8 = ""
 t3_l10 = ""
 
-tab3_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],               #pp_1_args
-[["PP_2_arg_1","PP_2_arg_2","PP_2_arg_3"],"#FEA95E"],                                  #pp_2_args
-[["pw_arg_1","pw_arg_2"],"#f11b23"],                                                   #pw_args
-[["mm_arg_1","mm_arg_2","mm_arg_3"],"#A44CD3"],                                        #mm_1_args
-[["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                  #ac_1_args
-[["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                  #ac_2_args
+#Here we can modify the arguments required for each tool. The color hex code corresponds to the tool color.
+#To modify: each checkbox requires arguments and a color. If no required aruments, nest an empty list, color within a list.
+#example with placeholders.
 
+# tab3_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],               #pp_1_args
+# [["PP_2_arg_1","PP_2_arg_2","PP_2_arg_3"],"#FEA95E"],                                  #pp_2_args
+# [["pw_arg_1","pw_arg_2"],"#f11b23"],                                                   #pw_args
+# [["mm_arg_1","mm_arg_2","mm_arg_3"],"#A44CD3"],                                        #mm_1_args
+# [["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                  #ac_1_args
+# [["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                  #ac_2_args
+
+tab3_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],        #pp_1_args
+[[],"#FEA95E"],                                                                 #pp_2_args
+[[],"#f11b23"],                                                                 #pw_args
+[[],"#FFE54C"],                                                                 #ds_1_args
+[[],"#FFE54C"],                                                                 #ds_2_args
+[[],"#7EC4EF"],                                                                 #ac_1_args
+[[],"#7EC4EF"]]                                                                 #ac_2_args
+
+# Required files for each tool
 tab3_files_list = [["Raw Data"],                                                #pp_1_args
 ["Raw Data"],                                                                   #pp_2_args
 ["Raw Data"],                                                                   #pw_args
-["mzML Data"],                                                                  #mm_1_args
-["Feature Data", "config_data (Hidden)","Metadata","Target List"],              #ac_1_args
-["Feature Data", "config_data (Hidden)","Metadata","Target List"]]              #ac_2_args
-
-
-#Maybe Need an extract metadata button?
+["mzML Data", "Metadata"],                                                      #mm_1_args
+["Feature Data","Target List"],                         #ac_1_args
+["Feature Data","Target List"]]                         #ac_2_args
 
 
 
+#Reset All Pipelines
+#This clears all three pipelines everytime a pipeline is generated. This is implemented to allow for shared variables between pipelines. 
+#Only shared variables are currently global_file_dictionary and "necessary" variables, but this should be expanded to all.
 
-#SINGLE
-#This generates the pipeline (arguments, file uploads, labels, run button) for the single field experiment.
-def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
-    arguments = locals()
-    counter = 0
-    global single_label_list, single_input_list, single_entry_list, single_file_list, selected_boxes_single, \
-            single_file_label_list, t1_l8, t1_l10, Run_button_single, necessary_files, necessary_arguments, necessary_arguments_colors
+def reset_all_pipelines():
+    #Single Field Pipeline
 
-    #Reset Pipeline
+    global single_label_list, single_input_list, single_entry_list, single_file_list, selected_boxes_single, global_file_dictionary, \
+            single_file_label_list, t1_l8, t1_l10, Run_button_single, necessary_files, necessary_arguments, necessary_arguments_colors, \
+            slim_label_list, slim_input_list, slim_entry_list, slim_file_list, selected_boxes_slim, \
+            slim_file_label_list, t2_l8, t2_l10, Run_button_slim, step_label_list, step_input_list, \
+            step_entry_list, step_file_list, selected_boxes_step, step_file_label_list, t3_l8, t3_l10, Run_button_step
+
     for label in range(0,len(single_label_list)):
         single_label_list[label].destroy()
     for entry in range(0,len(single_entry_list)):
@@ -177,6 +217,7 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
         single_file_label_list[lab].destroy()
     for button in range(0,len(single_file_list)):
         single_file_list[button].doom()
+    global_file_dictionary = {"Raw Data": "", "mzML Data": "","Metadata": "", "Feature Data": "","config_data (Hidden)": "", "calibrant_curves": "","calibrant_data": "", "Target List": ""}
     single_input_list = []
     single_entry_list = []
     single_label_list = []
@@ -188,15 +229,72 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     necessary_files = set()
     try:
         Run_button_single.destroy()
-        t1_l8.destroy()
         t1_l10.destroy()
+        t1_l8.destroy()
     except:
         pass
-        #info for json file
+    # SLIM Pipeline
+    for label in range(0,len(slim_label_list)):
+        slim_label_list[label].destroy()
+    for entry in range(0,len(slim_entry_list)):
+        slim_entry_list[entry].destroy()
+    for lab in range(0,len(slim_file_label_list)):
+        slim_file_label_list[lab].destroy()
+    for button in range(0,len(slim_file_list)):
+        slim_file_list[button].doom()
+    slim_input_list = []
+    slim_entry_list = []
+    slim_label_list = []
+    slim_file_list = []
+    slim_file_label_list = []
+    selected_boxes_slim = {}
+    try:
+        Run_button_slim.destroy()
+        t2_l10.destroy()
+        t2_l8.destroy()
+    except:
+        pass
+    #Step field pipeline
+    for label in range(0,len(step_label_list)):
+        step_label_list[label].destroy()
+    for entry in range(0,len(step_entry_list)):
+        step_entry_list[entry].destroy()
+    for lab in range(0,len(step_file_label_list)):
+        step_file_label_list[lab].destroy()
+    for button in range(0,len(step_file_list)):
+        step_file_list[button].doom()
+    step_input_list = []
+    step_entry_list = []
+    step_label_list = []
+    step_file_list = []
+    step_file_label_list = []
+    selected_boxes_step = {}
+    try:
+        Run_button_step.destroy()
+        t3_l10.destroy()
+        t3_l8.destroy()
+    except:
+        pass
+
+
+
+#SINGLE Field Pipeline Generation
+#This generates the pipeline (arguments, file uploads, labels, run button) for the single field experiment.
+def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
+    arguments = locals()
+    counter = 0
+    global single_label_list, single_input_list, single_entry_list, single_file_list, selected_boxes_single, global_file_dictionary, \
+            single_file_label_list, t1_l8, t1_l10, Run_button_single, necessary_files, necessary_arguments, necessary_arguments_colors
+
+#Reset Pipeline Arguments and Lists
+    reset_all_pipelines()
+
+#Checkbox values for json file 
     for k,v in arguments.items():
         selected_boxes_single[k] = v
 
-    #Create Pipeline
+#Create Pipeline
+    #Generate required arugments and required files lists
     for item in arguments.values():
         if item ==True:
             necessary_arguments.extend(tab1_args_list[counter][0])
@@ -211,13 +309,16 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     if (arguments["ds_1"] == True) and "Feature Data" in necessary_files:
         necessary_files.remove("Feature Data")
 
+   #Create all Argument labels and Entry Boxes
     row_placer_t1 = 6
     column_placer_t1 = 1
     num_of_desired_rows = 5
+    args_exist = False
     if len(necessary_arguments) >= 1:
         t1_l8=Label(tab1,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
         t1_l8.grid(row=5, column=1, columnspan=5)
         counter = 0
+        args_exist = True
         for arg in necessary_arguments:
             single_label_list.append(tk.Label(tab1,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
             single_label_list[counter].grid(row=row_placer_t1, column = column_placer_t1,pady=(5,5))
@@ -233,11 +334,16 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
                 row_placer_t1 = 6
                 num_of_desired_rows -=1
 
-        t1_l10=Label(tab1,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        t1_l10.grid(row=11, column=1, columnspan=5)
+    #Create all File upload labels and file upload buttons
+    if len(necessary_files) >= 1:
+        if args_exist == False:
+            row_placer_t1 = 6
+        else:
+            row_placer_t1 = 12
         counter = 0
-        row_placer_t1 = 12
         column_placer_t1 = 1
+        t1_l10=Label(tab1,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
+        t1_l10.grid(row=(row_placer_t1-1), column=1, columnspan=5)
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
@@ -253,45 +359,23 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     return  
 
 
-#SLIM
+#SLIM Pipeline Generation
 #This generates the pipeline (arguments, file uploads, labels, run button) for the slim field experiment.
 def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     arguments = locals()
     counter = 0
-    global slim_label_list, slim_input_list, slim_entry_list, slim_file_list, selected_boxes_slim, \
+    global slim_label_list, slim_input_list, slim_entry_list, slim_file_list, selected_boxes_slim, global_file_dictionary, \
             slim_file_label_list, t2_l8, t2_l10, Run_button_slim, necessary_files, necessary_arguments, necessary_arguments_colors
 
-    #Reset Pipeline
-    for label in range(0,len(slim_label_list)):
-        slim_label_list[label].destroy()
-    for entry in range(0,len(slim_entry_list)):
-        slim_entry_list[entry].destroy()
-    for lab in range(0,len(slim_file_label_list)):
-        slim_file_label_list[lab].destroy()
-    for button in range(0,len(slim_file_list)):
-        slim_file_list[button].doom()
-    slim_input_list = []
-    slim_entry_list = []
-    slim_label_list = []
-    slim_file_list = []
-    slim_file_label_list = []
-    necessary_arguments = []
-    necessary_arguments_colors = []
-    selected_boxes_slim = {}
-    necessary_files = set()
-    try:
-        Run_button_slim.destroy()
-        t2_l8.destroy()
-        t2_l10.destroy()
-    except:
-        pass
+#Reset Pipeline Arguments and Lists
+    reset_all_pipelines()
 
-        #info for json file
+#Checkbox values for json file 
     for k,v in arguments.items():
         selected_boxes_slim[k] = v
-        #print(k, "=", v)
 
-        #Create Pipeline
+#Create Pipeline
+  #Generate required arugments and required files lists
     for item in arguments.values():
         if item ==True:
             necessary_arguments.extend(tab2_args_list[counter][0])
@@ -306,14 +390,16 @@ def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     if (arguments["ds_1"] == True) and "Feature Data" in necessary_files:
         necessary_files.remove("Feature Data")
         
-
+    #Create all Argument labels and Entry Boxes
     row_placer_t2 = 6
     column_placer_t2 = 1
     num_of_desired_rows = 5
+    args_exist = False
     if len(necessary_arguments) >= 1:
         t2_l8=Label(tab2,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
         t2_l8.grid(row=5, column=1, columnspan=5)
         counter = 0
+        args_exist = True
         for arg in necessary_arguments:
             slim_label_list.append(tk.Label(tab2,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
             slim_label_list[counter].grid(row=row_placer_t2, column = column_placer_t2)
@@ -329,11 +415,16 @@ def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
                 row_placer_t2 = 6
                 num_of_desired_rows -=1
 
-        t2_l10=Label(tab2,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        t2_l10.grid(row=11, column=1, columnspan=5)
+    #Create all File upload labels and file upload buttons
+    if len(necessary_files) >= 1:
+        if args_exist == False:
+            row_placer_t2 = 6
+        else:
+            row_placer_t2 = 12
         counter = 0
-        row_placer_t2 = 12
         column_placer_t2 = 1
+        t2_l10=Label(tab2,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
+        t2_l10.grid(row=(row_placer_t2-1), column=1, columnspan=5)
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
@@ -346,47 +437,26 @@ def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
             counter += 1
         Run_button_slim = tk.Button(tab2, text="Run", command=lambda:Run_Experiment(), height=5, width=12, fg= "green")
         Run_button_slim.grid(row=12, column=8, rowspan=3)
-
     return  
 
 
-#Stepped
+#Stepped Field Pipeline Generation
+#This generates the pipeline (arguments, file uploads, labels, run button) for the stepped field experiment.
 def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
     arguments = locals()
     counter = 0
-    global step_label_list, step_input_list, step_entry_list, step_file_list, selected_boxes_step, \
+    global step_label_list, step_input_list, step_entry_list, step_file_list, selected_boxes_step, global_file_dictionary, \
             step_file_label_list, t3_l8, t3_l10, Run_button_step, necessary_arguments, necessary_files, necessary_arguments_colors
 
-    #Reset Pipeline
-    for label in range(0,len(step_label_list)):
-        step_label_list[label].destroy()
-    for entry in range(0,len(step_entry_list)):
-        step_entry_list[entry].destroy()
-    for lab in range(0,len(step_file_label_list)):
-        step_file_label_list[lab].destroy()
-    for button in range(0,len(step_file_list)):
-        step_file_list[button].doom()
-    step_input_list = []
-    step_entry_list = []
-    step_label_list = []
-    step_file_list = []
-    step_file_label_list = []
-    necessary_arguments = []
-    necessary_arguments_colors = []
-    selected_boxes_step = {}
-    necessary_files = set() 
-    try:
-        Run_button_step.destroy()
-        t3_l8.destroy()
-        t3_l10.destroy()
-    except:
-        pass
+#Reset Pipeline Arguments and Lists
+    reset_all_pipelines()
 
-        #info for json file
+#Checkbox values for json file 
     for k,v in arguments.items():
         selected_boxes_step[k] = v
 
-    #Create Pipeline
+#Create Pipeline
+  #Generate required arugments and required files lists
     for item in arguments.values():
         if item ==True:
             necessary_arguments.extend(tab3_args_list[counter][0])
@@ -401,14 +471,16 @@ def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
     if (arguments["mm_1"] == True) and "Feature Data" in necessary_files:
         necessary_files.remove("Feature Data")
         
-
+    #Create all Argument labels and Entry Boxes
     row_placer_t3 = 6
     column_placer_t3 = 1
     num_of_desired_rows = 5
+    args_exist = False
     if len(necessary_arguments) >= 1:
         t3_l8=Label(tab3,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
         t3_l8.grid(row=5, column=1, columnspan=5)
         counter = 0
+        args_exist = True
         for arg in necessary_arguments:
             step_label_list.append(tk.Label(tab3,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
             step_label_list[counter].grid(row=row_placer_t3, column = column_placer_t3)
@@ -423,12 +495,17 @@ def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
                 column_placer_t3 +=2
                 row_placer_t3 = 6
                 num_of_desired_rows -=1
-
-        t3_l10=Label(tab3,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        t3_l10.grid(row=11, column=1, columnspan=5)
+        
+        #Create all File upload labels and file upload buttons
+    if len(necessary_files) >= 1:
+        if args_exist == False:
+            row_placer_t3 = 6
+        else:
+            row_placer_t3 = 12
         counter = 0
-        row_placer_t3 = 12
         column_placer_t3 = 1
+        t3_l10=Label(tab3,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
+        t3_l10.grid(row=(row_placer_t3-1), column=1, columnspan=5)
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
@@ -443,7 +520,13 @@ def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
         Run_button_step.grid(row=12, column=8, rowspan=3)
     return  
 
+
 # Open File function - linked to file upload buttons
+# Possible issue because the file variables are shared between tabs. 
+# Partial fix implemented: all are reset when a new pipeline is generated.
+# To do:
+# Easiest fix: create a clear pipeline function that clears all 3 pipelines. Run this each time the tab changed or pipeline generated.
+# Longer fix: create seperate file variables for all 3 pipelines.
 def open_file(file_variable,button):
     """ 
     Raw data - Choose a folder
@@ -451,67 +534,43 @@ def open_file(file_variable,button):
     """
     global global_file_dictionary
     if file_variable == "Raw Data":
-        #To do - fix green bug when not selecting directory.
         file = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
         if file != "":
-            global raw_data_file
-            raw_data_file = os.path.abspath(file)
-            global_file_dictionary["Raw Data"]=raw_data_file
+            global_file_dictionary["Raw Data"]=os.path.abspath(file)
             button.configure(background="green", fg = "green")
-            return raw_data_file
     else:
         file = askopenfile(parent=window, mode = 'rb',title = "Select a file")
         if file_variable == "mzML Data":
-            global mz_file
-            mz_data_file = os.path.abspath(file.name)
-            global_file_dictionary["mzML Data"] = mz_data_file
+            global_file_dictionary["mzML Data"] = os.path.abspath(file.name)
             button.configure(background="green", fg = "green")
-            return mz_data_file
 
         elif file_variable == "Metadata":
-            global meta_file
-            meta_data_file = os.path.abspath(file.name)
-            global_file_dictionary["Metadata"]=meta_data_file
+            global_file_dictionary["Metadata"]= os.path.abspath(file.name)
             button.configure(background="green", fg = "green")
-            return meta_data_file
 
         elif file_variable == "Feature Data":
-            global feature_file
-            feature_file = os.path.abspath(file.name)
-            global_file_dictionary["Feature Data"]= feature_file
+            global_file_dictionary["Feature Data"]= os.path.abspath(file.name)
             button.configure(background="green", fg = "green")
-            return feature_file
 
-        elif file_variable == "config_data (Hidden)":
-            global config_file
-            config_file = os.path.abspath(file.name)
-            global_file_dictionary["config_data (Hidden)"] = config_file
-            button.configure(background="green", fg = "green")
-            return config_file
+        # elif file_variable == "config_data (Hidden)":
+        #     global_file_dictionary["config_data (Hidden)"] = os.path.abspath(file.name)
+        #     button.configure(background="green", fg = "green")
 
         elif file_variable == "calibrant_curves":
-            global calibrant_curve_file
-            calibrant_curve_file = os.path.abspath(file.name)
-            global_file_dictionary["calibrant_curves"] = calibrant_curve_file
+            global_file_dictionary["calibrant_curves"] = os.path.abspath(file.name)
             button.configure(background="green", fg = "green")
-            return calibrant_curve_file
 
         elif file_variable == "Calibrant Data":
-            global calibrant_data_file
-            calibrant_data_file = os.path.abspath(file.name)
-            global_file_dictionary["Calibrant Data"] = calibrant_data_file
-            button.configure(background="green", fg = "green")
-            return calibrant_data_file
+            global_file_dictionary["Calibrant Data"] = os.path.abspath(file.name)
+            button.configure(background="green", fg = "green") 
 
         elif file_variable == "Target List":
-            global target_list_file
-            target_list_file = os.path.abspath(file.name)
-            global_file_dictionary["Target List"] = target_list_file
+            global_file_dictionary["Target List"] = os.path.abspath(file.name)
             button.configure(background="green", fg = "green")
-            return target_list_file
+    return 
 
 
-# Required for tkinter canvas rounded rectange shapes - UX
+# Required for tkinter canvas. Creates rounded rectangle shapes
 def round_rectangle(obj, x1, y1, x2, y2, r, **kwargs):    
     points = (x1+r, y1, x1+r, y1, x2-r, y1, x2-r, y1, x2, y1, x2, y1+r, x2, y1+r, x2, y2-r, x2, y2-r, x2, y2, x2-r, y2, x2-r, y2, x1+r, y2, x1+r, y2, x1, y2, x1, y2-r, x1, y2-r, x1, y1+r, x1, y1+r, x1, y1)
     return obj.create_polygon(points, **kwargs, smooth=True)
@@ -522,31 +581,26 @@ def gather_everything_together(*args):
     global necessary_arguments, necessary_files
     counter = -1
     json_args = {}
+    json_files = {}
     for arg in args:
         if counter == -1:
-            #print("experiment = :", arg)
             json_exp =  {"Experiment": arg}
         else: 
-            #print(necessary_arguments[counter], " = ", arg)
             json_args[necessary_arguments[counter]] = arg
         counter += 1
-        #single
-    json_files = {}
+    #single
     if tabControl.index(tabControl.select()) == 0:
         for file in single_file_list:
-            #print(file.val, " = ", global_file_dictionary[file.val])
             json_files[file.val] = global_file_dictionary[file.val]
             json_selected = selected_boxes_single
-        #slim
+    #slim
     if tabControl.index(tabControl.select()) == 1:
         for file in slim_file_list:
-            #print(file.val, " = ", global_file_dictionary[file.val])
             json_files[file.val] = global_file_dictionary[file.val]
             json_selected = selected_boxes_slim
-        #step
+    #step
     if tabControl.index(tabControl.select()) == 2:
         for file in step_file_list:
-           #print(file.val, " = ", global_file_dictionary[file.val])
             json_files[file.val] = global_file_dictionary[file.val]
             json_selected = selected_boxes_step
 
@@ -560,34 +614,39 @@ def gather_everything_together(*args):
 def run_nextflow():
     confirmation_step = msg.askquestion("Run Experiment", "Please confirm all arguments before running experiment. There will be no option to cancel run.")
     if confirmation_step == "yes":
-        Run_button_single = tk.Button(tab1, text="In progress", height=5, width=12, fg="green").grid(row=12, column=8, rowspan=3)
-        Run_button_step = tk.Button(tab1, text="In progress", height=5, width=12, fg="green").grid(row=12, column=8, rowspan=3)
-        Run_button_slim = tk.Button(tab1, text="In progress", height=5, width=12, fg="green").grid(row=12, column=8, rowspan=3)
-        #os.system("nextflow run hello")
-        pipeline = nextflow.Pipeline("main.nf")
-        execution = pipeline.run()  
-        print("Duration of Pipeline: ", execution.duration)
-        print("Standard Out: ", execution.stdout)
-        print("Status: ", execution.status)
-        Run_button_single = tk.Button(tab1, text="Run Complete. \nView Results.", command=lambda:open_popup(), height=5, width=12, fg="green").grid(row=12, column=8, rowspan=3)
-        Run_button_slim = tk.Button(tab1, text="Run Complete. \nView Results.", command=lambda:open_popup(), height=5, width=12, fg="green").grid(row=12, column=8, rowspan=3)
-        Run_button_step = tk.Button(tab1, text="Run Complete. \nView Results.", command=lambda:open_popup(), height=5, width=12, fg="green").grid(row=12, column=8, rowspan=3)
+        global Run_button_single, Run_button_slim, Run_button_step
+        if tabControl.index(tabControl.select()) == 0:
+            Run_button_single.config(text="In progress")
+            pipeline = nextflow.Pipeline("main.nf")
+            execution = pipeline.run()  
+            print("Duration of Pipeline: ", execution.duration)
+            print("Standard Out: ", execution.stdout)
+            print("Status: ", execution.status)
+            Run_button_single.config(text="Run Complete. \nView Results.", command=lambda:open_popup())
+        if tabControl.index(tabControl.select()) == 1:
+            Run_button_slim.config(text="In progress")
+            pipeline = nextflow.Pipeline("main.nf")
+            execution = pipeline.run()  
+            print("Duration of Pipeline: ", execution.duration)
+            print("Standard Out: ", execution.stdout)
+            print("Status: ", execution.status)
+            Run_button_slim.config(text="Run Complete. \nView Results.", command=lambda:open_popup())
+        if tabControl.index(tabControl.select()) == 2:
+            Run_button_step.config(text="In progress")
+            pipeline = nextflow.Pipeline("main.nf")
+            execution = pipeline.run()  
+            print("Duration of Pipeline: ", execution.duration)
+            print("Standard Out: ", execution.stdout)
+            print("Status: ", execution.status)
+            Run_button_step.config(text="Run Complete. \nView Results.", command=lambda:open_popup())
 
-
-
-
-#Run Experiment!
-#add in nextflow stuff
-#add in button changes when clicked.
 
 def Run_Experiment():
     #To do: 
     #Add correct parameters and files required for each
-    #Add check_all_values function here too
 
     #single Field
    if tabControl.index(tabControl.select()) == 0:
-            #check for files too
         try:
             error_catch_arguments_single = [var.get() for var in single_input_list if var.get() !='']
             if len(error_catch_arguments_single) != len(single_input_list):
@@ -603,7 +662,6 @@ def Run_Experiment():
             thread1.start()
     #slim
    elif tabControl.index(tabControl.select()) == 1:
-            #check for files too
         try:
             error_catch_arguments_slim = [var.get() for var in slim_input_list if var.get() !='']
             if len(error_catch_arguments_slim) != len(slim_input_list):
@@ -613,13 +671,11 @@ def Run_Experiment():
         else:
             L = [var.get() for var in slim_input_list]
             L = [tabControl.index(tabControl.select())] + L
-            #L.extend((raw_data_file,target_list_file))
             gather_everything_together(*L)
             thread1 = threading.Thread(target=run_nextflow)
             thread1.start()
 
    elif tabControl.index(tabControl.select()) == 2:
-            #check for files too
         try:
             error_catch_arguments_step = [var.get() for var in step_input_list if var.get() !='']
             if len(error_catch_arguments_step) != len(step_input_list):
@@ -629,7 +685,6 @@ def Run_Experiment():
         else:
             L = [var.get() for var in step_input_list]
             L = [tabControl.index(tabControl.select())] + L
-            #L.extend((raw_data_file,target_list_file))
             gather_everything_together(*L)
             thread1 = threading.Thread(target=run_nextflow)
             thread1.start()
@@ -838,6 +893,10 @@ t1_canvas5.tag_bind(t1_tag1, "<Leave>", lambda event: t1_canvas5.config(bg="grey
 t1_canvas5.tag_bind(t1_tag2, "<Leave>", lambda event: t1_canvas5.config(bg="grey"))
 
 
+t1_canvas5_help = Pmw.Balloon(window)
+t1_canvas5_help.bind(t1_canvas5, "Note: Generating new pipeline will\nclear all existing pipelines and results.")
+t1_canvas5_lbl = t1_canvas5_help.component("label")
+t1_canvas5_lbl.config(background="black", foreground="white")
 
 
 #### SLIM Tab ####
@@ -980,6 +1039,12 @@ t2_canvas5.tag_bind(t2_tag1, "<Leave>", lambda event: t2_canvas5.config(bg="grey
 t2_canvas5.tag_bind(t2_tag2, "<Leave>", lambda event: t2_canvas5.config(bg="grey"))
 
 
+t2_canvas5_help = Pmw.Balloon(window)
+t2_canvas5_help.bind(t2_canvas5, "Note: Generating new pipeline will\nclear all existing pipelines and results.")
+t2_canvas5_lbl = t2_canvas5_help.component("label")
+t2_canvas5_lbl.config(background="black", foreground="white")
+
+
 #### Stepped Field #### 
 t3_l3=Label(tab3,text="     Build Your Pipeline", font=("Helvetica Neue", 18, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "nw", justify = "left").grid(row=1, rowspan=4, column=0, columnspan=10, pady=(5,0), sticky="NEWS")
 t3_l11=Label(tab3,text="     Hover over the tools for a description of usage.   ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
@@ -1113,6 +1178,10 @@ t3_canvas5.tag_bind(t3_tag0, "<Leave>", lambda event: t3_canvas5.config(bg="grey
 t3_canvas5.tag_bind(t3_tag1, "<Leave>", lambda event: t3_canvas5.config(bg="grey"))
 t3_canvas5.tag_bind(t3_tag2, "<Leave>", lambda event: t3_canvas5.config(bg="grey"))
 
+t3_canvas5_help = Pmw.Balloon(window)
+t3_canvas5_help.bind(t3_canvas5, "Note: Generating new pipeline will\nclear all existing pipelines and results.")
+t3_canvas5_lbl = t3_canvas5_help.component("label")
+t3_canvas5_lbl.config(background="black", foreground="white")
 
 
 
