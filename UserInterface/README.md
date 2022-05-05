@@ -1,12 +1,10 @@
-User Interface - Functional.
+User Interface - Functional for MacOS. 
 
 This is being built in Python3.9 with the Ktinker front-end library.
 
-In progress: simplify and make code more scalable / easy to modify. Still a couple bugs that are being worked on.  If the user is not trying to break it, it works.
 
+Several changes needed for user accessibility.
 
-Current roadblocks - need list of static parameters, dynamic parameters, and required file uploads for each experiment type.
-                   - need format of "nexflow run" command. I'll use string substitution to call arguments in a order specifed on back-end.
-
-
-Work for later: Work on install script for users that includes everything needed for mac and windows.
+Then: 
+Create on install script/executable for mac.
+Then rebuild everything for Windows.
