@@ -8,6 +8,7 @@ from tkinter.ttk import *
 from tkinter import ttk
 from tkinter import *
 from tkinter.filedialog import askopenfile
+import tkinter.scrolledtext as scrolledtext
 from tkinter import messagebox as msg
 from tkinter import font
 import os
@@ -277,7 +278,6 @@ def reset_all_pipelines():
         pass
 
 
-
 #SINGLE Field Pipeline Generation
 #This generates the pipeline (arguments, file uploads, labels, run button) for the single field experiment.
 def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
@@ -316,7 +316,7 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     args_exist = False
     if len(necessary_arguments) >= 1:
         t1_l8=Label(tab1,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
-        t1_l8.grid(row=5, column=1, columnspan=5)
+        t1_l8.grid(row=5, column=1, columnspan=5, sticky = "W")
         counter = 0
         args_exist = True
         for arg in necessary_arguments:
@@ -343,7 +343,7 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
         counter = 0
         column_placer_t1 = 1
         t1_l10=Label(tab1,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        t1_l10.grid(row=(row_placer_t1-1), column=1, columnspan=5)
+        t1_l10.grid(row=(row_placer_t1-1), column=1, columnspan=3, sticky = "W")
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
@@ -354,8 +354,8 @@ def Generate_pipeline_single(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
             column_placer_t1 -= 1
             row_placer_t1 += 1
             counter += 1
-        Run_button_single = tk.Button(tab1, text="Run", command=lambda:Run_Experiment(), height=5, width=12, fg= "green")
-        Run_button_single.grid(row=12, column=8, rowspan=3)
+        Run_button_single = tk.Button(tab1, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(), height=6, width=14, fg= "green")
+        Run_button_single.grid(row=12, column=8, rowspan=4, columnspan=2)
     return  
 
 
@@ -397,7 +397,7 @@ def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
     args_exist = False
     if len(necessary_arguments) >= 1:
         t2_l8=Label(tab2,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
-        t2_l8.grid(row=5, column=1, columnspan=5)
+        t2_l8.grid(row=5, column=1, columnspan=5, sticky = "W")
         counter = 0
         args_exist = True
         for arg in necessary_arguments:
@@ -424,7 +424,7 @@ def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
         counter = 0
         column_placer_t2 = 1
         t2_l10=Label(tab2,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        t2_l10.grid(row=(row_placer_t2-1), column=1, columnspan=5)
+        t2_l10.grid(row=(row_placer_t2-1), column=1, columnspan=5, sticky = "W")
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
@@ -435,8 +435,8 @@ def Generate_pipeline_slim(pp_1,pp_2,pw_1,ds_1,ds_2,ac_1,ac_2):
             column_placer_t2 -= 1
             row_placer_t2 += 1
             counter += 1
-        Run_button_slim = tk.Button(tab2, text="Run", command=lambda:Run_Experiment(), height=5, width=12, fg= "green")
-        Run_button_slim.grid(row=12, column=8, rowspan=3)
+        Run_button_slim = tk.Button(tab2, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(), height=6, width=14, fg= "green")
+        Run_button_slim.grid(row=12, column=8, rowspan=4, columnspan=2)
     return  
 
 
@@ -478,7 +478,7 @@ def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
     args_exist = False
     if len(necessary_arguments) >= 1:
         t3_l8=Label(tab3,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
-        t3_l8.grid(row=5, column=1, columnspan=5)
+        t3_l8.grid(row=5, column=1, columnspan=5, sticky = "W")
         counter = 0
         args_exist = True
         for arg in necessary_arguments:
@@ -505,7 +505,7 @@ def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
         counter = 0
         column_placer_t3 = 1
         t3_l10=Label(tab3,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        t3_l10.grid(row=(row_placer_t3-1), column=1, columnspan=5)
+        t3_l10.grid(row=(row_placer_t3-1), column=1, columnspan=5, sticky = "W")
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
@@ -516,20 +516,16 @@ def Generate_pipeline_step(pp_1,pp_2,pw_1,mm_1,ac_1,ac_2):
             column_placer_t3 -= 1
             row_placer_t3 += 1
             counter += 1
-        Run_button_step = tk.Button(tab3, text="Run", command=lambda:Run_Experiment(), height=5, width=12, fg= "green")
-        Run_button_step.grid(row=12, column=8, rowspan=3)
+        Run_button_step = tk.Button(tab3, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(), height=6, width=14, fg= "green")
+        Run_button_step.grid(row=12, column=8, rowspan=4, columnspan=2)
     return  
 
 
 # Open File function - linked to file upload buttons
-# Possible issue because the file variables are shared between tabs. 
-# Partial fix implemented: all are reset when a new pipeline is generated.
-# To do:
-# Easiest fix: create a clear pipeline function that clears all 3 pipelines. Run this each time the tab changed or pipeline generated.
-# Longer fix: create seperate file variables for all 3 pipelines.
 def open_file(file_variable,button):
     """ 
     Raw data - Choose a folder
+
     All others - Choose a file
     """
     global global_file_dictionary
@@ -674,7 +670,6 @@ def Run_Experiment():
             gather_everything_together(*L)
             thread1 = threading.Thread(target=run_nextflow)
             thread1.start()
-
    elif tabControl.index(tabControl.select()) == 2:
         try:
             error_catch_arguments_step = [var.get() for var in step_input_list if var.get() !='']
@@ -694,13 +689,42 @@ def Run_Experiment():
 def open_popup():
     top= Toplevel(window)
     top.geometry("1000x500")
-    top.title("Child Window")
+    top.title("Tool Documentation")
     results = open("./sample.json", "r")
     text_box = tk.Text(top, height = 20, width = 60, padx=15, pady=15)
     for line in results:
         text_box.insert(tkinter.END, line)
     text_box.config(state=DISABLED)
     text_box.grid(row = 1, column = 1)
+
+#Documentation Single field / SLIM
+def show_help_single():
+    front= Toplevel(window)
+    front.geometry("900x500")
+    front.title("Tool Documentation Single Field / SLIM")
+    results = open("./documentation_single.txt", "r")
+    help_box_single = scrolledtext.ScrolledText(front, height = 30, width = 90, padx=15, pady=15, bg = "grey")
+    help_box_single.configure(font=("default", 14))
+    for line in results:
+        help_box_single.insert(tkinter.END, line)
+    help_box_single.config(state=DISABLED)
+    help_box_single.grid(row = 1, column = 1)
+
+#Documentation Stepped field
+def show_help_step():
+    front= Toplevel(window)
+    front.geometry("900x500")
+    front.title("Tool Documentation Stepped Field")
+    results = open("./documentation_step.txt", "r")
+    help_box_single = scrolledtext.ScrolledText(front, height = 30, width = 90, padx=15, pady=15, bg = "grey")
+    help_box_single.configure(font=("default", 14))
+    for line in results:
+        help_box_single.insert(tkinter.END, line)
+    help_box_single.config(state=DISABLED)
+    help_box_single.grid(row = 1, column = 1)
+
+
+
 
 
 #Layout
@@ -751,7 +775,7 @@ tab3.rowconfigure((1,2,3,4,5,6,7,8,9,10,11,12,13,14,15), minsize=40)
 
 ##### Single Field Tab  #####
 t1_l3=Label(tab1,text="     Build Your Pipeline   ", font=("Helvetica Neue", 18, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "nw", justify = "left").grid(row=1, rowspan=4, column=0, columnspan=10, pady=(5,0), sticky="NEWS")
-t1_l11=Label(tab1,text="     Hover over the tools for a description of usage.   ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
+t1_l11=Label(tab1,text="     Hover over the tools or click \"Show Documentation\" for a description of usage.  ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
 
 t1_tool_1 = tk.Frame(tab1)
 t1_tool_2 = tk.Frame(tab1)
@@ -786,7 +810,7 @@ round_rectangle(t1_canvas1, 20, 20, 180, 80, 25, fill="#FFCD91")
 t1_canvas1.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="PNNL PreProcessor")
 
 t1_canvas1_help = Pmw.Balloon(window)
-t1_canvas1_help.bind(t1_canvas1, "PNNL PreProcessor\nInput: Raw Data\tOutput: Processed data & metadata\nProcess raw data to reduce noise and highlight features.\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
+t1_canvas1_help.bind(t1_canvas1, "PNNL PreProcessor\nProcess raw data to reduce noise and highlight features.\n\nInput: Raw Data\nOutput: Processed data & metadata\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
 t1_canvas1_lbl = t1_canvas1_help.component("label")
 t1_canvas1_lbl.config(background="black", foreground="white")
 
@@ -795,11 +819,11 @@ t1_l4=Label(tab1,text="Smooth data", font=("default, 14"),borderwidth=0, relief=
 
 PP_check_1_single = BooleanVar(False)
 PP_button_1_single = Checkbutton(tab1, variable=PP_check_1_single, onvalue=True, offvalue=False, bg="grey")
-PP_button_1_single.grid(row=3, column=2, sticky = "EW")
+PP_button_1_single.grid(row=3, column=2, sticky = "W")
 
 PP_check_2_single = BooleanVar(False)
 PP_button_2_single = Checkbutton(tab1, variable=PP_check_2_single, onvalue=True, offvalue=False, bg="grey")
-PP_button_2_single.grid(row=4, column=2, sticky = "EW")
+PP_button_2_single.grid(row=4, column=2, sticky = "W")
 
 
 #ProteoWizard
@@ -810,7 +834,7 @@ t1_pw_tag2 = round_rectangle(t1_canvas2, 20, 20, 180, 80, 25, fill="#fd6861")
 t1_canvas2.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="ProteoWizard")
 
 t1_canvas2_help = Pmw.Balloon(window) 
-t1_canvas2_help.bind(t1_canvas2, "ProteoWizard\nInput: Raw or Preprocessed data\t Output: mzML Files \nThis tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.\nmzML format is universal file type that is required for many open source tools.")
+t1_canvas2_help.bind(t1_canvas2, "ProteoWizard\nThis tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.\nmzML format is universal file type that is required for many open source tools.\n\nInput: Raw or Preprocessed data\nOutput: mzML Files ")
 t1_canvas2_lbl = t1_canvas2_help.component("label")
 t1_canvas2_lbl.config(background="black", foreground="white")
 
@@ -820,7 +844,7 @@ t1_l5=Label(tab1,text= "  Convert to mzML", font=("default, 14"),borderwidth=0, 
 
 PW_check_1_single = BooleanVar(False)
 PW_button_1_single = Checkbutton(tab1, variable=PW_check_1_single, onvalue=True, offvalue=False, bg="grey")
-PW_button_1_single.grid(row=3, column=4, sticky = "EW")
+PW_button_1_single.grid(row=3, column=4, sticky = "W")
 
 
 
@@ -832,7 +856,7 @@ round_rectangle(t1_canvas3, 20, 20, 180, 80, 25, fill="#FFFFBF")
 t1_canvas3.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="DEIMoS")
 
 t1_canvas3_help = Pmw.Balloon(window)
-t1_canvas3_help.bind(t1_canvas3, "DEIMoS\nInput: mzML files & metadata\tOutput: Feature files and/or CCS results\nThis tool has many capabilities including feature detection and CCS calculation.")
+t1_canvas3_help.bind(t1_canvas3, "DEIMoS\nThis tool has many capabilities including feature detection and CCS calculation.\n\nInput: mzML files, metadata, target list, calibrant data, configuration file (hidden) \nOutput: Feature files and/or CCS results")
 t1_canvas3_lbl = t1_canvas3_help.component("label")
 t1_canvas3_lbl.config(background="black", foreground="white")
 
@@ -843,11 +867,11 @@ t1_l7=Label(tab1,text="Calculate CCS", font=("default, 14"),borderwidth=0, relie
 
 DS_check_1_single = BooleanVar(False)
 DS_button_1_single = Checkbutton(tab1, variable=DS_check_1_single, onvalue=True, offvalue=False, bg="grey")
-DS_button_1_single.grid(row=3, column=6, sticky = "EW")
+DS_button_1_single.grid(row=3, column=6, sticky = "W")
 
 DS_check_2_single = BooleanVar(False)
 DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey")
-DS_button_2_single.grid(row=4, column=6, sticky = "EW")
+DS_button_2_single.grid(row=4, column=6, sticky = "W")
 
 
 #AutoCCS
@@ -858,7 +882,7 @@ round_rectangle(t1_canvas4, 20, 20, 180, 80, 25, fill="#BEDFF1")
 t1_canvas4.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="AutoCCS")
 
 t1_canvas4_help = Pmw.Balloon(window)
-t1_canvas4_help.bind(t1_canvas4, "AutoCCS\nInput: Feature files \tOutput: CCS results\nThis tool offers two methods of CCS calculations.\nThe \"standard\" method is comparable to DEIMoS.\nThe \"enhanced\" method takes into account the temperature and pressure of the instrument across runs.")
+t1_canvas4_help.bind(t1_canvas4, "AutoCCS\nThis tool offers two methods of CCS calculations.\nThe \"standard\" method is comparable to DEIMoS.\nThe \"enhanced\" method takes into account the temperature and pressure of the instrument across runs.\n\nInput: Feature files, calibration data, target list, configuration file (hidden) \nOutput: CCS results\n")
 t1_canvas4_lbl = t1_canvas4_help.component("label")
 t1_canvas4_lbl.config(background="black", foreground="white")
 
@@ -868,11 +892,11 @@ t1_l9=Label(tab1,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwid
 
 AC_check_1_single = BooleanVar(False)
 AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey")
-AC_button_1_single.grid(row=3, column=8, sticky = "EW")
+AC_button_1_single.grid(row=3, column=8, sticky = "W")
 
 AC_check_2_single = BooleanVar(False)
 AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey")
-AC_button_2_single.grid(row=4, column=8, sticky = "EW")
+AC_button_2_single.grid(row=4, column=8, sticky = "W")
 
 
 #Generate Pipeline Button
@@ -892,16 +916,21 @@ t1_canvas5.tag_bind(t1_tag0, "<Leave>", lambda event: t1_canvas5.config(bg="grey
 t1_canvas5.tag_bind(t1_tag1, "<Leave>", lambda event: t1_canvas5.config(bg="grey"))
 t1_canvas5.tag_bind(t1_tag2, "<Leave>", lambda event: t1_canvas5.config(bg="grey"))
 
-
 t1_canvas5_help = Pmw.Balloon(window)
 t1_canvas5_help.bind(t1_canvas5, "Note: Generating new pipeline will\nclear all existing pipelines and results.")
 t1_canvas5_lbl = t1_canvas5_help.component("label")
 t1_canvas5_lbl.config(background="black", foreground="white")
 
+#Show Documentation Button
+Help_button_slim = tk.Button(tab1,text="Show Documentation", command=lambda:show_help_single(), height=3, width=12, fg= "green")
+Help_button_slim.grid(row=4, column=9, columnspan=2, sticky = "W")
+
+
+
 
 #### SLIM Tab ####
 t2_l3=Label(tab2,text="     Build Your Pipeline", font=("Helvetica Neue", 18, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "nw", justify = "left").grid(row=1, rowspan=4, column=0, columnspan=10, pady=(5,0), sticky="NEWS")
-t2_l11=Label(tab2,text="     Hover over the tools for a description of usage.   ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
+t2_l11=Label(tab2,text="     Hover over the tools or click \"Show Documentation\" for a description of usage.  ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
 
 t2_tool_1 = tk.Frame(tab2)
 t2_tool_2 = tk.Frame(tab2)
@@ -936,7 +965,7 @@ round_rectangle(t2_canvas1, 20, 20, 180, 80, 25, fill="#FFCD91")
 t2_canvas1.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="PNNL PreProcessor")
 
 t2_canvas1_help = Pmw.Balloon(window)
-t2_canvas1_help.bind(t2_canvas1, "PNNL PreProcessor\nInput: Raw Data\tOutput: Processed data & metadata\nProcess raw data to reduce noise and highlight features.\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
+t2_canvas1_help.bind(t2_canvas1, "PNNL PreProcessor\nProcess raw data to reduce noise and highlight features.\n\nInput: Raw Data\nOutput: Processed data & metadata\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
 t2_canvas1_lbl = t2_canvas1_help.component("label")
 t2_canvas1_lbl.config(background="black", foreground="white")
 
@@ -945,11 +974,11 @@ t2_l4=Label(tab2,text="Smooth data", font=("default, 14"),borderwidth=0, relief=
 
 PP_check_1_slim = BooleanVar(False)
 PP_button_1_slim = Checkbutton(tab2, variable=PP_check_1_slim, onvalue=True, offvalue=False, bg="grey")
-PP_button_1_slim.grid(row=3, column=2, sticky = "EW")
+PP_button_1_slim.grid(row=3, column=2, sticky = "W")
 
 PP_check_2_slim = BooleanVar(False)
 PP_button_2_slim = Checkbutton(tab2, variable=PP_check_2_slim, onvalue=True, offvalue=False, bg="grey")
-PP_button_2_slim.grid(row=4, column=2, sticky = "EW")
+PP_button_2_slim.grid(row=4, column=2, sticky = "W")
 
 
 #ProteoWizard
@@ -960,7 +989,7 @@ round_rectangle(t2_canvas2, 20, 20, 180, 80, 25, fill="#fd6861")
 t2_canvas2.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="ProteoWizard")
 
 t2_canvas2_help = Pmw.Balloon(window) 
-t2_canvas2_help.bind(t2_canvas2, "ProteoWizard\nInput: Raw or Preprocessed data\t Output: mzML Files \nThis tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.\nmzML format is universal file type that is required for many open source tools.")
+t2_canvas2_help.bind(t2_canvas2, "ProteoWizard\nThis tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.\nmzML format is universal file type that is required for many open source tools.\n\nInput: Raw or Preprocessed data\nOutput: mzML Files ")
 t2_canvas2_lbl = t2_canvas2_help.component("label")
 t2_canvas2_lbl.config(background="black", foreground="white")
 
@@ -969,7 +998,7 @@ t2_l5=Label(tab2,text= "  Convert to mzML", font=("default, 14"),borderwidth=0, 
 
 PW_check_1_slim = BooleanVar(False)
 PW_button_1_slim = Checkbutton(tab2, variable=PW_check_1_slim, onvalue=True, offvalue=False, bg="grey")
-PW_button_1_slim.grid(row=3, column=4, sticky = "EW")
+PW_button_1_slim.grid(row=3, column=4, sticky = "W")
 
 
 #DEIMoS
@@ -984,14 +1013,14 @@ t2_l7=Label(tab2,text="Calculate CCS", font=("default, 14"),borderwidth=0, relie
 
 DS_check_1_slim = BooleanVar(False)
 DS_button_1_slim = Checkbutton(tab2, variable=DS_check_1_slim, onvalue=True, offvalue=False, bg="grey")
-DS_button_1_slim.grid(row=3, column=6, sticky = "EW")
+DS_button_1_slim.grid(row=3, column=6, sticky = "W")
 
 DS_check_2_slim = BooleanVar(False)
 DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey")
-DS_button_2_slim.grid(row=4, column=6, sticky = "EW")
+DS_button_2_slim.grid(row=4, column=6, sticky = "W")
 
 t2_canvas3_help = Pmw.Balloon(window)
-t2_canvas3_help.bind(t2_canvas3, "DEIMoS\nInput: mzML files & metadata\tOutput: Feature files and/or CCS results\nThis tool has many capabilities including feature detection and CCS calculation.")
+t2_canvas3_help.bind(t2_canvas3, "DEIMoS\nThis tool has many capabilities including feature detection and CCS calculation.\n\nInput: mzML files, metadata, target list, calibrant data, configuration file (hidden) \nOutput: Feature files and/or CCS results")
 t2_canvas3_lbl = t2_canvas3_help.component("label")
 t2_canvas3_lbl.config(background="black", foreground="white")
 
@@ -1004,7 +1033,7 @@ round_rectangle(t2_canvas4, 20, 20, 180, 80, 25, fill="#BEDFF1")
 t2_canvas4.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="AutoCCS")
 
 t2_canvas4_help = Pmw.Balloon(window)
-t2_canvas4_help.bind(t2_canvas4, "AutoCCS\nInput: Feature files \tOutput: CCS results\nThis tool offers two methods of CCS calculations.\nThe \"standard\" method is comparable to DEIMoS.\nThe \"enhanced\" method takes into account the temperature and pressure of the instrument across runs.")
+t2_canvas4_help.bind(t2_canvas4, "AutoCCS\nThis tool offers two methods of CCS calculations.\nThe \"standard\" method is comparable to DEIMoS.\nThe \"enhanced\" method takes into account the temperature and pressure of the instrument across runs.\n\nInput: Feature files, calibration data, target list, configuration file (hidden) \nOutput: CCS results\n")
 t2_canvas4_lbl = t2_canvas4_help.component("label")
 t2_canvas4_lbl.config(background="black", foreground="white")
 
@@ -1013,11 +1042,11 @@ t2_l9=Label(tab2,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwid
 
 AC_check_1_slim = BooleanVar(False)
 AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey")
-AC_button_1_slim.grid(row=3, column=8, sticky = "EW")
+AC_button_1_slim.grid(row=3, column=8, sticky = "W")
 
 AC_check_2_slim = BooleanVar(False)
 AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey")
-AC_button_2_slim.grid(row=4, column=8, sticky = "EW")
+AC_button_2_slim.grid(row=4, column=8, sticky = "W")
 
 
 #Generate Pipeline Button
@@ -1044,10 +1073,15 @@ t2_canvas5_help.bind(t2_canvas5, "Note: Generating new pipeline will\nclear all 
 t2_canvas5_lbl = t2_canvas5_help.component("label")
 t2_canvas5_lbl.config(background="black", foreground="white")
 
+#Show Documentation Button
+Help_button_slim = tk.Button(tab2,text="Show Documentation", command=lambda:show_help_single(), height=3, width=12, fg= "green")
+Help_button_slim.grid(row=4, column=9, columnspan=2, sticky = "W")
+
+
 
 #### Stepped Field #### 
 t3_l3=Label(tab3,text="     Build Your Pipeline", font=("Helvetica Neue", 18, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "nw", justify = "left").grid(row=1, rowspan=4, column=0, columnspan=10, pady=(5,0), sticky="NEWS")
-t3_l11=Label(tab3,text="     Hover over the tools for a description of usage.   ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
+t3_l11=Label(tab3,text="     Hover over the tools or click \"Show Documentation\" for a description of usage.  ", font=("Helvetica Neue", 14, "bold"),borderwidth=0, relief="solid", height=2, bg="grey", anchor= "center", justify = "left").grid(row=1, rowspan=1, column=3, columnspan=4, pady=(5,0), sticky="NEWS")
 
 
 t3_tool_1 = tk.Frame(tab3)
@@ -1083,7 +1117,7 @@ round_rectangle(t3_canvas1, 20, 20, 180, 80, 25, fill="#FFCD91")
 t3_canvas1.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="PNNL PreProcessor")
 
 t3_canvas1_help = Pmw.Balloon(window)
-t3_canvas1_help.bind(t3_canvas1, "PNNL PreProcessor\nInput: Raw Data\tOutput: Processed data & metadata\nProcess raw data to reduce noise and highlight features.\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
+t3_canvas1_help.bind(t3_canvas1, "PNNL PreProcessor\nProcess raw data to reduce noise and highlight features.\n\nInput: Raw Data\nOutput: Processed data & metadata\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
 t3_canvas1_lbl = t3_canvas1_help.component("label")
 t3_canvas1_lbl.config(background="black", foreground="white")
 
@@ -1092,11 +1126,11 @@ t3_l4=Label(tab3,text="Smooth data", font=("default, 14"),borderwidth=0, relief=
 
 PP_check_1_step = BooleanVar(False)
 PP_button_1_step = Checkbutton(tab3, variable=PP_check_1_step, onvalue=True, offvalue=False, bg="grey")
-PP_button_1_step.grid(row=3, column=2, sticky = "EW")
+PP_button_1_step.grid(row=3, column=2, sticky = "W")
 
 PP_check_2_step = BooleanVar(False)
 PP_button_2_step = Checkbutton(tab3, variable=PP_check_2_step, onvalue=True, offvalue=False, bg="grey")
-PP_button_2_step.grid(row=4, column=2, sticky = "EW")
+PP_button_2_step.grid(row=4, column=2, sticky = "W")
 
 
 #ProteoWizard
@@ -1107,7 +1141,7 @@ round_rectangle(t3_canvas2, 20, 20, 180, 80, 25, fill="#fd6861")
 t3_canvas2.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="ProteoWizard")
 
 t3_canvas2_help = Pmw.Balloon(window) 
-t3_canvas2_help.bind(t3_canvas2, "ProteoWizard\nInput: Raw or Preprocessed data\t Output: mzML Files \nThis tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.\nmzML format is universal file type that is required for many open source tools.")
+t3_canvas2_help.bind(t3_canvas2, "ProteoWizard\nThis tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.\nmzML format is universal file type that is required for many open source tools.\n\nInput: Raw or Preprocessed data\nOutput: mzML Files ")
 t3_canvas2_lbl = t3_canvas2_help.component("label")
 t3_canvas2_lbl.config(background="black", foreground="white")
 
@@ -1116,7 +1150,7 @@ t3_l5=Label(tab3,text= "  Convert to mzML", font=("default, 14"),borderwidth=0, 
 
 PW_check_1_step = BooleanVar(False)
 PW_button_1_step = Checkbutton(tab3, variable=PW_check_1_step, onvalue=True, offvalue=False, bg="grey")
-PW_button_1_step.grid(row=3, column=4, sticky = "EW")
+PW_button_1_step.grid(row=3, column=4, sticky = "W")
 
 
 #MZMine
@@ -1127,14 +1161,14 @@ round_rectangle(t3_canvas3, 20, 20, 180, 80, 25, fill="#E090EF")
 t3_canvas3.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="Mzmine")
 
 t3_canvas3_help = Pmw.Balloon(window)
-t3_canvas3_help.bind(t3_canvas3, "MZmine\nInput: mzML files & metadata\tOutput: Feature files \nThis open source tool has feature detection capabilities.")
+t3_canvas3_help.bind(t3_canvas3, "MZmine\nThis open source tool has feature detection capabilities.\n\nInput: mzML files & metadata\nOutput: Feature files")
 t3_canvas3_lbl = t3_canvas3_help.component("label")
 t3_canvas3_lbl.config(background="black", foreground="white")
 
 t3_l6=Label(tab3,text="  Feature Detection", font=("default, 14"),borderwidth=0, relief="solid", height=1, bg="grey").grid(row=3, column=5, columnspan=1)
 MM_check_1_step = BooleanVar(False)
 MM_button_1_step = Checkbutton(tab3, variable=MM_check_1_step, onvalue=True, offvalue=False, bg="grey")
-MM_button_1_step.grid(row=3, column=6, sticky = "EW")
+MM_button_1_step.grid(row=3, column=6, sticky = "W")
 
 
 #AutoCCS
@@ -1145,7 +1179,7 @@ round_rectangle(t3_canvas4, 20, 20, 180, 80, 25, fill="#BEDFF1")
 t3_canvas4.create_text(100,50,fill="black",font=("Helvetica Neue", 15, "bold"), text="AutoCCS")
 
 t3_canvas4_help = Pmw.Balloon(window)
-t3_canvas4_help.bind(t3_canvas4, "AutoCCS\nInput: Feature files \tOutput: CCS results\nThis tool offers two methods of CCS calculations.\nThe \"standard\" method is comparable to DEIMoS.\nThe \"enhanced\" method takes into account the temperature and pressure of the instrument across runs.")
+t3_canvas4_help.bind(t3_canvas4, "AutoCCS\nThis tool offers two methods of CCS calculations.\nThe \"standard\" method is comparable to DEIMoS.\nThe \"enhanced\" method takes into account the temperature and pressure of the instrument across runs.\n\nInput: Feature files, target list, configuration file (hidden) \nOutput: CCS results\n")
 t3_canvas4_lbl = t3_canvas4_help.component("label")
 t3_canvas4_lbl.config(background="black", foreground="white")
 
@@ -1155,11 +1189,11 @@ t3_l9=Label(tab3,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwid
 
 AC_check_1_step = BooleanVar(False)
 AC_button_1_step = Checkbutton(tab3, variable=AC_check_1_step, onvalue=True, offvalue=False, bg="grey")
-AC_button_1_step.grid(row=3, column=8, sticky = "EW")
+AC_button_1_step.grid(row=3, column=8, sticky = "W")
 
 AC_check_2_step = BooleanVar(False)
 AC_button_2_step = Checkbutton(tab3, variable=AC_check_2_step, onvalue=True, offvalue=False, bg="grey")
-AC_button_2_step.grid(row=4, column=8, sticky = "EW")
+AC_button_2_step.grid(row=4, column=8, sticky = "W")
 
 #Generate Pipeline Button
 t3_tag0 = round_rectangle(t3_canvas5, 0, 0, 115, 100, 25, fill="black")
@@ -1182,6 +1216,11 @@ t3_canvas5_help = Pmw.Balloon(window)
 t3_canvas5_help.bind(t3_canvas5, "Note: Generating new pipeline will\nclear all existing pipelines and results.")
 t3_canvas5_lbl = t3_canvas5_help.component("label")
 t3_canvas5_lbl.config(background="black", foreground="white")
+
+
+#Show Documentation Button
+Help_button_step = tk.Button(tab3,text="Show Documentation", command=lambda:show_help_step(), height=3, width=12, fg= "green")
+Help_button_step.grid(row=4, column=9, columnspan=2, sticky = "W")
 
 
 
