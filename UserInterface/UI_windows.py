@@ -16,7 +16,7 @@ from turtle import bgcolor, st
 import threading
 import sv_ttk
 from ttkthemes import ThemedTk
-import nextflow
+#import nextflow
 import json
 import Pmw
 
@@ -613,27 +613,30 @@ def run_nextflow():
         global Run_button_single, Run_button_slim, Run_button_step
         if tabControl.index(tabControl.select()) == 0:
             Run_button_single.config(text="In progress")
-            pipeline = nextflow.Pipeline("main.nf")
-            execution = pipeline.run()  
-            print("Duration of Pipeline: ", execution.duration)
-            print("Standard Out: ", execution.stdout)
-            print("Status: ", execution.status)
+            # pipeline = nextflow.Pipeline("main.nf")
+            # execution = pipeline.run()  
+            # print("Duration of Pipeline: ", execution.duration)
+            # print("Standard Out: ", execution.stdout)
+            # print("Status: ", execution.status)
+            print("nextflow for single here")
             Run_button_single.config(text="Run Complete. \nView Results.", command=lambda:open_popup())
         if tabControl.index(tabControl.select()) == 1:
             Run_button_slim.config(text="In progress")
-            pipeline = nextflow.Pipeline("main.nf")
-            execution = pipeline.run()  
-            print("Duration of Pipeline: ", execution.duration)
-            print("Standard Out: ", execution.stdout)
-            print("Status: ", execution.status)
+            # pipeline = nextflow.Pipeline("main.nf")
+            # execution = pipeline.run()  
+            # print("Duration of Pipeline: ", execution.duration)
+            # print("Standard Out: ", execution.stdout)
+            # print("Status: ", execution.status)
+            print("nextflow for slim here")
             Run_button_slim.config(text="Run Complete. \nView Results.", command=lambda:open_popup())
         if tabControl.index(tabControl.select()) == 2:
             Run_button_step.config(text="In progress")
-            pipeline = nextflow.Pipeline("main.nf")
-            execution = pipeline.run()  
-            print("Duration of Pipeline: ", execution.duration)
-            print("Standard Out: ", execution.stdout)
-            print("Status: ", execution.status)
+            # pipeline = nextflow.Pipeline("main.nf")
+            # execution = pipeline.run()  
+            # print("Duration of Pipeline: ", execution.duration)
+            # print("Standard Out: ", execution.stdout)
+            # print("Status: ", execution.status)
+            print("nextflow for stepped here")
             Run_button_step.config(text="Run Complete. \nView Results.", command=lambda:open_popup())
 
 
