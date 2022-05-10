@@ -24,21 +24,8 @@ import Pmw
 #TO DO!
 #Edit the Nextflow stuff when I have more info .
 
-#To do - replace nessesary args set with dictionary 
-#This will preserve order of file uploads in UI
-
-
-#To Do:
-# Add pops up to all sections.
-# Add results to all sections.
-# Add colors to all sections.
-
-# !!!
-# Add results to all sections.
-
 # To DO:
-# Work on visualization for data!!!! 
-# be creativve
+# Work on visualization for data!
 
 
 """
@@ -130,7 +117,7 @@ t2_l10 = ""
 
 
 #Here we can modify the arguments required for each tool. The color hex code corresponds to the tool color.
-#To modify: each checkbox requires arguments and a color. If no required aruments, nest an empty list, color within a list.
+#To modify: each checkbox requires arguments and a color. If no required aruments: [ [], #color ].
 #example with placeholders.
 
 # tab2_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],                              #pp_1_args
@@ -670,6 +657,7 @@ def Run_Experiment():
             gather_everything_together(*L)
             thread1 = threading.Thread(target=run_nextflow)
             thread1.start()
+            
    elif tabControl.index(tabControl.select()) == 2:
         try:
             error_catch_arguments_step = [var.get() for var in step_input_list if var.get() !='']
@@ -1225,8 +1213,6 @@ Help_button_step.grid(row=4, column=9, columnspan=2, sticky = "W")
 
 
 window.mainloop()
-
-
 
 
 
