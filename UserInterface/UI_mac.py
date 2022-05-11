@@ -17,7 +17,7 @@ from ttkthemes import ThemedTk
 import nextflow
 import json
 import Pmw
-from utils import *
+from utils_mac import *
 
 
 

@@ -14,10 +14,9 @@ from turtle import bgcolor, st
 import threading
 import sv_ttk
 from ttkthemes import ThemedTk
-import nextflow
 import json
 import Pmw
-from utils import *
+from utils_PC import *
 
 
 
