@@ -109,21 +109,18 @@ window.columnconfigure(0,weight=1)
 window.columnconfigure(10,weight=1)
 sv_ttk.set_theme("dark")
 
-
-
 screen_width = window.winfo_screenwidth()
 screen_height = (window.winfo_screenheight()-50)
 window_height = 900
 window_width = 1500
-print("Screen height: ", screen_height)
-print("Screen width: ", screen_width)
 
+wf = 1
+hf = 1
+small_screen = False
 if screen_height < window_height or screen_width < window_width:
     wf = window_width/screen_width
     hf = window_height/screen_height
     small_screen = True
-
-
 
 
 #Global Labels

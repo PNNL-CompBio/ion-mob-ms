@@ -231,18 +231,17 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
         Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
         Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
     
-    #this gets screen size
-    screen_width = window.winfo_screenwidth()
-    screen_height = window.winfo_screenheight()
-    window_height = window.winfo_height()
-    window_width = window.winfo_width()
+    # #this gets screen size
+    # screen_width = window.winfo_screenwidth()
+    # screen_height = window.winfo_screenheight()
+    # window_height = window.winfo_height()
+    # window_width = window.winfo_width()
 
-    #Print the screen size
-   
-    print("Screen height: ", screen_height)
-    print("Screen width: ", screen_width)
-    print("\ntkinter height: ", window_height)
-    print("tkinter width: ", window_width)
+    # #Print the screen size
+    # print("Screen height: ", screen_height)
+    # print("Screen width: ", screen_width)
+    # print("\ntkinter height: ", window_height)
+    # print("tkinter width: ", window_width)
 
     return  
 
