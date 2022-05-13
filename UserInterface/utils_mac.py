@@ -107,12 +107,11 @@ tab3_files_list = [["Raw Data"],                                                
 
 
 
-
 #Button creation class - this is required to create buttons dynamically
 class My_Button(tk.Button):
-    def __init__(self, master, txt, r, c, value, col, window):
-        self.a_button = tk.Button(master, text = txt, width=5, height = 2, command = lambda: open_file(value,self.a_button,window), fg=col)
-        self.a_button.grid(row = r, column = c, columnspan = 2, sticky = "w")
+    def __init__(self, master, txt, r, c,colspan, value, col,col2, window):
+        self.a_button = tk.Button(master, text = txt, width=7, height = 2, command = lambda: open_file(value,self.a_button,window), fg=col,bg=col2)
+        self.a_button.grid(row = r, column = c, columnspan = colspan, sticky = "w")
         self.val = value
     def doom(self):
         self.a_button.destroy()
@@ -126,7 +125,7 @@ def round_rectangle(obj, x1, y1, x2, y2, r, **kwargs):
 
 #Pipeline Generation
 #This generates the pipeline (arguments, file uploads, labels, run button) for the single field experiment.
-def Generate_pipeline(t_num,tab,window,*args):
+def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
     global user_entry_list, user_input_list, user_entry_label_list, user_file_list, user_file_label_list, selected_boxes, \
         parameter_label, file_label, Run_button, necessary_files, necessary_arguments, necessary_arguments_colors
     if t_num == 0:
@@ -154,6 +153,7 @@ def Generate_pipeline(t_num,tab,window,*args):
     for k,v in arguments.items():
         selected_boxes[k] = v
 
+
 #Create Pipeline
     #Generate required arugments and required files lists
     for item in arguments.values():
@@ -180,47 +180,69 @@ def Generate_pipeline(t_num,tab,window,*args):
     num_of_desired_rows = 5
     args_exist = False
     if len(necessary_arguments) >= 1:
-        parameter_label=Label(the_tab,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
-        parameter_label.grid(row=5, column=1, columnspan=5, sticky = "W")
+        parameter_label=Label(tab,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
+        parameter_label.grid(row=5, column=1, columnspan=7, sticky = "W")
         counter = 0
         args_exist = True
         for arg in necessary_arguments:
-            user_entry_label_list.append(tk.Label(the_tab,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
-            user_entry_label_list[counter].grid(row=row_placer, column = column_placer,pady=(5,5))
+            user_entry_label_list.append(tk.Label(tab,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
+            user_entry_label_list[counter].grid(row=row_placer, column = column_placer,pady=(5,5),columnspan=2,sticky="w")
             column_placer += 1
             user_input_list.append(tk.StringVar())
-            user_entry_list.append(ttk.Entry(the_tab, width=10, justify = "left", textvariable=user_input_list[counter]))
-            user_entry_list[counter].grid(row=row_placer, column = column_placer)
+            user_entry_list.append(ttk.Entry(tab, width=10, justify = "left", textvariable=user_input_list[counter]))
+            user_entry_list[counter].grid(row=row_placer, column = column_placer, columnspan=2, sticky="W")
             column_placer -= 1
             row_placer += 1
             counter += 1
             if counter%6 == num_of_desired_rows:
-                column_placer +=2
+                column_placer +=3
                 row_placer = 6
                 num_of_desired_rows -=1
 
     #Create all File upload labels and file upload buttons
     if len(necessary_files) >= 1:
+        column_placer = 1
+        run_row_placer=12
+        run_col_placer=8
         if args_exist == False:
             row_placer = 6
         else:
             row_placer = 12
+        if args_exist == True and smol == True:
+            column_placer = 4
+            row_placer = 6
+        if smol == True:
+            run_row_placer=6
+            run_col_placer=8
+            
         counter = 0
-        column_placer = 1
-        file_label=Label(the_tab,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        file_label.grid(row=(row_placer-1), column=1, columnspan=3, sticky = "W")
+        file_label=Label(tab,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
+        file_label.grid(row=(row_placer-1), column=column_placer, columnspan=7, sticky = "W")
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
-            user_file_label_list.append(tk.Label(the_tab,text=file, anchor="w", font=("Helvetica Neue",12), width = 20, bg ="#1c1c1c"))
-            user_file_label_list[counter].grid(row=row_placer, column = column_placer, sticky = "w")
+            user_file_label_list.append(tk.Label(tab,text=file, anchor="w", font=("Helvetica Neue",12), width = 20, bg ="#1c1c1c"))
+            user_file_label_list[counter].grid(row=row_placer, column = column_placer,columnspan=2, sticky = "w")
             column_placer += 1
-            user_file_list.append(My_Button(the_tab, browse_text.get(), row_placer, column_placer, file,'red',window))
+            user_file_list.append(My_Button(tab, browse_text.get(), row_placer, column_placer, 3, file,'red', 'silver', window))
             column_placer -= 1
             row_placer += 1
             counter += 1
-        Run_button = tk.Button(the_tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=6, width=14, fg= "green")
-        Run_button.grid(row=12, column=8, rowspan=4, columnspan=2)
+        Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
+        Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
+    
+    # #this gets screen size
+    # screen_width = window.winfo_screenwidth()
+    # screen_height = window.winfo_screenheight()
+    # window_height = window.winfo_height()
+    # window_width = window.winfo_width()
+
+    # #Print the screen size
+    # print("Screen height: ", screen_height)
+    # print("Screen width: ", screen_width)
+    # print("\ntkinter height: ", window_height)
+    # print("tkinter width: ", window_width)
+
     return  
 
 
