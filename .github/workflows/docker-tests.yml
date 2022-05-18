@@ -1,0 +1,17 @@
+name: Docker-tests
+defaults:
+  run:
+    working-directory: ./
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  auto-ccs:
+    runs-on: ubuntu-latest
+    container: anubhav0fnu/autoccs
+    steps:
+      - name: Run help
+        run: |
+          python /autoCCS.py --h
