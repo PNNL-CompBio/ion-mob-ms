@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: Run help
         run: |
-          python autoCCS.py --h
+          docker run anubhav0fnu/autoccs python autoCCS.py --h
