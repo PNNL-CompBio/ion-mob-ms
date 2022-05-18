@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: Run help
         run: |
-          python /autoCCS.py --h
+          python autoCCS.py --h
