@@ -5,10 +5,12 @@ COPY ccs_comparison.py .
 
 RUN conda env create -f environment.yml
 RUN echo "conda activate deimos" >> ~/.bashrc
+#RUN conda activate deimos
 SHELL ["/bin/bash", "--login", "-c"]
 SHELL ["conda", "run", "-n", "deimos", "/bin/bash", "-c"]
 
-RUN echo "Make sure deimos is installed:"
+#RUN echo "Make sure deimos is installed:"
 RUN python -c "import deimos"
 
-# ENTRYPOINT ["python", "-u", "ccs_comparison.py"]
+
+#ENTRYPOINT ["python", "-u", "ccs_comparison.py"]
