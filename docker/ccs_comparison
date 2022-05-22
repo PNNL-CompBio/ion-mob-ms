@@ -1,7 +1,6 @@
 FROM continuumio/miniconda3
 
 COPY environment.yml .
-COPY ccs_comparison.py .
 
 RUN conda env create -f environment.yml
 RUN echo "conda activate deimos" >> ~/.bashrc
@@ -11,6 +10,6 @@ SHELL ["conda", "run", "-n", "deimos", "/bin/bash", "-c"]
 
 #RUN echo "Make sure deimos is installed:"
 RUN python -c "import deimos"
-
+COPY ccs_comparison.py .
 
 #ENTRYPOINT ["python", "-u", "ccs_comparison.py"]
