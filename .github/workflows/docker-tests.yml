@@ -29,3 +29,10 @@ jobs:
       - name: MZMine Help
         run: |
           /opt/mzmine_linux_installer/bin/MZmine --h
+  proteowizard:
+    runs-on: ubuntu-latest
+    container: anubhav0fnu/proteowizard
+    steps:
+      - name: Proteowizard help
+        run: |
+          --help
