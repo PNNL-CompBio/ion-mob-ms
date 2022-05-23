@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: CCS Comparison Help
         run: |
-          /opt/conda/envs/deimos/bin/python ccs_comparison.py --h
+          /opt/conda/envs/deimos/bin/python /ccs_comparison.py --h
   mzmine:
     runs-on: ubuntu-latest
     container: anubhav0fnu/mzmine
