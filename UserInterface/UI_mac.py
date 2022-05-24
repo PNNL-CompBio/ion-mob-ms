@@ -17,7 +17,7 @@ from ttkthemes import ThemedTk
 import nextflow
 import json
 import Pmw
-from utils import *
+from utils_mac import *
 
 
 
@@ -56,6 +56,14 @@ Run Experiment
 #SV Black = #1c1c1c
 #Standard Background = #E5E4E2
 
+
+
+
+
+cwd = os.getcwd()
+
+# Print the current working directory
+print("Current working directory: {0}".format(cwd))
 
 
 
