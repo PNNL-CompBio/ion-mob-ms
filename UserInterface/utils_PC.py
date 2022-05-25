@@ -21,7 +21,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
-import Pipeline
+import Pipeline_PC
 from matplotlib.lines import Line2D
 
 
@@ -311,11 +311,11 @@ def open_file(file_variable,button,window):
                 button.configure(bg="silver", fg = "green")
 
             elif file_variable == "FrameMetadata":
-                global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "/*.txt")
+                global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "\*.txt")
                 button.configure(bg="silver", fg = "green")
 
             elif file_variable == "Feature Data":
-                global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "/*.csv")
+                global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "\*.csv")
                 button.configure(bg="silver", fg = "green")
 
     else:
@@ -406,7 +406,7 @@ def run_workflow():
         global Run_button, win
         Run_button.config(text="In progress", state=DISABLED)
         print("pipeline in progress. this is printed in function \"run_workflow\"")
-        Pipeline.execute_workflow("sample.json")
+        Pipeline_PC.execute_workflow("sample.json")
         Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
 
 

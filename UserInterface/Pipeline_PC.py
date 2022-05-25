@@ -3,7 +3,7 @@
 import argparse
 import json
 import subprocess
-import AC_step
+import AC_step_PC
 
 import sys
 import docker
@@ -32,7 +32,7 @@ def execute_workflow(json_file):
     ## Stepped Field
     #Define all variables
     # for me : -output_dir "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/docker_test_area/AC_python_area/IV_Results" -mode "multi" 
-    config_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/autoCCS_config.xml"
+    #config_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/autoCCS_config.xml"
     # framemeta_files = "/Users/jaco059/OneDrive\ -\ PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/IV_ImsMetadata/*.txt"
     # target_list_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/TargetList_NeutralMass.csv"
     # feature_files = "/Users/jaco059/OneDrive\ -\ PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/IV_Features_csv/*.csv"
@@ -53,7 +53,7 @@ def execute_workflow(json_file):
             print("MZMine searches for Features")
         if data[1]["ac_1"] == True:
             print("AutoCCS finds features through the enhanced method.")
-            data[3]["FrameMetadata"] = (data[3]["FrameMetadata"]).replace(" ", "\ ")
-            data[3]["Feature Data"] = (data[3]["Feature Data"]).replace(" ", "\ ")
-            AC_step.run_container(config_file, data[3]["FrameMetadata"], data[3]["Feature Data"], data[3]["Target List"])
+            #data[3]["FrameMetadata"] = (data[3]["FrameMetadata"]).replace(" ", "\ ")
+            #data[3]["Feature Data"] = (data[3]["Feature Data"]).replace(" ", "\ ")
+            AC_step_PC.run_container(data[3]["FrameMetadata"], data[3]["Feature Data"], data[3]["Target List"])
 
