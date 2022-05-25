@@ -1,0 +1,23 @@
+name: deimos
+channels:
+  - conda-forge
+  - bioconda
+  - openbabel
+  - defaults
+  - main
+dependencies:
+  - python=3.9
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - snakemake
+  - pymzml
+  - h5py
+  - statsmodels
+  - scikit-learn
+  - dask
+  - pytables
+  - pip
+  - pip:
+    - git+https://github.com/pnnl/deimos
