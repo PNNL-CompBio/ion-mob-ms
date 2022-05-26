@@ -58,7 +58,6 @@ user_file_label_list = []
 # [["ds_2_arg_1","ds_2_arg_2","ds_2_arg_3"],"#FFE54C"],                                                     #ds_2_args
 # [["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                                     #ac_1_args
 # [["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                                     #ac_2_args
-
 #Unique Parameters
 tab1_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],    #pp_1_args
 [[],"#FEA95E"],                                                             #pp_2_args
@@ -74,8 +73,8 @@ tab1_files_list = [["Raw Data"],                                                
 ["Raw Data"],                                                                              #pw_args
 ["mzML Data", "Metadata"],                                                                   #ds_1_args
 ["Feature Data", "Calibrant Data"],                                                         #ds_2_args
-["Feature Data","Target List", "Calibrant Data"],       #ac_1_args
-["Feature Data","FrameMetadata","Target List", "Calibrant Data"]]       #ac_2_args
+["Feature Data", "Calibrant Data", "Raw File Metadata"],       #ac_1_args
+["Feature Data","FrameMetadata", "Calibrant Data", "Raw File Metadata"]]       #ac_2_args
 
 
 #SLIM - Initalize Variables
@@ -94,8 +93,8 @@ tab2_files_list = [["Raw Data"],                                                
 ["Raw Data"],                                                                                #pw_args
 ["mzML Data", "Metadata"],                                                                    #ds_1_args
 ["Feature Data", "Calibrant Data"],                                                           #ds_2_args
-["Feature Data","Target List", "Calibrant Data"],         #ac_1_args
-["Feature Data","FrameMetadata","Target List", "Calibrant Data"]]         #ac_2_args
+["Feature Data","Calibrant Data", "Raw File Metadata"],         #ac_1_args
+["Feature Data","FrameMetadata", "Calibrant Data", "Raw File Metadata"]]         #ac_2_args
 
 #Stepped Field - Initalize Variables
 #Unique Parameters
@@ -112,7 +111,6 @@ tab3_files_list = [["Raw Data"],                                                
 ["Raw Data"],                                                                   #pw_args
 ["mzML Data", "Metadata"],                                                      #mm_1_args
 ["Feature Data","FrameMetadata","Target List"]]                                 #ac_1_args
-
 
 
 
@@ -325,8 +323,8 @@ def open_file(file_variable,button,window):
                 global_file_dictionary["mzML Data"] = os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green")
 
-            elif file_variable == "Metadata":
-                global_file_dictionary["Metadata"]= os.path.abspath(file.name)
+            elif file_variable == "Raw File Metadata":
+                global_file_dictionary["Raw File Metadata"]= os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green")
 
             # elif file_variable == "Feature Data":
