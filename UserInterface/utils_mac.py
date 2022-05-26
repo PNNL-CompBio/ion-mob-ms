@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.9
 
+from cProfile import label
 import tkinter as tk
 import tkinter.filedialog
 from tkinter.ttk import *
@@ -14,9 +15,17 @@ from turtle import bgcolor, st
 import threading
 import sv_ttk
 from ttkthemes import ThemedTk
-import nextflow
 import json
-import Pmw
+import pmw
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import pandas as pd
+import Pipeline_mac
+from matplotlib.lines import Line2D
+
+
+
 
 
 #Initialize All Variables
@@ -65,8 +74,8 @@ tab1_files_list = [["Raw Data"],                                                
 ["Raw Data"],                                                                              #pw_args
 ["mzML Data", "Metadata"],                                                                   #ds_1_args
 ["Feature Data", "Calibrant Data"],                                                         #ds_2_args
-["Feature Data","Metadata","Target List", "Calibrant Data"],       #ac_1_args
-["Feature Data","Metadata","Target List", "Calibrant Data"]]       #ac_2_args
+["Feature Data", "Calibrant Data", "Raw File Metadata"],       #ac_1_args
+["Feature Data","FrameMetadata", "Calibrant Data", "Raw File Metadata"]]       #ac_2_args
 
 
 #SLIM - Initalize Variables
@@ -85,8 +94,8 @@ tab2_files_list = [["Raw Data"],                                                
 ["Raw Data"],                                                                                #pw_args
 ["mzML Data", "Metadata"],                                                                    #ds_1_args
 ["Feature Data", "Calibrant Data"],                                                           #ds_2_args
-["Feature Data","Metadata","Target List", "Calibrant Data"],         #ac_1_args
-["Feature Data","Metadata","Target List", "Calibrant Data"]]         #ac_2_args
+["Feature Data","Calibrant Data", "Raw File Metadata"],         #ac_1_args
+["Feature Data","FrameMetadata", "Calibrant Data", "Raw File Metadata"]]         #ac_2_args
 
 #Stepped Field - Initalize Variables
 #Unique Parameters
@@ -94,25 +103,25 @@ tab3_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],        
 [[],"#FEA95E"],                                                                 #pp_2_args
 [[],"#f11b23"],                                                                 #pw_args
 [[],"#FFE54C"],                                                                 #mm_1_args                                                            
-[[],"#7EC4EF"],                                                                 #ac_1_args
-[[],"#7EC4EF"]]                                                                 #ac_2_args
+[[],"#7EC4EF"]]                                                                 #ac_1_args
+
 
 #Required files
 tab3_files_list = [["Raw Data"],                                                #pp_1_args
 ["Raw Data"],                                                                   #pp_2_args
 ["Raw Data"],                                                                   #pw_args
 ["mzML Data", "Metadata"],                                                      #mm_1_args
-["Feature Data","Target List"],                                                 #ac_1_args
-["Feature Data","Target List"]]                                                 #ac_2_args
+["Feature Data","FrameMetadata","Target List"]]                                 #ac_1_args
+
 
 
 
 
 #Button creation class - this is required to create buttons dynamically
 class My_Button(tk.Button):
-    def __init__(self, master, txt, r, c, value, col, window):
-        self.a_button = tk.Button(master, text = txt, width=5, height = 2, command = lambda: open_file(value,self.a_button,window), fg=col)
-        self.a_button.grid(row = r, column = c, columnspan = 2, sticky = "w")
+    def __init__(self, master, txt, r, c,colspan, value, col,col2, window):
+        self.a_button = tk.Button(master, text = txt, width=7, height = 2, command = lambda: open_file(value,self.a_button,window), fg=col,bg=col2)
+        self.a_button.grid(row = r, column = c, columnspan = colspan, sticky = "w")
         self.val = value
     def doom(self):
         self.a_button.destroy()
@@ -126,7 +135,7 @@ def round_rectangle(obj, x1, y1, x2, y2, r, **kwargs):
 
 #Pipeline Generation
 #This generates the pipeline (arguments, file uploads, labels, run button) for the single field experiment.
-def Generate_pipeline(t_num,tab,window,*args):
+def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
     global user_entry_list, user_input_list, user_entry_label_list, user_file_list, user_file_label_list, selected_boxes, \
         parameter_label, file_label, Run_button, necessary_files, necessary_arguments, necessary_arguments_colors
     if t_num == 0:
@@ -140,7 +149,7 @@ def Generate_pipeline(t_num,tab,window,*args):
     elif t_num == 2:
         arg_by_exp = tab3_args_list
         file_by_exp = tab3_files_list
-        the_keys = ["pp_1","pp_2","pw_1","mm_1","ac_1","ac_2"]
+        the_keys = ["pp_1","pp_2","pw_1","mm_1","ac_1"]
 
     the_values = args
     arguments = dict(zip(the_keys, the_values))
@@ -153,6 +162,7 @@ def Generate_pipeline(t_num,tab,window,*args):
 #Checkbox values for json file 
     for k,v in arguments.items():
         selected_boxes[k] = v
+
 
 #Create Pipeline
     #Generate required arugments and required files lists
@@ -180,47 +190,69 @@ def Generate_pipeline(t_num,tab,window,*args):
     num_of_desired_rows = 5
     args_exist = False
     if len(necessary_arguments) >= 1:
-        parameter_label=Label(the_tab,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
-        parameter_label.grid(row=5, column=1, columnspan=5, sticky = "W")
+        parameter_label=Label(tab,text="Enter Parameter Values", font=("Helvetica Neue", 16), height=2)
+        parameter_label.grid(row=5, column=1, columnspan=7, sticky = "W")
         counter = 0
         args_exist = True
         for arg in necessary_arguments:
-            user_entry_label_list.append(tk.Label(the_tab,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
-            user_entry_label_list[counter].grid(row=row_placer, column = column_placer,pady=(5,5))
+            user_entry_label_list.append(tk.Label(tab,text=arg, font=("Helvetica Neue",12), anchor="w", width = 20, fg =necessary_arguments_colors[counter]))
+            user_entry_label_list[counter].grid(row=row_placer, column = column_placer,pady=(5,5),columnspan=2)
             column_placer += 1
             user_input_list.append(tk.StringVar())
-            user_entry_list.append(ttk.Entry(the_tab, width=10, justify = "left", textvariable=user_input_list[counter]))
-            user_entry_list[counter].grid(row=row_placer, column = column_placer)
+            user_entry_list.append(ttk.Entry(tab, width=10, justify = "left", textvariable=user_input_list[counter]))
+            user_entry_list[counter].grid(row=row_placer, column = column_placer, columnspan=2, sticky="W")
             column_placer -= 1
             row_placer += 1
             counter += 1
             if counter%6 == num_of_desired_rows:
-                column_placer +=2
+                column_placer +=3
                 row_placer = 6
                 num_of_desired_rows -=1
 
     #Create all File upload labels and file upload buttons
     if len(necessary_files) >= 1:
+        column_placer = 1
+        run_row_placer=12
+        run_col_placer=8
         if args_exist == False:
             row_placer = 6
         else:
             row_placer = 12
+        if args_exist == True and smol == True:
+            column_placer = 4
+            row_placer = 6
+        if smol == True:
+            run_row_placer=6
+            run_col_placer=8
+            
         counter = 0
-        column_placer = 1
-        file_label=Label(the_tab,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
-        file_label.grid(row=(row_placer-1), column=1, columnspan=3, sticky = "W")
+        file_label=Label(tab,text="Upload the Following File(s)", font=("Helvetica Neue", 16), height=2)
+        file_label.grid(row=(row_placer-1), column=column_placer, columnspan=7, sticky = "W")
         browse_text =tk.StringVar()
         browse_text.set("Browse")
         for file in necessary_files:
-            user_file_label_list.append(tk.Label(the_tab,text=file, anchor="w", font=("Helvetica Neue",12), width = 20, bg ="#1c1c1c"))
-            user_file_label_list[counter].grid(row=row_placer, column = column_placer, sticky = "w")
+            user_file_label_list.append(tk.Label(tab,text=file, anchor="w", font=("Helvetica Neue",12), width = 20, bg ="#1c1c1c"))
+            user_file_label_list[counter].grid(row=row_placer, column = column_placer,columnspan=2, sticky = "w")
             column_placer += 1
-            user_file_list.append(My_Button(the_tab, browse_text.get(), row_placer, column_placer, file,'red',window))
+            user_file_list.append(My_Button(tab, browse_text.get(), row_placer, column_placer, 3, file,'red', 'silver', window))
             column_placer -= 1
             row_placer += 1
             counter += 1
-        Run_button = tk.Button(the_tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=6, width=14, fg= "green")
-        Run_button.grid(row=12, column=8, rowspan=4, columnspan=2)
+        Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
+        Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
+    
+    # #this gets screen size
+    # screen_width = window.winfo_screenwidth()
+    # screen_height = window.winfo_screenheight()
+    # window_height = window.winfo_height()
+    # window_width = window.winfo_width()
+
+    # #Print the screen size
+    # print("Screen height: ", screen_height)
+    # print("Screen width: ", screen_width)
+    # print("\ntkinter height: ", window_height)
+    # print("tkinter width: ", window_width)
+
     return  
 
 
@@ -271,59 +303,72 @@ def open_file(file_variable,button,window):
     All others - Choose a file
     """
     global global_file_dictionary
-    if file_variable == "Raw Data":
+    if file_variable in ["Raw Data","FrameMetadata","Feature Data"]:
         file = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
         if file != "":
-            global_file_dictionary["Raw Data"]=os.path.abspath(file)
-            button.configure(background="green", fg = "green")
+            if file_variable == "Raw Data":
+                global_file_dictionary["Raw Data"]=os.path.abspath(file)
+                button.configure(bg="silver", fg = "green")
+
+            elif file_variable == "FrameMetadata":
+                global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "/*.txt")
+                button.configure(bg="silver", fg = "green")
+
+            elif file_variable == "Feature Data":
+                global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "/*.csv")
+                button.configure(bg="silver", fg = "green")
+
     else:
         file = askopenfile(parent=window, mode = 'rb',title = "Select a file")
-        if file_variable == "mzML Data":
-            global_file_dictionary["mzML Data"] = os.path.abspath(file.name)
-            button.configure(background="green", fg = "green")
+        if file != None:
+            if file_variable == "mzML Data":
+                global_file_dictionary["mzML Data"] = os.path.abspath(file.name)
+                button.configure(bg="silver", fg = "green")
 
-        elif file_variable == "Metadata":
-            global_file_dictionary["Metadata"]= os.path.abspath(file.name)
-            button.configure(background="green", fg = "green")
+            elif file_variable == "Raw File Metadata":
+                global_file_dictionary["Raw File Metadata"]= os.path.abspath(file.name)
+                button.configure(bg="silver", fg = "green")
 
-        elif file_variable == "Feature Data":
-            global_file_dictionary["Feature Data"]= os.path.abspath(file.name)
-            button.configure(background="green", fg = "green")
+            # elif file_variable == "Feature Data":
+            #     global_file_dictionary["Feature Data"]= os.path.abspath(file.name)
+            #     button.configure(bg="silver", fg = "green")
 
-        # elif file_variable == "config_data (Hidden)":
-        #     global_file_dictionary["config_data (Hidden)"] = os.path.abspath(file.name)
-        #     button.configure(background="green", fg = "green")
+            # elif file_variable == "config_data (Hidden)":
+            #     global_file_dictionary["config_data (Hidden)"] = os.path.abspath(file.name)
+            #     button.configure(bg="silver", fg = "green")
 
-        elif file_variable == "calibrant_curves":
-            global_file_dictionary["calibrant_curves"] = os.path.abspath(file.name)
-            button.configure(background="green", fg = "green")
+            elif file_variable == "calibrant_curves":
+                global_file_dictionary["calibrant_curves"] = os.path.abspath(file.name)
+                button.configure(bg="silver", fg = "green")
 
-        elif file_variable == "Calibrant Data":
-            global_file_dictionary["Calibrant Data"] = os.path.abspath(file.name)
-            button.configure(background="green", fg = "green") 
+            elif file_variable == "Calibrant Data":
+                global_file_dictionary["Calibrant Data"] = os.path.abspath(file.name)
+                button.configure(bg="silver", fg = "green") 
 
-        elif file_variable == "Target List":
-            global_file_dictionary["Target List"] = os.path.abspath(file.name)
-            button.configure(background="green", fg = "green")
-    return 
+            elif file_variable == "Target List":
+                global_file_dictionary["Target List"] = os.path.abspath(file.name)
+                button.configure(bg="silver", fg = "green")
+    return
 
 
 #Called when the Run experiment button is pressed
 def Run_Experiment(t_num,window):
-    global win
+    global win, global_file_dictionary, necessary_files
     win = window
-    #single Field
     try:
         error_catch_arguments_single = [var.get() for var in user_input_list if var.get() !='']
         if len(error_catch_arguments_single) != len(user_input_list):
             fail_the_test
+        for file in necessary_files:
+            if global_file_dictionary[file] == "":
+                fail_the_test
     except:
         msg.showerror("Error","Please enter all parameter values and upload all files before running experiment!", icon = "warning")
     else:
         L = [var.get() for var in user_input_list]
         L = [t_num] + L
         write_to_json(*L)
-        thread1 = threading.Thread(target=run_nextflow)
+        thread1 = threading.Thread(target=run_workflow)
         thread1.start()
 
 # This will write all relevent information to a json file!
@@ -355,31 +400,53 @@ def write_to_json(*args):
 #Run nextflow! 
 #if this section is not working, check if main.nf is in current directory!
 #to do: find current directory of nextflow file and run.
-def run_nextflow():
+def run_workflow():
     confirmation_step = msg.askquestion("Run Experiment", "Please confirm all arguments before running experiment. There will be no option to cancel run.")
     if confirmation_step == "yes":
         global Run_button, win
-        Run_button.config(text="In progress")
-        pipeline = nextflow.Pipeline("main.nf")
-        execution = pipeline.run()  
-        print("Duration of Pipeline: ", execution.duration)
-        print("Standard Out: ", execution.stdout)
-        print("Status: ", execution.status)
-        Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_popup(win))
+        Run_button.config(text="In progress", state=DISABLED)
+        print("pipeline in progress. this is printed in function \"run_workflow\"")
+        Pipeline_mac.execute_workflow("sample.json")
+        Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
 
 
 #Results Popup window
 #called on run button press after nextflow thread is complete
-def open_popup(window):
-    top= Toplevel(window)
-    top.geometry("1000x500")
-    top.title("Tool Documentation")
-    results = open("./sample.json", "r")
-    text_box = tk.Text(top, height = 20, width = 60, padx=15, pady=15)
-    for line in results:
-        text_box.insert(tkinter.END, line)
-    text_box.config(state=DISABLED)
-    text_box.grid(row = 1, column = 1)
+def open_results(window):
+    matplotlib.use('TkAgg')
+    results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
+    df = pd.read_csv(results_loc, sep='\\t', engine='python')
+
+    #set colors
+    color_by_Tunemix = []
+    names = df.name.to_list()
+    for n in names:
+        if "tunemix" in n.lower():
+            color_by_Tunemix.append("blue")
+        else:
+            color_by_Tunemix.append("green")
+            
+    mz = df.loc[df['adduct_mz'] >= 0, 'adduct_mz'].values
+    ccs = df.loc[df['ccs'] >= 0, 'ccs'].values
+    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Experimental', markerfacecolor='g', markersize=15),
+                        Line2D([0], [0], marker='o', color='w', label='Tunemix', markerfacecolor='b', markersize=15)]
+
+    fig, ax = plt.subplots()
+    ax.scatter(mz, ccs, color = color_by_Tunemix)
+    plt.xlabel("adduct_mz")
+    plt.ylabel("ccs")
+    plt.title('Results: Adduct_MZ - CCS Values')
+    ax.legend(handles=legend_elements, loc='lower right')
+    plt.show()
+    # house = np.random.normal(200000,25000,5000)
+    # plt.hist(house,50)
+    # plt.show()
+    # results = open("./sample.json", "r")
+    # text_box = tk.Text(top, height = 20, width = 60, padx=15, pady=15)
+    # for line in results:
+    #     text_box.insert(tkinter.END, line)
+    # text_box.config(state=DISABLED)
+    # text_box.grid(row = 1, column = 1)
 
 #Documentation Single field / SLIM
 #called on "show documentation" button press
@@ -387,7 +454,7 @@ def show_help_single(window):
     front= Toplevel(window)
     front.geometry("900x500")
     front.title("Tool Documentation Single Field / SLIM")
-    results = open("./documentation_single.txt", "r")
+    results = open("./docs/documentation_single.txt", "r")
     help_box_single = scrolledtext.ScrolledText(front, height = 30, width = 90, padx=15, pady=15, bg = "grey")
     help_box_single.configure(font=("default", 14))
     for line in results:
@@ -401,7 +468,7 @@ def show_help_step(window):
     front= Toplevel(window)
     front.geometry("900x500")
     front.title("Tool Documentation Stepped Field")
-    results = open("./documentation_step.txt", "r")
+    results = open("./docs/documentation_step.txt", "r")
     help_box_step = scrolledtext.ScrolledText(front, height = 30, width = 90, padx=15, pady=15, bg = "grey")
     help_box_step.configure(font=("default", 14))
     for line in results:
