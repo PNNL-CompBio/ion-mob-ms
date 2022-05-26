@@ -17,7 +17,7 @@ import sv_ttk
 from ttkthemes import ThemedTk
 import json
 import pmw
-from utils_Mac import *
+from utils_mac import *
 import sys
 
 """

@@ -37,11 +37,12 @@ def copy_some_files(client, src_list,dst):
 def run_container(exp,version,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
-    print("target list: ", target_list_file)
-    print("raw metadata: ", raw_file_metadata)
+    print(("/tmp/MD/" + os.path.basename(raw_file_metadata)))
+    print(("/tmp/CBF/ " + os.path.basename(calibrant_file)))
+
     if exp == "single" and version == "standard":
         command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
-         "--sample_meta", "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", "/tmp/CBF/TuneMix-CCS.txt", "--output_dir", "/tmp/IV_Results", "--mode", "single",
+         "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
           "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
     if version == "enhanced": 
         #framemeta_files = framemeta_files.replace(" ", "\ ")
@@ -55,11 +56,11 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             counter +=1
         if exp == "single":
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
-            "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", "/tmp/CBF/TuneMix-CCS.txt", "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
+            ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
             "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
         elif exp == "step":
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_step_config.xml", "--framemeta_files",
-            '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", "/tmp/TLF/TargetList_NeutralMass.csv", "--mode", "multi"]
+            '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
     
     #feature_files = feature_files.replace(" ", "\ ")
     cmd2 = "echo " + feature_files

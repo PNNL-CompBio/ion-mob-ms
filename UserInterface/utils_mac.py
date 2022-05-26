@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import Pipeline_mac
 from matplotlib.lines import Line2D
+from tkPDFViewer import tkPDFViewer as pdf
 
 
 
@@ -374,7 +375,7 @@ def Run_Experiment(t_num,window):
 # This will write all relevent information to a json file!
 #this is called in run_experiment
 def write_to_json(*args):
-    global necessary_arguments, necessary_files
+    global necessary_arguments, necessary_files, json_exp
     counter = -1
     json_args = {}
     json_files = {}
@@ -413,31 +414,48 @@ def run_workflow():
 #Results Popup window
 #called on run button press after nextflow thread is complete
 def open_results(window):
-    matplotlib.use('TkAgg')
-    results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
-    df = pd.read_csv(results_loc, sep='\\t', engine='python')
+    global json_exp
+    #single / slim
+    if json_exp["Experiment"] == 0 or json_exp["Experiment"] == 1:
+        front= Toplevel(window)
+        front.geometry("900x600")
+        front.title("Results")
+        v1 = pdf.ShowPdf()
+        v2 = v1.pdf_view(front,
+                    pdf_location =r"./tmp/IV_Results/calibration_output.poly.pdf", bar=False)
+        v2.grid()
+    #step
+    elif json_exp["Experiment"] == 2:
+        matplotlib.use('TkAgg')
+        results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
+        df = pd.read_csv(results_loc, sep='\\t', engine='python')
 
-    #set colors
-    color_by_Tunemix = []
-    names = df.name.to_list()
-    for n in names:
-        if "tunemix" in n.lower():
-            color_by_Tunemix.append("blue")
-        else:
-            color_by_Tunemix.append("green")
-            
-    mz = df.loc[df['adduct_mz'] >= 0, 'adduct_mz'].values
-    ccs = df.loc[df['ccs'] >= 0, 'ccs'].values
-    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Experimental', markerfacecolor='g', markersize=15),
-                        Line2D([0], [0], marker='o', color='w', label='Tunemix', markerfacecolor='b', markersize=15)]
+        #set colors
+        color_by_Tunemix = []
+        names = df.name.to_list()
+        for n in names:
+            if "tunemix" in n.lower():
+                color_by_Tunemix.append("blue")
+            else:
+                color_by_Tunemix.append("green")
+                
+        mz = df.loc[df['adduct_mz'] >= 0, 'adduct_mz'].values
+        ccs = df.loc[df['ccs'] >= 0, 'ccs'].values
+        legend_elements = [Line2D([0], [0], marker='o', color='w', label='Experimental', markerfacecolor='g', markersize=15),
+                            Line2D([0], [0], marker='o', color='w', label='Tunemix', markerfacecolor='b', markersize=15)]
 
-    fig, ax = plt.subplots()
-    ax.scatter(mz, ccs, color = color_by_Tunemix)
-    plt.xlabel("adduct_mz")
-    plt.ylabel("ccs")
-    plt.title('Results: Adduct_MZ - CCS Values')
-    ax.legend(handles=legend_elements, loc='lower right')
-    plt.show()
+        fig, ax = plt.subplots()
+        ax.scatter(mz, ccs, color = color_by_Tunemix)
+        plt.xlabel("adduct_mz")
+        plt.ylabel("ccs")
+        plt.title('Results: Adduct_MZ - CCS Values')
+        ax.legend(handles=legend_elements, loc='lower right')
+        plt.show()
+        
+        
+
+
+
     # house = np.random.normal(200000,25000,5000)
     # plt.hist(house,50)
     # plt.show()
