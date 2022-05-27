@@ -25,10 +25,6 @@ import Pipeline_mac
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
 
-
-
-
-
 #Initialize All Variables
 
 # These variables are used across all three experiments and are overwritten with each pipeline generation.
@@ -241,18 +237,6 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
             counter += 1
         Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
         Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
-    
-    # #this gets screen size
-    # screen_width = window.winfo_screenwidth()
-    # screen_height = window.winfo_screenheight()
-    # window_height = window.winfo_height()
-    # window_width = window.winfo_width()
-
-    # #Print the screen size
-    # print("Screen height: ", screen_height)
-    # print("Screen width: ", screen_width)
-    # print("\ntkinter height: ", window_height)
-    # print("tkinter width: ", window_width)
 
     return  
 
@@ -453,18 +437,6 @@ def open_results(window):
         plt.show()
         
         
-
-
-
-    # house = np.random.normal(200000,25000,5000)
-    # plt.hist(house,50)
-    # plt.show()
-    # results = open("./sample.json", "r")
-    # text_box = tk.Text(top, height = 20, width = 60, padx=15, pady=15)
-    # for line in results:
-    #     text_box.insert(tkinter.END, line)
-    # text_box.config(state=DISABLED)
-    # text_box.grid(row = 1, column = 1)
 
 #Documentation Single field / SLIM
 #called on "show documentation" button press

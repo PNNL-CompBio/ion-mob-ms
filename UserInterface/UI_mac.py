@@ -34,60 +34,22 @@ Run Experiment
 
 """
 
-
-
 #To do: Create Slide Deck
 
-#To do!!! This will not work if main.nf is not in current directory. 
+#Nextflow Note This will not work if main.nf is not in current directory. 
 #  When this is executable app, add string substitution to find current directory and/or main.nf
-
-#TO DO!
-#Edit the Nextflow stuff when I have more info on run scripts.
-
-# To DO:
-# Work on visualization for data!
-
-# To do: compress all code
-
-
 
 #Notes
 #SV Black = #1c1c1c
 #Standard Background = #E5E4E2
 
 
-#Thursday goal!!
-
-#Allow a bit of space (50?) for bottom of screen (windows bottom bar thing)
-#Create Shrink factor for windows
-#Create Shrink factro for text
-#create shrink factor for buttons
-#maybe play with sticky?
-#create a shrink factor for canvas
-#any more needed?
-
-# #this gets screen size
-#scale all the windows to this!
-
-# screen_width = window.winfo_screenwidth()
-# screen_height = window.winfo_screenheight()
-
-# #Print the screen size
-# print("Screen width:", screen_width)
-# print("Screen height:", screen_height)
-
-
-
-print("the direcotray starts at : ", os.getcwd())
+#Set working directory
 cur_dir = os.path.dirname(__file__)
-os.chdir(cur_dir) # change working directory
-print("the directory is now: ", os.getcwd())
-os.system("ls *")
+os.chdir(cur_dir)
 
                       
 #Layout
-#All function calls are in utils_PC.py
-
 
 # Initialize application
 window = ThemedTk(theme="none")
@@ -242,7 +204,7 @@ DS_button_1_single = Checkbutton(tab1, variable=DS_check_1_single, onvalue=True,
 DS_button_1_single.grid(row=3, column=6, sticky = "W")
 
 DS_check_2_single = BooleanVar(False)
-DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
 DS_button_2_single.grid(row=4, column=6, sticky = "W")
 
 
@@ -262,11 +224,11 @@ t1_l8=Label(tab1,text="Calculate CCS (Standard)", font=("default, 14"),borderwid
 t1_l9=Label(tab1,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwidth=0, relief="solid", height=1, bg="grey").grid(row=4, column=7, columnspan=1)
 
 AC_check_1_single = BooleanVar(False)
-AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
 AC_button_1_single.grid(row=3, column=8, sticky = "W")
 
 AC_check_2_single = BooleanVar(False)
-AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
 AC_button_2_single.grid(row=4, column=8, sticky = "W")
 
 #Generate Pipeline Button -  labels, buttons, design
@@ -392,7 +354,7 @@ DS_button_1_slim = Checkbutton(tab2, variable=DS_check_1_slim, onvalue=True, off
 DS_button_1_slim.grid(row=3, column=6, sticky = "W")
 
 DS_check_2_slim = BooleanVar(False)
-DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
 DS_button_2_slim.grid(row=4, column=6, sticky = "W")
 
 
@@ -411,11 +373,11 @@ t2_l8=Label(tab2,text="Calculate CCS (Standard)", font=("default, 14"),borderwid
 t2_l9=Label(tab2,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwidth=0, relief="solid", height=1, bg="grey").grid(row=4, column=7, columnspan=1)
 
 AC_check_1_slim = BooleanVar(False)
-AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
 AC_button_1_slim.grid(row=3, column=8, sticky = "W")
 
 AC_check_2_slim = BooleanVar(False)
-AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
 AC_button_2_slim.grid(row=4, column=8, sticky = "W")
 
 #Generate Pipeline Button -  labels, buttons, design
@@ -581,6 +543,93 @@ t3_canvas5_lbl.config(background="black", foreground="white")
 Help_button_step = tk.Button(tab3,text="Show\nDocumentation", command=lambda:show_help_step(window), height=3, width=14, bg= "silver", fg= "green")
 Help_button_step.grid(row=4, column=9, columnspan=2, sticky ="NWE")
 
+
+
+
+#Creating Radio Buttons for choosing CCS detection type
+#This method was used over tk radio button in order to keep visual style consistent.
+#Single
+def single_switcher():
+    global AC_check_1_single, AC_button_1_single, AC_button_2_single,AC_check_2_single, DS_button_2_single, DS_check_2_single, A, B, C, previous_true
+    A = AC_check_1_single.get()
+    B = AC_check_2_single.get()
+    C = DS_check_2_single.get()
+    if "C" in previous_true and C == True:
+        print("C")
+        AC_button_2_single.destroy()
+        AC_check_2_single = BooleanVar(False)
+        AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
+        AC_button_2_single.grid(row=4, column=8, sticky = "W")
+        AC_button_1_single.destroy()
+        AC_check_1_single = BooleanVar(False)
+        AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
+        AC_button_1_single.grid(row=3, column=8, sticky = "W")
+        previous_true = ["A","B"]
+
+    elif "B" in previous_true and B == True:
+        print("B")
+        AC_button_1_single.destroy()
+        AC_check_1_single = BooleanVar(False)
+        AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
+        AC_button_1_single.grid(row=3, column=8, sticky = "W")
+        DS_button_2_single.destroy()
+        DS_check_2_single = BooleanVar(False)
+        DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
+        DS_button_2_single.grid(row=4, column=6, sticky = "W")
+        previous_true = ["A","C"]
+
+    elif "A" in previous_true and A == True:
+        print("A")
+        AC_button_2_single.destroy()
+        AC_check_2_single = BooleanVar(False)
+        AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
+        AC_button_2_single.grid(row=4, column=8, sticky = "W")
+        DS_button_2_single.destroy()
+        DS_check_2_single = BooleanVar(False)
+        DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
+        DS_button_2_single.grid(row=4, column=6, sticky = "W")
+        previous_true = ["B","C"]
+#Slim
+def slim_switcher():
+    global AC_check_1_slim, AC_button_1_slim, AC_button_2_slim,AC_check_2_slim, DS_button_2_slim, DS_check_2_slim, A, B, C, previous_true
+    A = AC_check_1_slim.get()
+    B = AC_check_2_slim.get()
+    C = DS_check_2_slim.get()
+    if "C" in previous_true and C == True:
+        print("C")
+        AC_button_2_slim.destroy()
+        AC_check_2_slim = BooleanVar(False)
+        AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
+        AC_button_2_slim.grid(row=4, column=8, sticky = "W")
+        AC_button_1_slim.destroy()
+        AC_check_1_slim = BooleanVar(False)
+        AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
+        AC_button_1_slim.grid(row=3, column=8, sticky = "W")
+        previous_true = ["A","B"]
+
+    elif "B" in previous_true and B == True:
+        print("B")
+        AC_button_1_slim.destroy()
+        AC_check_1_slim = BooleanVar(False)
+        AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
+        AC_button_1_slim.grid(row=3, column=8, sticky = "W")
+        DS_button_2_slim.destroy()
+        DS_check_2_slim = BooleanVar(False)
+        DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
+        DS_button_2_slim.grid(row=4, column=6, sticky = "W")
+        previous_true = ["A","C"]
+
+    elif "A" in previous_true and A == True:
+        print("A")
+        AC_button_2_slim.destroy()
+        AC_check_2_slim = BooleanVar(False)
+        AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
+        AC_button_2_slim.grid(row=4, column=8, sticky = "W")
+        DS_button_2_slim.destroy()
+        DS_check_2_slim = BooleanVar(False)
+        DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
+        DS_button_2_slim.grid(row=4, column=6, sticky = "W")
+        previous_true = ["B","C"]
 
 window.mainloop()
 

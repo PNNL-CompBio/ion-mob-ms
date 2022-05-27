@@ -23,9 +23,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import Pipeline_PC
 from matplotlib.lines import Line2D
-
-
-
+from tkPDFViewer import tkPDFViewer as pdf
 
 
 #Initialize All Variables
@@ -239,18 +237,6 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
         Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
         Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
     
-    # #this gets screen size
-    # screen_width = window.winfo_screenwidth()
-    # screen_height = window.winfo_screenheight()
-    # window_height = window.winfo_height()
-    # window_width = window.winfo_width()
-
-    # #Print the screen size
-    # print("Screen height: ", screen_height)
-    # print("Screen width: ", screen_width)
-    # print("\ntkinter height: ", window_height)
-    # print("tkinter width: ", window_width)
-
     return  
 
 
@@ -372,7 +358,7 @@ def Run_Experiment(t_num,window):
 # This will write all relevent information to a json file!
 #this is called in run_experiment
 def write_to_json(*args):
-    global necessary_arguments, necessary_files
+    global necessary_arguments, necessary_files, json_exp
     counter = -1
     json_args = {}
     json_files = {}
@@ -411,40 +397,44 @@ def run_workflow():
 #Results Popup window
 #called on run button press after nextflow thread is complete
 def open_results(window):
-    matplotlib.use('TkAgg')
-    results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
-    df = pd.read_csv(results_loc, sep='\\t', engine='python')
+    global json_exp
+    #single field / SLIM
+    if json_exp["Experiment"] == 0 or json_exp["Experiment"] == 1:
+        front= Toplevel(window)
+        front.geometry("900x600")
+        front.title("Results")
+        v1 = pdf.ShowPdf()
+        v2 = v1.pdf_view(front,
+                    pdf_location =r".\\tmp\\IV_Results\\calibration_output.poly.pdf", bar=False)
+        v2.grid()
+    #step field
+    elif json_exp["Experiment"] == 2:
+        matplotlib.use('TkAgg')
+        results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
+        df = pd.read_csv(results_loc, sep='\\t', engine='python')
 
-    #set colors
-    color_by_Tunemix = []
-    names = df.name.to_list()
-    for n in names:
-        if "tunemix" in n.lower():
-            color_by_Tunemix.append("blue")
-        else:
-            color_by_Tunemix.append("green")
-            
-    mz = df.loc[df['adduct_mz'] >= 0, 'adduct_mz'].values
-    ccs = df.loc[df['ccs'] >= 0, 'ccs'].values
-    legend_elements = [Line2D([0], [0], marker='o', color='w', label='Experimental', markerfacecolor='g', markersize=15),
-                        Line2D([0], [0], marker='o', color='w', label='Tunemix', markerfacecolor='b', markersize=15)]
+        #set colors
+        color_by_Tunemix = []
+        names = df.name.to_list()
+        for n in names:
+            if "tunemix" in n.lower():
+                color_by_Tunemix.append("blue")
+            else:
+                color_by_Tunemix.append("green")
+                
+        mz = df.loc[df['adduct_mz'] >= 0, 'adduct_mz'].values
+        ccs = df.loc[df['ccs'] >= 0, 'ccs'].values
+        legend_elements = [Line2D([0], [0], marker='o', color='w', label='Experimental', markerfacecolor='g', markersize=15),
+                            Line2D([0], [0], marker='o', color='w', label='Tunemix', markerfacecolor='b', markersize=15)]
 
-    fig, ax = plt.subplots()
-    ax.scatter(mz, ccs, color = color_by_Tunemix)
-    plt.xlabel("adduct_mz")
-    plt.ylabel("ccs")
-    plt.title('Results: Adduct_MZ - CCS Values')
-    ax.legend(handles=legend_elements, loc='lower right')
-    plt.show()
-    # house = np.random.normal(200000,25000,5000)
-    # plt.hist(house,50)
-    # plt.show()
-    # results = open("./sample.json", "r")
-    # text_box = tk.Text(top, height = 20, width = 60, padx=15, pady=15)
-    # for line in results:
-    #     text_box.insert(tkinter.END, line)
-    # text_box.config(state=DISABLED)
-    # text_box.grid(row = 1, column = 1)
+        fig, ax = plt.subplots()
+        ax.scatter(mz, ccs, color = color_by_Tunemix)
+        plt.xlabel("adduct_mz")
+        plt.ylabel("ccs")
+        plt.title('Results: Adduct_MZ - CCS Values')
+        ax.legend(handles=legend_elements, loc='lower right')
+        plt.show()
+
 
 #Documentation Single field / SLIM
 #called on "show documentation" button press

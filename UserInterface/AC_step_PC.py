@@ -6,11 +6,6 @@ import os
 import tarfile
 import time
 
-# config_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/autoCCS_config.xml"
-# framemeta_files = '/Users/jaco059/OneDrive\ -\ PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/IV_ImsMetadata/*.txt'
-# target_list_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/TargetList_NeutralMass.csv"
-# feature_files = '/Users/jaco059/OneDrive\ -\ PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/IV_Features_csv/*.csv'
-
 
 def copy_a_file(client, src,dst):
     name, dst = dst.split(':')
@@ -33,13 +28,12 @@ def copy_some_files(client, src_list,dst):
             copy_a_file(client, src,dst)
 
 
-
 def run_container(exp,version,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     if exp == "single" and version == "standard":
         command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
-         "--sample_meta", "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", "/tmp/CBF/TuneMix-CCS.txt", "--output_dir", "/tmp/IV_Results", "--mode", "single",
+         "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
           "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
     
     if version == "enhanced": 
@@ -53,11 +47,11 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             counter +=1
         if exp == "single":
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
-            "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", "/tmp/CBF/TuneMix-CCS.txt", "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
+            ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
             "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
         elif exp == "step":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_step_config.xml", "--framemeta_files",
-            '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", "/tmp/TLF/TargetList_NeutralMass.csv", "--mode", "multi"]
+             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_step_config.xml", "--framemeta_files",
+            '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
 
     feature_files_quote = '"' + feature_files + '"'
     cmd2 = "dir/b " + feature_files_quote
@@ -67,11 +61,9 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
     for item in test2[:-1]:
         test2[counter] = '"'+ feature_files[:-5] + item +'"'
         counter +=1
-
         
     image = "anubhav0fnu/autoccs"
     local_mem = os.getcwd() + "\\tmp"
-    print("the locaal mem : ", local_mem)
     
 
     os.makedirs(".\\tmp\\CF", exist_ok=True)

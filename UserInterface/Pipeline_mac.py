@@ -67,20 +67,8 @@ def execute_workflow(json_file):
             data[3]["FrameMetadata"] = (data[3]["FrameMetadata"]).replace(" ", "\ ")
             data[3]["Feature Data"] = (data[3]["Feature Data"]).replace(" ", "\ ")
             AC_step_mac.run_container("single","enhanced",data[3]["Calibrant Data"], data[3]["FrameMetadata"], data[3]["Feature Data"], False, data[3]["Raw File Metadata"])
-        
-
 
     ## Stepped Field
-    #Define all variables
-    # for me : -output_dir "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/docker_test_area/AC_python_area/IV_Results" -mode "multi" 
-    # config_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/autoCCS_config.xml"
-    # framemeta_files = "/Users/jaco059/OneDrive\ -\ PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/IV_ImsMetadata/*.txt"
-    # target_list_file = "/Users/jaco059/OneDrive - PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/TargetList_NeutralMass.csv"
-    # feature_files = "/Users/jaco059/OneDrive\ -\ PNNL/Desktop/IonMobility_Desktop_App_Front_End/ion-mob-ms/test-data/SteppedField/IV_Features_csv/*.csv"
-
-
-
-    #Run pipeline
     if data[0]["Experiment"] == 2:
         print("Stepped Field Begins here.")
         # if data[1]["Experiment"]
