@@ -3,9 +3,10 @@ import pickle
 import deimos
 import pandas as pd
 import os
+import argparse
 
 # Author: Chang, Christine H <christine.chang@pnnl.gov>
-# Maintainer: Anubhav, Fnu <anubhav@pnnl.gov>
+# Maintainer: Gosline, Sara <sara.gosline@pnnl.gov>
 
 # set match error tolerances
 ERR_MZ = 100.0e-6
@@ -61,11 +62,21 @@ def comparison(file_a, file_b, ccs_file):
 
 
 if __name__ == "__main__":
+ 
+    parser = argparse.ArgumentParser('This script runs CCS comparison')
+    parser.add_argument('ccsFile',help='CCS file')
+    parser.add_argument('fileA',help='File A')
+    parser.add_argument('fileB',help='File B')
+
+    args = parser.parse_args()
 
     # define file paths
-    ccs_file = os.path.join(os.environ.get("CCS_FILE"))
-    file_a = os.path.join(os.environ.get("FILE_A"))
-    file_b = os.path.join(os.environ.get("FILE_B"))
+    if len(args)!=3:
+        sys.exit("Need three file arguments")
+    
+    ccs_file = args.ccsFile#os.path.join(os.environ.get("CCS_FILE"))
+    file_a = args.fileA#os.path.join(os.environ.get("FILE_A"))
+    file_b = args.fileB#os.path.join(os.environ.get("FILE_B"))
 
     matches = comparison(file_a, file_b, ccs_file)
 

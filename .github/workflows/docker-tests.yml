@@ -1,0 +1,38 @@
+name: Docker-tests
+defaults:
+  run:
+    working-directory: ./
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  auto-ccs:
+    runs-on: ubuntu-latest
+    container: anubhav0fnu/autoccs
+    steps:
+      - name: Autoccs help
+        run: |
+          python /AutoCCS/autoCCS.py --h
+  ccs-compare:
+    runs-on: ubuntu-latest
+    container: anubhav0fnu/ccs_comparison
+    steps:
+      - name: CCS Comparison Help
+        run: |
+          /opt/conda/envs/deimos/bin/python /ccs_comparison.py --h
+  mzmine:
+    runs-on: ubuntu-latest
+    container: anubhav0fnu/mzmine
+    steps:
+      - name: MZMine Help
+        run: |
+          /opt/mzmine_linux_installer/bin/MZmine --h
+  proteowizard:
+    runs-on: ubuntu-latest
+    container: anubhav0fnu/proteowizard
+    steps:
+      - name: Proteowizard help
+        run: |
+          --help
