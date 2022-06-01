@@ -16,6 +16,10 @@ Each mode has separate needs for input files, but runs a combination of the modu
 
 ### User interface
 
+## Installation
+
+## Contribution
+
 
 ### PNNL PreProcessor Tool
 Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor).
