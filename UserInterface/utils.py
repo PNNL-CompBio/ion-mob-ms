@@ -21,10 +21,10 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
-import Pipeline_PC
+import Pipeline_mac
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
-
+import platform
 
 #Initialize All Variables
 
@@ -56,6 +56,7 @@ user_file_label_list = []
 # [["ds_2_arg_1","ds_2_arg_2","ds_2_arg_3"],"#FFE54C"],                                                     #ds_2_args
 # [["ac_1_arg_1","ac_1_arg_2","ac_1_arg_3"],"#7EC4EF"],                                                     #ac_1_args
 # [["ac_2_arg_1","ac_2_arg_2","ac_2_arg_3"],"#7EC4EF"]]                                                     #ac_2_args
+
 #Unique Parameters
 tab1_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],    #pp_1_args
 [[],"#FEA95E"],                                                             #pp_2_args
@@ -109,7 +110,6 @@ tab3_files_list = [["Raw Data"],                                                
 ["Raw Data"],                                                                   #pw_args
 ["mzML Data", "Metadata"],                                                      #mm_1_args
 ["Feature Data","FrameMetadata","Target List"]]                                 #ac_1_args
-
 
 
 
@@ -236,9 +236,7 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
             counter += 1
         Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
         Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
-    
     return  
-
 
 
 #Reset All Pipelines
@@ -277,7 +275,6 @@ def reset_all_pipelines():
         pass
 
 
-
 # Open File function - linked to file upload buttons
 #this is called in the button class
 def open_file(file_variable,button,window):
@@ -295,11 +292,17 @@ def open_file(file_variable,button,window):
                 button.configure(bg="silver", fg = "green")
 
             elif file_variable == "FrameMetadata":
-                global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "\*.txt")
+                if platform.system().upper() == "DARWIN":
+                    global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "/*.txt")
+                elif platform.system().upper() == "WINDOWS":
+                    global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "\*.txt")
                 button.configure(bg="silver", fg = "green")
 
             elif file_variable == "Feature Data":
-                global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "\*.csv")
+                if platform.system().upper() == "DARWIN":
+                    global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "/*.csv")
+                elif platform.system().upper() == "WINDOWS":
+                    global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "\*.csv")
                 button.configure(bg="silver", fg = "green")
 
     else:
@@ -390,7 +393,7 @@ def run_workflow():
         global Run_button, win
         Run_button.config(text="In progress", state=DISABLED)
         print("pipeline in progress. this is printed in function \"run_workflow\"")
-        Pipeline_PC.execute_workflow("sample.json")
+        Pipeline_mac.execute_workflow("sample.json")
         Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
 
 
@@ -398,19 +401,29 @@ def run_workflow():
 #called on run button press after nextflow thread is complete
 def open_results(window):
     global json_exp
-    #single field / SLIM
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)
+    #single / slim
+    #currently does not work.
     if json_exp["Experiment"] == 0 or json_exp["Experiment"] == 1:
         front= Toplevel(window)
         front.geometry("900x600")
         front.title("Results")
         v1 = pdf.ShowPdf()
-        v2 = v1.pdf_view(front,
+        if platform.system().upper() == "DARWIN":
+            v2 = v1.pdf_view(front,
+                    pdf_location =r"./tmp/IV_Results/calibration_output.poly.pdf", bar=False)
+        elif platform.system().upper() == "WINDOWS":
+            v2 = v1.pdf_view(front,
                     pdf_location =r".\\tmp\\IV_Results\\calibration_output.poly.pdf", bar=False)
         v2.grid()
-    #step field
+    #step
     elif json_exp["Experiment"] == 2:
         matplotlib.use('TkAgg')
-        results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
+        if platform.system().upper() == "DARWIN":
+            results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
+        elif platform.system().upper() == "WINDOWS":
+             results_loc = os.path.dirname(__file__) + "\\tmp\\IV_Results\\ccs_table.tsv"
         df = pd.read_csv(results_loc, sep='\\t', engine='python')
 
         #set colors
@@ -434,7 +447,8 @@ def open_results(window):
         plt.title('Results: Adduct_MZ - CCS Values')
         ax.legend(handles=legend_elements, loc='lower right')
         plt.show()
-
+        
+        
 
 #Documentation Single field / SLIM
 #called on "show documentation" button press

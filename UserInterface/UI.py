@@ -17,7 +17,7 @@ import sv_ttk
 from ttkthemes import ThemedTk
 import json
 import pmw
-from utils_PC import *
+from utils_mac import *
 import sys
 
 """
@@ -34,13 +34,10 @@ Run Experiment
 
 """
 
-#nextflow note This will not work if main.nf is not in current directory. 
+#To do: Create Slide Deck
+
+#Nextflow Note This will not work if main.nf is not in current directory. 
 #  When this is executable app, add string substitution to find current directory and/or main.nf
-
-
-# To DO:
-# Work on visualization for data!
-
 
 #Notes
 #SV Black = #1c1c1c
@@ -49,12 +46,10 @@ Run Experiment
 
 #Set working directory
 cur_dir = os.path.dirname(__file__)
-os.chdir(cur_dir) 
-
-
-                    
+os.chdir(cur_dir)
+                      
 #Layout
-#                     
+
 # Initialize application
 window = ThemedTk(theme="none")
 window.title("PNNL Ion Mobility Application",)
@@ -71,6 +66,7 @@ window.columnconfigure(0,weight=1)
 window.columnconfigure(10,weight=1)
 sv_ttk.set_theme("dark")
 
+#Set down-scaling variables based on screen size
 screen_width = window.winfo_screenwidth()
 screen_height = (window.winfo_screenheight()-50)
 window_height = 900
@@ -93,8 +89,9 @@ sep = tk.Frame(window, bg="black", height=2, bd=0).grid(row=1, column=7, sticky=
 #tabs
 tab1 = ttk.Frame(tabControl)
 
-
+#Set sizing variables for each tab
 tabControl.add(tab1, text = "Single Field")
+
 tab1.columnconfigure((1,2,3,4,5,6,7,8,9), minsize=int(140//wf))
 tab1.columnconfigure((0), minsize=int(20//wf))
 tab1.rowconfigure((1,2,3,4,5,6,7,8,9,10,11,12,13,14,15), minsize=int(25//hf))
@@ -208,7 +205,7 @@ DS_button_1_single = Checkbutton(tab1, variable=DS_check_1_single, onvalue=True,
 DS_button_1_single.grid(row=3, column=6, sticky = "W")
 
 DS_check_2_single = BooleanVar(False)
-DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
+DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
 DS_button_2_single.grid(row=4, column=6, sticky = "W")
 
 
@@ -236,6 +233,7 @@ AC_check_2_single = BooleanVar(False)
 AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
 AC_button_2_single.grid(row=4, column=8, sticky = "W")
 
+
 #Generate Pipeline Button -  labels, buttons, design
 t1_tag0 = round_rectangle(t1_canvas5, 0, 0, int(115//wf), int(100//hf), 25, fill="black")
 t1_tag1 = round_rectangle(t1_canvas5, 5, 5, int(110//wf), int(95//hf), 25, fill="#72cc50")
@@ -258,6 +256,7 @@ t1_canvas5_help.bind(t1_canvas5, "Note: Generating new pipeline will\nclear all 
 t1_canvas5_lbl = t1_canvas5_help.component("label")
 t1_canvas5_lbl.config(background="black", foreground="white")
 
+
 #Show Documentation Button
 Help_button_slim = tk.Button(tab1,text="Show\nDocumentation", command=lambda:show_help_single(window), height=3, width=int(14//hf), bg = "silver", fg= "green")
 Help_button_slim.grid(row=4, column=9, columnspan=2, sticky = "NWE")
@@ -278,12 +277,11 @@ t2_tool_3 = tk.Frame(tab2)
 t2_tool_4 = tk.Frame(tab2)
 t2_generate_pipeline = tk.Frame(tab2)
 
-t2_canvas1 = tk.Canvas(t2_tool_1 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t2_canvas2 = tk.Canvas(t2_tool_2 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t2_canvas3 = tk.Canvas(t2_tool_3 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t2_canvas4 = tk.Canvas(t2_tool_4 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t2_canvas5 = tk.Canvas(t2_generate_pipeline, height=int(101//hf), width=int(116//wf), bg ="grey", highlightthickness=0)
-
+t2_canvas1 = tk.Canvas(t2_tool_1 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t2_canvas2 = tk.Canvas(t2_tool_2 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t2_canvas3 = tk.Canvas(t2_tool_3 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t2_canvas4 = tk.Canvas(t2_tool_4 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t2_canvas5 = tk.Canvas(t2_generate_pipeline, height=int(101//hf), width=int(116//wf), bg ="grey", highlightthickness=0) 
 
 t2_canvas1.pack()
 t2_canvas2.pack()
@@ -303,7 +301,6 @@ round_rectangle(t2_canvas1, 0, 0, int(200//wf), int(100//hf), 25, fill="#FE994A"
 round_rectangle(t2_canvas1, 5, 5, int(195//wf), int(95//hf), 25, fill="#FEA95E")
 round_rectangle(t2_canvas1, 20, 20, int(180//wf), int(80//hf), 25, fill="#FFCD91")
 t2_canvas1.create_text(int(100//wf),int(50//hf),fill="black",font=("Helvetica Neue", int(12//wf), "bold"), text="PNNL PreProcessor")
-
 
 t2_canvas1_help = pmw.Balloon(window)
 t2_canvas1_help.bind(t2_canvas1, "PNNL PreProcessor\nProcess raw data to reduce noise and highlight features.\n\nInput: Raw Data\nOutput: Processed data & metadata\nFilter out low count signals with \"minIntensity\".\nPerform smoothing to improve signal of low intensity peaks with \"driftkernel\".\nSum all frames into one by setting \"lcKernel\" to 0.")
@@ -359,7 +356,7 @@ DS_button_1_slim = Checkbutton(tab2, variable=DS_check_1_slim, onvalue=True, off
 DS_button_1_slim.grid(row=3, column=6, sticky = "W")
 
 DS_check_2_slim = BooleanVar(False)
-DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command = lambda:slim_switcher())
+DS_button_2_slim = Checkbutton(tab2, variable=DS_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
 DS_button_2_slim.grid(row=4, column=6, sticky = "W")
 
 
@@ -378,12 +375,13 @@ t2_l8=Label(tab2,text="Calculate CCS (Standard)", font=("default, 14"),borderwid
 t2_l9=Label(tab2,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwidth=0, relief="solid", height=1, bg="grey").grid(row=4, column=7, columnspan=1)
 
 AC_check_1_slim = BooleanVar(False)
-AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command = lambda:slim_switcher())
+AC_button_1_slim = Checkbutton(tab2, variable=AC_check_1_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
 AC_button_1_slim.grid(row=3, column=8, sticky = "W")
 
 AC_check_2_slim = BooleanVar(False)
-AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command = lambda:slim_switcher())
+AC_button_2_slim = Checkbutton(tab2, variable=AC_check_2_slim, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: slim_switcher())
 AC_button_2_slim.grid(row=4, column=8, sticky = "W")
+
 
 #Generate Pipeline Button -  labels, buttons, design
 t2_tag0 = round_rectangle(t2_canvas5, 0, 0, int(115//wf), int(100//hf), 25, fill="black")
@@ -407,9 +405,11 @@ t2_canvas5_help.bind(t2_canvas5, "Note: Generating new pipeline will\nclear all 
 t2_canvas5_lbl = t2_canvas5_help.component("label")
 t2_canvas5_lbl.config(background="black", foreground="white")
 
+
 #Show Documentation Button
 Help_button_slim = tk.Button(tab2,text="Show\nDocumentation", command=lambda:show_help_single(window), height=3, width=14, bg="silver", fg= "green")
 Help_button_slim.grid(row=4, column=9, columnspan=2, sticky ="NWE")
+
 
 
 ##################################################################
@@ -426,11 +426,11 @@ t3_tool_3 = tk.Frame(tab3)
 t3_tool_4 = tk.Frame(tab3)
 t3_generate_pipeline = tk.Frame(tab3)
 
-t3_canvas1 = tk.Canvas(t3_tool_1 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t3_canvas2 = tk.Canvas(t3_tool_2 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t3_canvas3 = tk.Canvas(t3_tool_3 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t3_canvas4 = tk.Canvas(t3_tool_4 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0)
-t3_canvas5 = tk.Canvas(t3_generate_pipeline, height=int(101//hf), width=int(116//wf), bg ="grey", highlightthickness=0)
+t3_canvas1 = tk.Canvas(t3_tool_1 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t3_canvas2 = tk.Canvas(t3_tool_2 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t3_canvas3 = tk.Canvas(t3_tool_3 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t3_canvas4 = tk.Canvas(t3_tool_4 , height=int(100//hf), width=int(200//wf), bg ="grey", highlightthickness=0) 
+t3_canvas5 = tk.Canvas(t3_generate_pipeline, height=int(101//hf), width=int(116//wf), bg ="grey", highlightthickness=0) 
 
 t3_canvas1.pack()
 t3_canvas2.pack()
@@ -544,14 +544,15 @@ t3_canvas5_help.bind(t3_canvas5, "Note: Generating new pipeline will\nclear all 
 t3_canvas5_lbl = t3_canvas5_help.component("label")
 t3_canvas5_lbl.config(background="black", foreground="white")
 
+
 #Show Documentation Button
 Help_button_step = tk.Button(tab3,text="Show\nDocumentation", command=lambda:show_help_step(window), height=3, width=14, bg= "silver", fg= "green")
 Help_button_step.grid(row=4, column=9, columnspan=2, sticky ="NWE")
 
 
-
-#Creating Radio Buttons for choosing CCS detection type
+#Creating Radio Button switch function for choosing CCS detection type
 #This method was used over tk radio button in order to keep visual style consistent.
+
 #Single
 def single_switcher():
     global AC_check_1_single, AC_button_1_single, AC_button_2_single,AC_check_2_single, DS_button_2_single, DS_check_2_single, A, B, C, previous_true
@@ -635,5 +636,6 @@ def slim_switcher():
         DS_button_2_slim.grid(row=4, column=6, sticky = "W")
         previous_true = ["B","C"]
 
-
 window.mainloop()
+
+
