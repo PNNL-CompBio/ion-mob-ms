@@ -14,4 +14,16 @@ You will need a series of files to start.
 
 ## Build your workflow
 
+There are generally three types of workflows to run:
+
+### DTIMS single field
+Drift tube ion mobility mass spectrometry requires knowledge of experiments and a table of calibration ions.
+
+### SLIM data (also single field)
+Data from the SLIM machine.
+
+### DTIMS stepped field
+Drift tube ion mobiology mass spectrometry that requires specific known targets and their masses.
+Each mode has separate needs for input files, but runs a combination of the modules depicted below.
+
 ## Citation
