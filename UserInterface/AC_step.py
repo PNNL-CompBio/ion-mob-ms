@@ -153,7 +153,11 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         print("F\n")
         AC_Container.exec_run(cmd=command_list)
         print("G\n")
-
+        AC_Container.stop()
+        print("H\n")
+        AC_Container.remove()
+        print("I\n")
+        
     if platform.system().upper() == "WINDOWS":
         print("AC container running on PC")
         if exp == "single":
@@ -173,6 +177,9 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         print("F\n")
         AC_Container.exec_run(cmd=command_list)
         print("G\n")
-
+        AC_Container.stop()
+        print("H\n")
+        AC_Container.remove()
+        print("I\n")
 
 

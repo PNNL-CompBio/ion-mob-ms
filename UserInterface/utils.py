@@ -21,7 +21,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
-import Pipeline_mac
+import Pipeline
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
 import platform
@@ -393,7 +393,7 @@ def run_workflow():
         global Run_button, win
         Run_button.config(text="In progress", state=DISABLED)
         print("pipeline in progress. this is printed in function \"run_workflow\"")
-        Pipeline_mac.execute_workflow("sample.json")
+        Pipeline.execute_workflow("sample.json")
         Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
 
 
