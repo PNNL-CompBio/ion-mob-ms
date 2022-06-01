@@ -26,4 +26,23 @@ Data from the SLIM machine.
 Drift tube ion mobiology mass spectrometry that requires specific known targets and their masses.
 Each mode has separate needs for input files, but runs a combination of the modules depicted below.
 
+## Available Tools
+
+Currently we have enabled the use of the following tools. 
+
+### PNNL PreProcessor Tool
+Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor).
+
+### ProteoWizard Tool
+Docker image and script to run [ProteoWizard tool](https://proteowizard.sourceforge.io/)
+
+### MZMine Tool
+Docker image and script to run [MZMine Java Program](http://mzmine.github.io/).
+
+### AutoCCS Tool
+Docker image and script to run [AutoCCS Python script](https://github.com/PNNL-Comp-Mass-Spec/AutoCCS).
+
+### ion-mob-UI
+This is the front-end for the entire workflow.  TODO: determine implementation and design.
+
 ## Citation
