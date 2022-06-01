@@ -4,7 +4,7 @@ This is a workflow for analyzing Ion Mobility Mass-Spectrometry data. The primar
 ## Architecture
 The system is designed to enable users to run individual parts via the command line, using a graphical user interface, or using Nextflow.
 
-![architecture.png](Draft architecture plan]
+<img src="architecture.png" width="500">
 
 Each mode has separate needs for input files, but runs a combination of the modules depicted below.
 
