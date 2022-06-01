@@ -50,10 +50,10 @@ jobs:
           push: true
           file: docker/ccs_comparison
           tags: anubhav0fnu/ccs_comparison:latest
-      - name: Build and push pnnl_preprocessor
-        uses: docker/build-push-action@v2
-        with:
-          context: docker
-          file: docker/pnnl_preprocessor
-          push: true
-          tags: anubhav0fnu/pnnl_preprocessor:latest
+#      - name: Build and push pnnl_preprocessor
+#        uses: docker/build-push-action@v2
+#        with:
+#          context: docker
+#          file: docker/pnnl_preprocessor
+#          push: true
+#          tags: anubhav0fnu/pnnl_preprocessor:latest
