@@ -400,6 +400,8 @@ def run_workflow():
 def open_results(window):
     global json_exp
     #single / slim
+    
+    #currently does not work.
     if json_exp["Experiment"] == 0 or json_exp["Experiment"] == 1:
         front= Toplevel(window)
         front.geometry("900x600")

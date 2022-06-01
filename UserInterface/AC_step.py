@@ -31,6 +31,29 @@ def run_container(sys,exp,version,calibrant_file,framemeta_files, feature_files,
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
+    if sys == "mac":
+        feature_files=feature_files.replace(" ", "\ ")
+        cmd2 = "echo " + feature_files
+        test2 = os.popen(cmd2).read()
+        test2 = test2.strip()
+        test2 = test2.split(" /")
+        counter = 1
+        for item in test2[1:]:
+            test2[counter] =  "/" + item
+            counter +=1
+        local_mem = os.getcwd() + "/tmp"
+
+    if sys == "PC":
+        feature_files_quote = '"' + feature_files + '"'
+        cmd2 = "dir/b " + feature_files_quote
+        test2 = os.popen(cmd2).read()
+        test2 = test2.split("\n")
+        counter = 0
+        for item in test2[:-1]:
+            test2[counter] = '"'+ feature_files[:-5] + item +'"'
+            counter +=1
+        local_mem = os.getcwd() + "\\tmp"
+
     if version == "standard":
         command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
         "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
@@ -46,16 +69,6 @@ def run_container(sys,exp,version,calibrant_file,framemeta_files, feature_files,
             '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
         if sys == "mac":
             framemeta_files=framemeta_files.replace(" ", "\ ")
-            feature_files=feature_files.replace(" ", "\ ")
-            cmd2 = "echo " + feature_files
-            test2 = os.popen(cmd2).read()
-            test2 = test2.strip()
-            test2 = test2.split(" /")
-            counter = 1
-            for item in test2[1:]:
-                test2[counter] =  "/" + item
-                counter +=1
-
             cmd1 = "echo " + framemeta_files
             test1 = os.popen(cmd1).read()
             test1 = test1.strip()
@@ -64,10 +77,7 @@ def run_container(sys,exp,version,calibrant_file,framemeta_files, feature_files,
             for item in test1[1:]:
                 test1[counter] =  "/" + item
                 counter +=1
-
-            local_mem = os.getcwd() + "/tmp"
-
-        if sys =="windows": 
+        if sys =="PC": 
             framemeta_files_quote = '"' + framemeta_files + '"'
             cmd1 = "dir/b " + framemeta_files_quote
             test1 = os.popen(cmd1).read()
@@ -76,17 +86,6 @@ def run_container(sys,exp,version,calibrant_file,framemeta_files, feature_files,
             for item in test1[:-1]:
                 test1[counter] = '"'+ framemeta_files[:-5] + item +'"'
                 counter +=1
-
-            feature_files_quote = '"' + feature_files + '"'
-            cmd2 = "dir/b " + feature_files_quote
-            test2 = os.popen(cmd2).read()
-            test2 = test2.split("\n")
-            counter = 0
-            for item in test2[:-1]:
-                test2[counter] = '"'+ feature_files[:-5] + item +'"'
-                counter +=1
-            
-            local_mem = os.getcwd() + "\\tmp"
 
 
     image = "anubhav0fnu/autoccs"    
@@ -101,8 +100,8 @@ def run_container(sys,exp,version,calibrant_file,framemeta_files, feature_files,
     time.sleep(5)
     print("Z\n")
 
-    command_single = ["mv", "/tmp_autoccs/autoCCS_single_config.xml", "/tmp"]
-    command_step = ["mv", "/tmp_autoccs/autoCCS_step_config.xml", "/tmp"]
+    command_single = ["mv", "/tmp_autoccs/autoCCS_single_config.xml", "/tmp/CF"]
+    command_step = ["mv", "/tmp_autoccs/autoCCS_step_config.xml", "/tmp/CF"]
 
     client = docker.from_env()
     print("Y\n")

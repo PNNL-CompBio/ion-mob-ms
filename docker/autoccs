@@ -11,7 +11,13 @@ RUN export LDFLAGS="-L/usr/local/opt/openssl/lib"
 RUN git clone https://github.com/PNNL-Comp-Mass-Spec/AutoCCS.git
 RUN pip install -r /AutoCCS/requirements.txt
 
+# add config files
+RUN mkdir /tmp_autoccs
+COPY autoCCS_single_config.xml /tmp_autoccs
+COPY autoCCS_step_config.xml /tmp_autoccs
+
 # set work directory
 WORKDIR /AutoCCS
+
 
 # ENTRYPOINT ["python", "-u", "autoCCS.py"]

@@ -12,7 +12,6 @@ import time
 
 
 def execute_workflow(json_file):
-    #Set working directory and import json file with all parameters
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     f = open(json_file)

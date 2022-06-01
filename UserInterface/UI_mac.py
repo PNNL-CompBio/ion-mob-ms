@@ -223,6 +223,7 @@ t1_canvas4_lbl.config(background="black", foreground="white")
 t1_l8=Label(tab1,text="Calculate CCS (Standard)", font=("default, 14"),borderwidth=0, relief="solid", height=1, bg="grey").grid(row=3, column=7, columnspan=1)
 t1_l9=Label(tab1,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwidth=0, relief="solid", height=1, bg="grey").grid(row=4, column=7, columnspan=1)
 
+previous_true = ["A","B","C"]
 AC_check_1_single = BooleanVar(False)
 AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
 AC_button_1_single.grid(row=3, column=8, sticky = "W")
@@ -549,6 +550,7 @@ Help_button_step.grid(row=4, column=9, columnspan=2, sticky ="NWE")
 #Creating Radio Buttons for choosing CCS detection type
 #This method was used over tk radio button in order to keep visual style consistent.
 #Single
+
 def single_switcher():
     global AC_check_1_single, AC_button_1_single, AC_button_2_single,AC_check_2_single, DS_button_2_single, DS_check_2_single, A, B, C, previous_true
     A = AC_check_1_single.get()
