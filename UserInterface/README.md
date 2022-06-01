@@ -1,10 +1,13 @@
-User Interface - Functional for MacOS. 
+User Interface - Functional for MacOS and Windows.
 
 This is being built in Python3.9 with the Ktinker front-end library.
 
+Currently Functional:
+GUI
+AutoCCS
 
-Several changes needed for user accessibility.
-
-Then: 
-Create on install script/executable for mac.
-Then rebuild everything for Windows.
+Not Functional:
+Pnnl Preprocessor - missing dependency or DLL issue.
+ProteoWizard - No known issues. Currently in progress.
+MzMine - issue with xml file. Needs to be configured for linux.
+Deimos - Needs Docker image.
