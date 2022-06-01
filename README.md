@@ -17,24 +17,12 @@ Each mode has separate needs for input files, but runs a combination of the modu
 ### User interface
 
 ## Installation
+To download and use this tool, please check out our [documentation site](https://pnnl-compbio.github.io/ion-mob-ms) for more details.
 
 ## Contribution
 
+We will add tools to enable to contribute.
 
-### PNNL PreProcessor Tool
-Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor).
-
-### ProteoWizard Tool
-Docker image and script to run [ProteoWizard tool](https://proteowizard.sourceforge.io/)
-
-### MZMine Tool
-Docker image and script to run [MZMine Java Program](http://mzmine.github.io/).
-
-### AutoCCS Tool
-Docker image and script to run [AutoCCS Python script](https://github.com/PNNL-Comp-Mass-Spec/AutoCCS).
-
-### ion-mob-UI
-This is the front-end for the entire workflow.  TODO: determine implementation and design.
 
 ## Summary
 This framework will enable the end-to-end analysis of Ion Mobility MS-MS data.
