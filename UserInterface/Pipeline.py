@@ -10,6 +10,7 @@ import os
 import tarfile
 import time
 import platform
+import PW_step
 
 
 def execute_workflow(json_file):
@@ -31,6 +32,7 @@ def execute_workflow(json_file):
             print("PNNL Preprocessor does Smoothing")
         if data[1]["pw_1"] == True:
             print("Proteowizard converts Files")
+            PW_step.run_container(data[3]["Raw Data"])
         if data[1]["ds_1"] == True:
             print("Deimos searches for Features")
         if data[1]["ds_2"] == True:
@@ -52,6 +54,7 @@ def execute_workflow(json_file):
             print("PNNL Preprocessor does Smoothing")
         if data[1]["pw_1"] == True:
             print("Proteowizard converts Files")
+            PW_step.run_container(data[3]["Raw Data"])
         if data[1]["ds_1"] == True:
             print("Deimos searches for Features")
         if data[1]["ds_2"] == True:
@@ -73,6 +76,7 @@ def execute_workflow(json_file):
             print("PNNL Preprocessor does Smoothing")
         if data[1]["pw_1"] == True:
             print("Proteowizard converts Files")
+            PW_step.run_container(data[3]["Raw Data"])
         if data[1]["mm_1"] == True:
             print("MZMine searches for Features")
         if data[1]["ac_1"] == True:
