@@ -49,7 +49,7 @@ def run_container(raw_file_folder):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
-    image = "jjacobson95/pw_test"    
+    image = "anubhav0fnu/proteowizard"    
     local_mem = os.getcwd() + "/III_mzML"
     client = docker.from_env()
     command_list = ["wine", "/wineprefix64/drive_c/pwiz/msconvert", "--zlib", "-e",".mzMZ.gz","-o","/III_mzML", "placeholder"]
