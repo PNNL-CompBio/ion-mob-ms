@@ -18,6 +18,14 @@ While we will eventually write a script to automate the installation, the instal
 ## Prepare to run
 You will need a series of files to start, depending on the workflow you want to run.
 
+### To run from Raw files
+
+Describe
+
+### To run from peaks
+
+etc.
+
 ## Build your workflow
 
 There are generally three types of workflows to run:
