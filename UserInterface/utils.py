@@ -33,7 +33,7 @@ necessary_arguments = []
 necessary_arguments_colors = []
 necessary_files = set()
 selected_boxes = {}
-global_file_dictionary = {"Raw Data": "", "mzML Data": "","Metadata": "", "Feature Data": "","config_data (Hidden)": "", "calibrant_curves": "","calibrant_data": "", "Target List": ""}
+global_file_dictionary = {"Raw Data Folder": "", "mzML Data Folder": "","Ims Metadata Folder": "", "Feature Data Folder": "","config_data (Hidden)": "", "calibrant_curves": "","calibrant_data": "", "Target List File": ""}
 file_label = ""
 parameter_label = ""
 user_input_list = []
@@ -67,13 +67,13 @@ tab1_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],    #pp_
 [[],"#7EC4EF"]]                                                             #ac_2_args
 
 #Required files
-tab1_files_list = [["Raw Data"],                                                           #pp_1_args
-["Raw Data"],                                                                              #pp_2_args
-["Raw Data"],                                                                              #pw_args
-["mzML Data", "Metadata"],                                                                   #ds_1_args
-["Feature Data", "Calibrant Data"],                                                         #ds_2_args
-["Feature Data", "Calibrant Data", "Raw File Metadata"],       #ac_1_args
-["Feature Data","FrameMetadata", "Calibrant Data", "Raw File Metadata"]]       #ac_2_args
+tab1_files_list = [["Raw Data Folder"],                                                           #pp_1_args
+["Raw Data Folder"],                                                                              #pp_2_args
+["Raw Data Folder"],                                                                              #pw_args
+["mzML Data Folder"],                                                                             #ds_1_args
+["Feature Data Folder", "Calibrant File"],                                                         #ds_2_args
+["Feature Data Folder", "Calibrant File", "Metadata File"],       #ac_1_args
+["Feature Data Folder","Ims Metadata Folder", "Calibrant File", "Metadata File"]]       #ac_2_args
 
 
 #SLIM - Initalize Variables
@@ -87,13 +87,13 @@ tab2_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],        
 [[],"#7EC4EF"]]                                                                 #ac_2_args
 
 #Required files
-tab2_files_list = [["Raw Data"],                                                             #pp_1_args
-["Raw Data"],                                                                                #pp_2_args
-["Raw Data"],                                                                                #pw_args
-["mzML Data", "Metadata"],                                                                    #ds_1_args
-["Feature Data", "Calibrant Data"],                                                           #ds_2_args
-["Feature Data","Calibrant Data", "Raw File Metadata"],         #ac_1_args
-["Feature Data","FrameMetadata", "Calibrant Data", "Raw File Metadata"]]         #ac_2_args
+tab2_files_list = [["Raw Data Folder"],                                                             #pp_1_args
+["Raw Data Folder"],                                                                                #pp_2_args
+["Raw Data Folder"],                                                                                #pw_args
+["mzML Data Folder"],                                                                    #ds_1_args
+["Feature Data Folder", "Calibrant File"],                                                           #ds_2_args
+["Feature Data Folder","Calibrant File", "Metadata File"],         #ac_1_args
+["Feature Data Folder","Ims Metadata Folder", "Calibrant File", "Metadata File"]]         #ac_2_args
 
 #Stepped Field - Initalize Variables
 #Unique Parameters
@@ -105,19 +105,18 @@ tab3_args_list = [[["driftkernel","lckernel","minintensity"],"#FEA95E"],        
 
 
 #Required files
-tab3_files_list = [["Raw Data"],                                                #pp_1_args
-["Raw Data"],                                                                   #pp_2_args
-["Raw Data"],                                                                   #pw_args
-["mzML Data", "Metadata"],                                                      #mm_1_args
-["Feature Data","FrameMetadata","Target List"]]                                 #ac_1_args
-
+tab3_files_list = [["Raw Data Folder"],                                                #pp_1_args
+["Raw Data Folder"],                                                                   #pp_2_args
+["Raw Data Folder"],                                                                   #pw_args
+["mzML Data Folder", "Metadata File"],                                                      #mm_1_args
+["Feature Data Folder","Ims Metadata Folder","Target List File"]]                                 #ac_1_args
 
 
 #Button creation class - this is required to create buttons dynamically
 class My_Button(tk.Button):
     def __init__(self, master, txt, r, c,colspan, value, col,col2, window):
         self.a_button = tk.Button(master, text = txt, width=7, height = 2, command = lambda: open_file(value,self.a_button,window), fg=col,bg=col2)
-        self.a_button.grid(row = r, column = c, columnspan = colspan, sticky = "w")
+        self.a_button.grid(row = r, column = c, columnspan = colspan, sticky = "e")
         self.val = value
     def doom(self):
         self.a_button.destroy()
@@ -152,13 +151,12 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
     the_tab = tab
     counter = 0
 
-#Reset Pipeline Arguments and Lists
+#Reset Previous Pipeline Arguments and Lists
     reset_all_pipelines()
 
 #Checkbox values for json file 
     for k,v in arguments.items():
         selected_boxes[k] = v
-
 
 #Create Pipeline
     #Generate required arugments and required files lists
@@ -169,16 +167,16 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
             for item in range(0,len((arg_by_exp[counter][0]))):
                 necessary_arguments_colors.append(arg_by_exp[counter][1])
         counter +=1
-    if (arguments["pp_1"] == True or arguments["pp_2"] == True) and "Metadata" in necessary_files:
-        necessary_files.remove("Metadata")
-    if arguments["pw_1"] == True and "mzML Data" in necessary_files:
-        necessary_files.remove("mzML Data")
+    if (arguments["pp_1"] == True or arguments["pp_2"] == True) and "Metadata File" in necessary_files:
+        necessary_files.remove("Metadata File")
+    if arguments["pw_1"] == True and "mzML Data Folder" in necessary_files:
+        necessary_files.remove("mzML Data Folder")
     if t_num == 0 or t_num == 1:
-        if (arguments["ds_1"] == True) and "Feature Data" in necessary_files:
-            necessary_files.remove("Feature Data")
+        if (arguments["ds_1"] == True) and "Feature Data Folder" in necessary_files:
+            necessary_files.remove("Feature Data Folder")
     elif t_num == 2:
-        if (arguments["mm_1"] == True) and "Feature Data" in necessary_files:
-            necessary_files.remove("Feature Data")
+        if (arguments["mm_1"] == True) and "Feature Data Folder" in necessary_files:
+            necessary_files.remove("Feature Data Folder")
 
    #Create all Argument labels and Entry Boxes
     row_placer = 6
@@ -230,21 +228,18 @@ def Generate_pipeline(t_num,tab,window, hf,wf,smol,*args):
             user_file_label_list.append(tk.Label(tab,text=file, anchor="w", font=("Helvetica Neue",12), width = 20, bg ="#1c1c1c"))
             user_file_label_list[counter].grid(row=row_placer, column = column_placer,columnspan=2, sticky = "w")
             column_placer += 1
-            user_file_list.append(My_Button(tab, browse_text.get(), row_placer, column_placer, 3, file,'red', 'silver', window))
+            user_file_list.append(My_Button(tab, browse_text.get(), row_placer, column_placer, 1, file,'red', 'silver', window))
             column_placer -= 1
             row_placer += 1
             counter += 1
-        Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(t_num,window), height=5, width=14, bg="silver", fg= "green")
+        Run_button = tk.Button(tab, text="Run\nExperiment", font=("default", 16), command=lambda:Run_Experiment(tab,t_num,window), height=4, width=14, bg="silver", fg= "green")
         Run_button.grid(row=run_row_placer, column=run_col_placer, rowspan=4, columnspan=2)
     return  
 
 
 #Reset All Pipelines
 #This clears all three pipelines everytime a pipeline is generated. This is implemented to allow for shared variables between pipelines. 
-
 def reset_all_pipelines():
-    #Single Field Pipeline
-
     global user_entry_label_list, user_input_list, user_file_list, selected_boxes, global_file_dictionary, \
             file_label, parameter_label, Run_button, necessary_files, necessary_arguments, necessary_arguments_colors, \
             user_entry_list, user_file_label_list
@@ -257,7 +252,7 @@ def reset_all_pipelines():
         user_file_label_list[lab].destroy()
     for button in range(0,len(user_file_list)):
         user_file_list[button].doom()
-    global_file_dictionary = {"Raw Data": "", "mzML Data": "","Metadata": "", "Feature Data": "","config_data (Hidden)": "", "calibrant_curves": "","calibrant_data": "", "Target List": ""}
+    global_file_dictionary = {"Raw Data Folder": "", "mzML Data Folder": "","Metadata File": "", "Feature Data Folder": "","config_data (Hidden)": "", "calibrant_curves": "","calibrant_data": "", "Target List File": ""}
     user_input_list = []
     user_entry_label_list = []
     user_entry_list = []
@@ -279,67 +274,59 @@ def reset_all_pipelines():
 #this is called in the button class
 def open_file(file_variable,button,window):
     """ 
-    Raw data - Choose a folder
+    Raw Data Folder - Choose a folder
 
     All others - Choose a file
     """
     global global_file_dictionary
-    if file_variable in ["Raw Data","FrameMetadata","Feature Data"]:
+    if file_variable in ["Raw Data Folder","Ims Metadata Folder","Feature Data Folder"]:
         file = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
         if file != "":
-            if file_variable == "Raw Data":
-                global_file_dictionary["Raw Data"]=os.path.abspath(file)
+            if file_variable == "Raw Data Folder":
+                global_file_dictionary["Raw Data Folder"]=os.path.abspath(file)
                 button.configure(bg="silver", fg = "green")
 
-            elif file_variable == "FrameMetadata":
+            elif file_variable == "Ims Metadata Folder":
                 if platform.system().upper() == "DARWIN":
-                    global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "/*.txt")
+                    global_file_dictionary["Ims Metadata Folder"]=(os.path.abspath(file) + "/*.txt")
                 elif platform.system().upper() == "WINDOWS":
-                    global_file_dictionary["FrameMetadata"]=(os.path.abspath(file) + "\*.txt")
+                    global_file_dictionary["Ims Metadata Folder"]=(os.path.abspath(file) + "\*.txt")
                 button.configure(bg="silver", fg = "green")
 
-            elif file_variable == "Feature Data":
+            elif file_variable == "Feature Data Folder":
                 if platform.system().upper() == "DARWIN":
-                    global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "/*.csv")
+                    global_file_dictionary["Feature Data Folder"]= (os.path.abspath(file) + "/*.csv")
                 elif platform.system().upper() == "WINDOWS":
-                    global_file_dictionary["Feature Data"]= (os.path.abspath(file) + "\*.csv")
+                    global_file_dictionary["Feature Data Folder"]= (os.path.abspath(file) + "\*.csv")
                 button.configure(bg="silver", fg = "green")
 
     else:
         file = askopenfile(parent=window, mode = 'rb',title = "Select a file")
         if file != None:
-            if file_variable == "mzML Data":
-                global_file_dictionary["mzML Data"] = os.path.abspath(file.name)
+            if file_variable == "mzML Data Folder":
+                global_file_dictionary["mzML Data Folder"] = os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green")
 
-            elif file_variable == "Raw File Metadata":
-                global_file_dictionary["Raw File Metadata"]= os.path.abspath(file.name)
+            elif file_variable == "Metadata File":
+                global_file_dictionary["Metadata File"]= os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green")
-
-            # elif file_variable == "Feature Data":
-            #     global_file_dictionary["Feature Data"]= os.path.abspath(file.name)
-            #     button.configure(bg="silver", fg = "green")
-
-            # elif file_variable == "config_data (Hidden)":
-            #     global_file_dictionary["config_data (Hidden)"] = os.path.abspath(file.name)
-            #     button.configure(bg="silver", fg = "green")
 
             elif file_variable == "calibrant_curves":
                 global_file_dictionary["calibrant_curves"] = os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green")
 
-            elif file_variable == "Calibrant Data":
-                global_file_dictionary["Calibrant Data"] = os.path.abspath(file.name)
+            elif file_variable == "Calibrant File":
+                global_file_dictionary["Calibrant File"] = os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green") 
 
-            elif file_variable == "Target List":
-                global_file_dictionary["Target List"] = os.path.abspath(file.name)
+            elif file_variable == "Target List File":
+                global_file_dictionary["Target List File"] = os.path.abspath(file.name)
                 button.configure(bg="silver", fg = "green")
     return
 
 
 #Called when the Run experiment button is pressed
-def Run_Experiment(t_num,window):
+def Run_Experiment(tab,t_num,window):
     global win, global_file_dictionary, necessary_files
     win = window
     try:
@@ -355,8 +342,9 @@ def Run_Experiment(t_num,window):
         L = [var.get() for var in user_input_list]
         L = [t_num] + L
         write_to_json(*L)
-        thread1 = threading.Thread(target=run_workflow)
+        thread1 = threading.Thread(target=run_workflow, args = (tab,window))
         thread1.start()
+        return 
 
 # This will write all relevent information to a json file!
 #this is called in run_experiment
@@ -384,18 +372,40 @@ def write_to_json(*args):
     return 
 
 
+#Work on this more later. Currently this only saves results from Proteowizard (See Pipeline.py local_mem variable)
+def save_results(copy_from_here,window):
+    #global Save_button
+    print("Results must be saved")
+    copy_to_here = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
+    if platform.system().upper() == "DARWIN":
+        command_mac = "cp -r " + copy_from_here + "/ " + copy_to_here
+        print(command_mac)
+        os.system(command_mac)
+        #Save_button.config(text="Saved!", state=DISABLED)
+    if platform.system().upper() == "WINDOWS":
+        copy_to_here = copy_to_here + "/" + os.path.basename(copy_from_here)
+        #command_PC = "copy "  + copy_from_here + " " + copy_to_here
+        command_PC = 'xcopy /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
+        os.system(command_PC)
+       # Save_button.config(text="Saved!", state=DISABLED)
+
+
 #Run nextflow! 
 #if this section is not working, check if main.nf is in current directory!
 #to do: find current directory of nextflow file and run.
-def run_workflow():
+def run_workflow(tab,window):
     confirmation_step = msg.askquestion("Run Experiment", "Please confirm all arguments before running experiment. There will be no option to cancel run.")
     if confirmation_step == "yes":
         global Run_button, win
         Run_button.config(text="In progress", state=DISABLED)
         print("pipeline in progress. this is printed in function \"run_workflow\"")
-        Pipeline.execute_workflow("sample.json")
-        Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
 
+        local_mem = Pipeline.execute_workflow("sample.json")
+        Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
+        if local_mem != "":
+            Save_button = tk.Button(tab, text="Save Results", font=("default", 14), command=lambda:save_results(local_mem,window), height=1, width=14, bg="silver", fg= "green")
+            Save_button.grid(row=10, column=8, rowspan=1, columnspan=2)
+    return 
 
 #Results Popup window
 #called on run button press after nextflow thread is complete

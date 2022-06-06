@@ -51,6 +51,7 @@ def run_container(raw_file_folder):
 
     image = "anubhav0fnu/proteowizard"    
     local_mem = os.getcwd() + "/III_mzML"
+    print("locsl mem: ",local_mem)
     client = docker.from_env()
     command_list = ["wine", "/wineprefix64/drive_c/pwiz/msconvert", "--zlib", "-e",".mzMZ.gz","-o","/III_mzML", "placeholder"]
 
@@ -62,5 +63,5 @@ def run_container(raw_file_folder):
         count +=1
     for t in threads:
         t.join()
-
+    return local_mem
 

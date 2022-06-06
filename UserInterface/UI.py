@@ -161,11 +161,11 @@ t1_l4=Label(tab1,text="Smooth data", font=("default, 14"),borderwidth=0, relief=
 
 PP_check_1_single = BooleanVar(False)
 PP_button_1_single = Checkbutton(tab1, variable=PP_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
-PP_button_1_single.grid(row=3, column=2, sticky = "W")
+PP_button_1_single.grid(row=3, column=2, columnspan=2, sticky = "W")
 
 PP_check_2_single = BooleanVar(False)
 PP_button_2_single = Checkbutton(tab1, variable=PP_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
-PP_button_2_single.grid(row=4, column=2, sticky = "W")
+PP_button_2_single.grid(row=4, column=2, columnspan=2, sticky = "W")
 
 
 #ProteoWizard -  labels, buttons, design
@@ -183,7 +183,7 @@ t1_l5=Label(tab1,text= "  Convert to mzML", font=("default, 14"),borderwidth=0, 
 
 PW_check_1_single = BooleanVar(False)
 PW_button_1_single = Checkbutton(tab1, variable=PW_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
-PW_button_1_single.grid(row=3, column=4, sticky = "W")
+PW_button_1_single.grid(row=3, column=4, columnspan=2, sticky = "W")
 
 
 #DEIMoS -  labels, buttons, design
@@ -202,11 +202,11 @@ t1_l7=Label(tab1,text="Calculate CCS", font=("default, 14"),borderwidth=0, relie
 
 DS_check_1_single = BooleanVar(False)
 DS_button_1_single = Checkbutton(tab1, variable=DS_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue")
-DS_button_1_single.grid(row=3, column=6, sticky = "W")
+DS_button_1_single.grid(row=3, column=6, columnspan=2, sticky = "W")
 
 DS_check_2_single = BooleanVar(False)
 DS_button_2_single = Checkbutton(tab1, variable=DS_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
-DS_button_2_single.grid(row=4, column=6, sticky = "W")
+DS_button_2_single.grid(row=4, column=6, columnspan=2, sticky = "W")
 
 
 #AutoCCS - labels, buttons, design
@@ -227,11 +227,11 @@ t1_l9=Label(tab1,text="Calculate CCS (Enhanced)", font=("default, 14"),borderwid
 previous_true = ["A","B","C"]
 AC_check_1_single = BooleanVar(False)
 AC_button_1_single = Checkbutton(tab1, variable=AC_check_1_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
-AC_button_1_single.grid(row=3, column=8, sticky = "W")
+AC_button_1_single.grid(row=3, column=8, columnspan=2, sticky = "W")
 
 AC_check_2_single = BooleanVar(False)
 AC_button_2_single = Checkbutton(tab1, variable=AC_check_2_single, onvalue=True, offvalue=False, bg="grey", fg ="blue", command=lambda: single_switcher())
-AC_button_2_single.grid(row=4, column=8, sticky = "W")
+AC_button_2_single.grid(row=4, column=8, columnspan=2, sticky = "W")
 
 
 #Generate Pipeline Button -  labels, buttons, design
