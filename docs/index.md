@@ -33,6 +33,35 @@ Data from the SLIM machine.
 Drift tube ion mobiology mass spectrometry that requires specific known targets and their masses.
 Each mode has separate needs for input files, but runs a combination of the modules depicted below.
 
+## Select your Tools  
+
+Check the boxes to choose which steps you'd like to run. Once selected, press Generate New Pipeline.  
+At any point, clear the uploaded files and parameter values by selecting "Generate New Pipeline" again.  
+
+## Upload your files
+  
+To upload files/folders, please sort each file type into their own folder, then select the folder by clicking "Browse".  
+For example, all Raw data files should be placed in a single folder without any other files. This is the same for Ims Metadata files, and Feature files.  
+While browsing, any "Folder" upload will hide all individual files to avoid improper selections.  
+  
+Individual File uploads do not require folders and may be selected directly. These include: Calibrant File, Target List File, and Metadata File.  
+
+## Run Experiment  
+
+Prior to selecting "Run Experiment", Docker must be open. Docker is required to run each of the tools.  
+  
+Please confirm all variables and path locations before running experiment.  
+  
+When running experiment, do not exit the application or Docker. Doing so may result in temporary files (such as .tar files in data folders) not being deleted. 
+If exited early, please ensure no temporary files exist in experimental folders before running again.  
+  
+## Viewing Results  
+
+After the experiment is completed, a "Save Results" button should appear. Press the button to choose a folder to move results to.  
+  
+If CCS Values were generated, a summary graph will be generated or a PDF will be available to view depending on the experiment type.  
+
+
 ## Available Tools
 
 <<<<<< main
