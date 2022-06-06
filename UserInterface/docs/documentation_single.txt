@@ -1,0 +1,65 @@
+Single Field Ion Mobility - Mass Spectrometry
+
+Tools:
+________________________________________________________________________________________________
+PNNL Preprocessor: 
+
+This tool processes raw data to reduce noise and highlight features.
+
+Filtering - Filter out signals below a user defined threshold [minIntensity]. 
+Smoothing - Improve signal of low intensity peaks with [driftKernel].
+Sum frames - Sum all frames into a single one for consolidated results by setting [lcKernal] to 0.
+
+Input:  1) Raw data
+
+Output: 1) Processed data in same format  
+              2) Metadata
+
+Notes: Metadata is required for feature detection using MZmine or DEIMoS 
+________________________________________________________________________________________________
+ProteoWizard:
+
+This tool is capable of converting proprietary data (raw or preprocessed) into (gz compressed) mzML files.
+
+Input:  1) Raw  or
+            1) Preprocesed data
+
+Output: 1) mzML formatted data
+
+Notes: mzML format is universal file type that is required for many open source tools such as mzMine and DEIMoS.
+________________________________________________________________________________________________
+DEIMoS
+
+This tool has many capabilities including feature detection and CCS calculation for single field (or SLIM) data.
+
+Feature Detection:
+Input:  1) mzML formatted files
+            2) Metadata
+
+Output: 1) Feature file
+       
+CCS Calculation:
+Input:  1) Feature file
+            2) Target List (csv)
+            3) Calibrant data
+            4) Configuration file
+
+Output: 1) CCS Values
+
+Notes: The configuration file may be manually modified by the user, but is otherwise hidden.
+________________________________________________________________________________________________
+AutoCCS
+
+This tool offers two methods to calculate CCS values. The "standard" method is comparable to the DEIMoS CCS calculation
+The "enhanced" method accounts for changes of temperature and pressure of the instrument across runs and reduces noise. 
+
+Input:  1) Feature file
+            2) Target List (csv)
+            3) Calibrant data
+            4) Configuration file
+
+Output: 1) CCS Values
+
+Notes: The configuration file may be manually modified by the user, but is otherwise hidden.
+________________________________________________________________________________________________
+

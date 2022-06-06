@@ -3,6 +3,7 @@
 [to edit this]
 You can use the [editor on GitHub](https://github.com/PNNL-CompBio/ion-mob-ms/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files. Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
+
 This dashboard is designed to facilitate the numerous steps required to run analysis tools required for Ion Mobility Mass Spectrometry Analysis.
 
 ## How to install
@@ -42,7 +43,9 @@ Each mode has separate needs for input files, but runs a combination of the modu
 
 ## Available Tools
 
-Currently we have enabled the use of the following tools.
+<<<<<< main
+Currently we have enabled the use of the following tools. 
+
 
 ### PNNL PreProcessor Tool
 Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor).
