@@ -1,6 +1,0 @@
-Mac:
-pyinstaller --collect-all sv_ttk --collect-all nextflow --add-data="docs/*:docs" --add-data="autoCCS_config.xml:tmp/CF" -F UI_PC.py
-
-
-Windows:
-pyinstaller.exe --collect-all sv_ttk --add-data="docs/*;docs" --add-data="autoCCS_config.xml;tmp/CF" -F UI_PC.py

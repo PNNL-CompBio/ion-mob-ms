@@ -65,7 +65,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         for item in test2[1:]:
             test2[counter] =  "/" + item
             counter +=1
-        local_mem = os.getcwd() + "/tmp"
+        local_mem = os.getcwd() + "/IV_data"
 
     if platform.system().upper() == "WINDOWS":
         feature_files_quote = '"' + feature_files + '"'
@@ -76,7 +76,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         for item in test2[:-1]:
             test2[counter] = '"'+ feature_files[:-5] + item +'"'
             counter +=1
-        local_mem = os.getcwd() + "\\tmp"
+        local_mem = os.getcwd() + "\\IV_data"
 
     if version == "standard":
         command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
@@ -116,13 +116,13 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
     print("local mem is: ", local_mem)
     image = "anubhav0fnu/autoccs"    
 
-    os.makedirs("./tmp/CF", exist_ok=True)
-    os.makedirs("./tmp/TLF", exist_ok=True)
-    os.makedirs("./tmp/FF", exist_ok=True)
-    os.makedirs("./tmp/IV_Results", exist_ok=True)
-    os.makedirs("./tmp/FMF", exist_ok=True)
-    os.makedirs("./tmp/MD", exist_ok=True)
-    os.makedirs("./tmp/CBF", exist_ok=True)
+    os.makedirs("./IV_data/CF", exist_ok=True)
+    os.makedirs("./IV_data/TLF", exist_ok=True)
+    os.makedirs("./IV_data/FF", exist_ok=True)
+    os.makedirs("./IV_data/IV_Results", exist_ok=True)
+    os.makedirs("./IV_data/FMF", exist_ok=True)
+    os.makedirs("./IV_data/MD", exist_ok=True)
+    os.makedirs("./IV_data/CBF", exist_ok=True)
     time.sleep(5)
     print("Z\n")
 
@@ -181,5 +181,6 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         print("H\n")
         AC_Container.remove()
         print("I\n")
+        return local_mem
 
 

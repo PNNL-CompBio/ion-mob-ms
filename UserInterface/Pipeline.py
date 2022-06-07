@@ -22,7 +22,11 @@ def execute_workflow(json_file):
 
 #Mac and Windows are seperated here to avoid building host OS variables into docker images.
 #Instead, "mac" and "pc" arguments are passed into the run_container functions.
-    local_mem = ""
+    PP_results = ""
+    PW_results = ""
+    MZ_results = ""
+    DM_results = ""
+    AC_results = ""
     ## Single Field
     if data[0]["Experiment"] == 0:
         print("Single Field Begins here.")
@@ -32,17 +36,17 @@ def execute_workflow(json_file):
             print("PNNL Preprocessor does Smoothing")
         if data[1]["pw_1"] == True:
             print("Proteowizard converts Files")
-            local_mem = PW_step.run_container(data[3]["Raw Data Folder"])
+            PW_results = PW_step.run_container(data[3]["Raw Data Folder"])
         if data[1]["ds_1"] == True:
             print("Deimos searches for Features")
         if data[1]["ds_2"] == True:
             print("Deimos finds CCS values")
         if data[1]["ac_1"] == True:
             print("AutoCCS finds features through the standard method.")
-            AC_step.run_container("single","standard",data[3]["Calibrant File"],False, data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
+            AC_results= AC_step.run_container("single","standard",data[3]["Calibrant File"],False, data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
         if data[1]["ac_2"] == True:
             print("AutoCCS finds features through the enhanced method.")
-            AC_step.run_container("single","enhanced",data[3]["Calibrant File"],data[3]["Ims Metadata Folder"], data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
+            AC_results= AC_step.run_container("single","enhanced",data[3]["Calibrant File"],data[3]["Ims Metadata Folder"], data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
 
     ## Slim 
     if data[0]["Experiment"] == 1:
@@ -54,17 +58,17 @@ def execute_workflow(json_file):
             print("PNNL Preprocessor does Smoothing")
         if data[1]["pw_1"] == True:
             print("Proteowizard converts Files")
-            local_mem = PW_step.run_container(data[3]["Raw Data Folder"])
+            PW_results = PW_step.run_container(data[3]["Raw Data Folder"])
         if data[1]["ds_1"] == True:
             print("Deimos searches for Features")
         if data[1]["ds_2"] == True:
             print("Deimos finds CCS values")
         if data[1]["ac_1"] == True:
             print("AutoCCS finds features through the standard method.")
-            AC_step.run_container("single","standard",data[3]["Calibrant File"],False, data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
+            AC_results= AC_step.run_container("single","standard",data[3]["Calibrant File"],False, data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
         if data[1]["ac_2"] == True:
             print("AutoCCS finds features through the enhanced method.")
-            AC_step.run_container("single","enhanced",data[3]["Calibrant File"], data[3]["Ims Metadata Folder"], data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
+            AC_results= AC_step.run_container("single","enhanced",data[3]["Calibrant File"], data[3]["Ims Metadata Folder"], data[3]["Feature Data Folder"], False, data[3]["Metadata File"])
 
     ## Stepped Field
     if data[0]["Experiment"] == 2:
@@ -76,11 +80,12 @@ def execute_workflow(json_file):
             print("PNNL Preprocessor does Smoothing")
         if data[1]["pw_1"] == True:
             print("Proteowizard converts Files")
-            local_mem = PW_step.run_container(data[3]["Raw Data Folder"])
+            PW_results = PW_step.run_container(data[3]["Raw Data Folder"])
         if data[1]["mm_1"] == True:
             print("MZMine searches for Features")
         if data[1]["ac_1"] == True:
             print("AutoCCS finds features through the enhanced method.")
-            AC_step.run_container("step","enhanced",False, data[3]["Ims Metadata Folder"], data[3]["Feature Data Folder"], data[3]["Target List File"],False)
+            AC_results= AC_step.run_container("step","enhanced",False, data[3]["Ims Metadata Folder"], data[3]["Feature Data Folder"], data[3]["Target List File"],False)
     
-    return local_mem
+    all_results = [PP_results, PW_results, MZ_results, DM_results, AC_results]
+    return all_results

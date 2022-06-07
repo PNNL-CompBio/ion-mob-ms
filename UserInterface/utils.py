@@ -7,6 +7,7 @@ from tkinter.ttk import *
 from tkinter import ttk
 from tkinter import *
 from tkinter.filedialog import askopenfile
+from tkinter import simpledialog
 import tkinter.scrolledtext as scrolledtext
 from tkinter import messagebox as msg
 from tkinter import font
@@ -341,10 +342,11 @@ def Run_Experiment(tab,t_num,window):
     else:
         L = [var.get() for var in user_input_list]
         L = [t_num] + L
-        write_to_json(*L)
-        thread1 = threading.Thread(target=run_workflow, args = (tab,window))
+        JE = write_to_json(*L)
+        write_as_summary(*L)
+        thread1 = threading.Thread(target=run_workflow, args = (tab,window,JE))
         thread1.start()
-        return 
+        return
 
 # This will write all relevent information to a json file!
 #this is called in run_experiment
@@ -369,42 +371,122 @@ def write_to_json(*args):
 
     with open("sample.json", "w") as outfile:
         outfile.write(json_object)
-    return 
+    return json_export
+
+def write_as_summary(*args):
+    global necessary_arguments, necessary_files, json_exp
+    f = open("Run_summary.txt", "w")
+    f.write("Ion Mobility Application  -  User Selected Parameters\n\n\n")
+    counter = -1
+    for arg in args:
+        if counter == -1:
+            if arg == 0:
+                exp = "Experiment Selected:\t Single Field\n\n"
+            elif arg == 1:
+                exp = "Experiment Selected:\t SLIM\n\n"
+            elif arg == 2:
+                exp = "Experiment Selected:\t Stepped Field\n\n"
+            f.write(exp)
+            for k,v in selected_boxes.items():
+                if v == True:
+                    if k == "pp_1":
+                        sline = "Step Selected:\t\t PNNL PreProcessor - Filtering\n" 
+                    if k == "pp_2":
+                        sline = "Step Selected:\t\t PNNL PreProcessor - Smoothing\n" 
+                    if k == "pw_1":
+                        sline = "Step Selected:\t\t ProteoWizard - Data Conversion\n" 
+                    if k == "mz_1":
+                        sline = "Step Selected:\t\t MZmine - Feature Detection\n" 
+                    if k == "dm_1":
+                        sline = "Step Selected:\t\t DEIMoS - Feature Detection\n" 
+                    if k == "dm_2":
+                        sline = "Step Selected:\t\t DEIMoS - Calculated CCS (Standard)\n" 
+                    if k == "ac_1":
+                        sline = "Step Selected:\t\t AutoCCS - Calculated CCS (Standard)\n" 
+                    if k == "ac_2":
+                        sline = "Step Selected:\t\t AutoCCS - Calculated CCS (Enhanced)\n" 
+                    f.write(sline)
+            f.write("\n")
+        else:
+            if len(necessary_arguments) > 0:
+                pline = "Parameter " + str(necessary_arguments[counter]) + ":\\tt" + str(arg)
+                f.write(pline)
+                f.write("\n")
+        for file in user_file_list:
+            fline = str(file.val) + " Path:\t\t" + str(global_file_dictionary[file.val]) + "\n\n"
+            f.write(fline)
+    f.close()
+
+def confirm_json(window,JE):
+    front= Toplevel(window)
+    front.geometry("900x500")
+    front.title("Tool Documentation Single Field / SLIM")
+    results = open("./Run_summary.txt", "r")
+    confirm_box = scrolledtext.ScrolledText(front, height = 30, width = 90, padx=15, pady=15, bg = "grey")
+    confirm_box.configure(font=("default", 14))
+    for line in results:
+        confirm_box.insert(tkinter.END, line)
+    confirm_box.config(state=DISABLED)
+    confirm_box.grid(row = 1, column = 1)
+    
+    new_window = tk.Tk()
+    new_window.withdraw()
+    #confirmation_step = msg.askquestion("Run Experiment", "Please confirm all arguments before running experiment. There will be no option to cancel run.")
+    run_name = simpledialog.askstring(title="Run Name",
+                                  prompt="Confirm all parameters and file paths.\nThen create a run name.", parent=new_window, initialvalue ="Create Run Name!")
+    JE.append({"Run_name": run_name})
+    json_object = json.dumps(JE, indent = 4)
+    with open("sample.json", "w") as outfile:
+        outfile.write(json_object)
+    new_window.destroy()
+    front.destroy()
+    return run_name
 
 
-#Work on this more later. Currently this only saves results from Proteowizard (See Pipeline.py local_mem variable)
-def save_results(copy_from_here,window):
-    #global Save_button
-    print("Results must be saved")
-    copy_to_here = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
-    if platform.system().upper() == "DARWIN":
-        command_mac = "cp -r " + copy_from_here + "/ " + copy_to_here
-        print(command_mac)
-        os.system(command_mac)
+#Work on this more later. Currently this only saves results from Proteowizard (See Pipeline.py PW_results variable)
+def save_results(all_results,window,run_name):
+    global Save_button
+    copy_to_dir = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory') +"/" + run_name
+    for copy_from_here in all_results:
+        print(copy_from_here)
+        if copy_from_here != "":
+            if platform.system().upper() == "DARWIN":
+                command_mac = 'cp "'  + copy_from_here + '" "' + copy_to_here + '"'
+                print(command_mac)
+                os.system(command_mac)
+                #Save_button.config(text="Saved!", state=DISABLED)
+            if platform.system().upper() == "WINDOWS":
+                copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
+                #command_PC = "copy "  + copy_from_here + " " + copy_to_here
+                command_PC = 'xcopy /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
+                print("ffrom here:", copy_from_here)
+                print("to here: ", copy_to_here)
+                os.system(command_PC)
+        #To Do - Change saved button after saving.        
         #Save_button.config(text="Saved!", state=DISABLED)
-    if platform.system().upper() == "WINDOWS":
-        copy_to_here = copy_to_here + "/" + os.path.basename(copy_from_here)
-        #command_PC = "copy "  + copy_from_here + " " + copy_to_here
-        command_PC = 'xcopy /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
-        os.system(command_PC)
-       # Save_button.config(text="Saved!", state=DISABLED)
+
 
 
 #Run nextflow! 
 #if this section is not working, check if main.nf is in current directory!
 #to do: find current directory of nextflow file and run.
-def run_workflow(tab,window):
-    confirmation_step = msg.askquestion("Run Experiment", "Please confirm all arguments before running experiment. There will be no option to cancel run.")
-    if confirmation_step == "yes":
+def run_workflow(tab,window,JE):    
+
+    Run_name = confirm_json(window,JE)
+
+    if Run_name != "Create Run Name!" and Run_name != "" and Run_name.isspace() == False :
         global Run_button, win
         Run_button.config(text="In progress", state=DISABLED)
         print("pipeline in progress. this is printed in function \"run_workflow\"")
 
-        local_mem = Pipeline.execute_workflow("sample.json")
-        Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
-        if local_mem != "":
-            Save_button = tk.Button(tab, text="Save Results", font=("default", 14), command=lambda:save_results(local_mem,window), height=1, width=14, bg="silver", fg= "green")
-            Save_button.grid(row=10, column=8, rowspan=1, columnspan=2)
+        all_results = Pipeline.execute_workflow("sample.json")
+        if all_results[4] + all_results[3] != "":
+            Run_button.config(text="Run Complete. \nView Results.", command=lambda:open_results(win),state=ACTIVE)
+        else:
+            Run_button.config(text="Run Complete.", state=DISABLED)
+        
+        Save_button = tk.Button(tab, text="Save Results", font=("default", 14), command=lambda:save_results(all_results,window,Run_name), height=1, width=14, bg="silver", fg= "green")
+        Save_button.grid(row=10, column=8, rowspan=1, columnspan=2)
     return 
 
 #Results Popup window
@@ -422,18 +504,18 @@ def open_results(window):
         v1 = pdf.ShowPdf()
         if platform.system().upper() == "DARWIN":
             v2 = v1.pdf_view(front,
-                    pdf_location =r"./tmp/IV_Results/calibration_output.poly.pdf", bar=False)
+                    pdf_location =r"./IV_data/IV_Results/calibration_output.poly.pdf", bar=False)
         elif platform.system().upper() == "WINDOWS":
             v2 = v1.pdf_view(front,
-                    pdf_location =r".\\tmp\\IV_Results\\calibration_output.poly.pdf", bar=False)
+                    pdf_location =r".\\IV_data\\IV_Results\\calibration_output.poly.pdf", bar=False)
         v2.grid()
     #step
     elif json_exp["Experiment"] == 2:
         matplotlib.use('TkAgg')
         if platform.system().upper() == "DARWIN":
-            results_loc = os.path.dirname(__file__) + "/tmp/IV_Results/ccs_table.tsv"
+            results_loc = os.path.dirname(__file__) + "/IV_data/IV_Results/ccs_table.tsv"
         elif platform.system().upper() == "WINDOWS":
-             results_loc = os.path.dirname(__file__) + "\\tmp\\IV_Results\\ccs_table.tsv"
+             results_loc = os.path.dirname(__file__) + "\\IV_data\\IV_Results\\ccs_table.tsv"
         df = pd.read_csv(results_loc, sep='\\t', engine='python')
 
         #set colors
