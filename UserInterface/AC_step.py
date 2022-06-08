@@ -157,6 +157,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         print("H\n")
         AC_Container.remove()
         print("I\n")
+        return local_mem
         
     if platform.system().upper() == "WINDOWS":
         print("AC container running on PC")

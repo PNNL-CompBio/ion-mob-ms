@@ -7,14 +7,11 @@ def find(name, path):
             return os.path.join(root, name)
 
 
-Pyinstaller_location = find("pyinstaller.exe","/")
-
-print(Pyinstaller_location)
-
 if platform.system().upper() == "WINDOWS":
+    Pyinstaller_location = find("pyinstaller.exe","/")
     command = Pyinstaller_location + ' --collect-all sv_ttk --add-data="docs/*;docs" -F UI.py'
 if platform.system().upper() == "DARWIN":
-    command = Pyinstaller_location + ' --collect-all sv_ttk --add-data="docs/*:docs" -F UI.py'
+    command = 'pyinstaller --collect-all sv_ttk --add-data="docs/*:docs" -F UI.py'
 
 os.system(command)
 
@@ -24,3 +21,5 @@ if platform.system().upper() == "WINDOWS":
 if platform.system().upper() == "DARWIN":
     os.system("rm -r build")
     os.system("rm UI.spec")
+
+    

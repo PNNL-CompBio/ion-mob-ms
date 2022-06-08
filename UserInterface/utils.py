@@ -26,6 +26,7 @@ import Pipeline
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
 import platform
+import time
 
 #Initialize All Variables
 
@@ -417,6 +418,8 @@ def write_as_summary(*args):
             f.write(fline)
     f.close()
 
+
+
 def confirm_json(window,JE):
     front= Toplevel(window)
     front.geometry("900x500")
@@ -428,39 +431,47 @@ def confirm_json(window,JE):
         confirm_box.insert(tkinter.END, line)
     confirm_box.config(state=DISABLED)
     confirm_box.grid(row = 1, column = 1)
-    
-    new_window = tk.Tk()
-    new_window.withdraw()
-    #confirmation_step = msg.askquestion("Run Experiment", "Please confirm all arguments before running experiment. There will be no option to cancel run.")
-    run_name = simpledialog.askstring(title="Run Name",
-                                  prompt="Confirm all parameters and file paths.\nThen create a run name.", parent=new_window, initialvalue ="Create Run Name!")
-    JE.append({"Run_name": run_name})
-    json_object = json.dumps(JE, indent = 4)
-    with open("sample.json", "w") as outfile:
-        outfile.write(json_object)
-    new_window.destroy()
-    front.destroy()
-    return run_name
-
+    time.sleep(1)
+    if platform.system().upper() == "DARWIN":
+        run_name = simpledialog.askstring(title="Run Name",
+                                    prompt="Confirm all parameters and file paths.\nThen create a run name.")
+        JE.append({"Run_name": run_name})
+        json_object = json.dumps(JE, indent = 4)
+        with open("sample.json", "w") as outfile:
+            outfile.write(json_object)
+        front.destroy()
+        return run_name
+    if platform.system().upper() == "WINDOWS":
+        new_window = tk.Tk()
+        new_window.withdraw()
+        run_name = simpledialog.askstring(title="Run Name",
+                            prompt="Confirm all parameters and file paths.\nThen create a run name.", parent=new_window, initialvalue= "Create Run Name!")
+        JE.append({"Run_name": run_name})
+        json_object = json.dumps(JE, indent = 4)
+        with open("sample.json", "w") as outfile:
+            outfile.write(json_object)
+        new_window.destroy()
+        front.destroy()
+        return run_name
 
 #Work on this more later. Currently this only saves results from Proteowizard (See Pipeline.py PW_results variable)
 def save_results(all_results,window,run_name):
     global Save_button
     copy_to_dir = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory') +"/" + run_name
     for copy_from_here in all_results:
-        print(copy_from_here)
         if copy_from_here != "":
+            copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
             if platform.system().upper() == "DARWIN":
-                command_mac = 'cp "'  + copy_from_here + '" "' + copy_to_here + '"'
-                print(command_mac)
+                command_mac_mkdir = 'mkdir -p "' + copy_to_dir + '"'
+                os.system(command_mac_mkdir)
+                command_mac = 'cp -r "'  + copy_from_here + '" "' + copy_to_here + '"'
                 os.system(command_mac)
                 #Save_button.config(text="Saved!", state=DISABLED)
             if platform.system().upper() == "WINDOWS":
-                copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
                 #command_PC = "copy "  + copy_from_here + " " + copy_to_here
                 command_PC = 'xcopy /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
-                print("ffrom here:", copy_from_here)
-                print("to here: ", copy_to_here)
+                # print("ffrom here:", copy_from_here)
+                # print("to here: ", copy_to_here)
                 os.system(command_PC)
         #To Do - Change saved button after saving.        
         #Save_button.config(text="Saved!", state=DISABLED)
