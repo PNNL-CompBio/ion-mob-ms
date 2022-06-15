@@ -220,6 +220,8 @@ def PP_create():
         hide_run()
     hide_single_workflow()
     hide_stepped_workflow()
+    create_modes()
+    change_mode_color(Single_tool_button)
     global_file_dictionary = {}
     ExpType = "Any"
     ToolType = "PP"
@@ -301,6 +303,8 @@ def PW_create():
         hide_run()
     hide_single_workflow()
     hide_stepped_workflow()
+    create_modes()
+    change_mode_color(Single_tool_button)
     global_file_dictionary = {}
     ExpType = "Any"
     ToolType = "PW"
@@ -359,16 +363,18 @@ def AC_create():
         hide_run()
     hide_single_workflow()
     hide_stepped_workflow()
+    create_modes()
+    change_mode_color(Single_tool_button)
     tool_check = ""
     Data_Frame.columnconfigure((0,1,2,3,4,5,6,7), minsize=int(40))
     Data_Frame.rowconfigure((0,1,2,3,4,5), minsize=int(40))
     l36=Label(Data_Frame,text="Select Experiment Type", font=("default", 16, "bold"),borderwidth=0, relief="solid", justify="center", anchor="center")
     l36.grid(row=1, column = 0, columnspan=7, rowspan=1, sticky="NWES")
-    AC_single_button= Button(Data_Frame, height = 1, width = 8, text = "Single Field", bg = "white", command = lambda: AC_single_create())
+    AC_single_button= Button(Data_Frame, height = 1, width = 10, text = "Single Field", bg = "white", command = lambda: AC_single_create())
     AC_single_button.grid(row=3, column = 1, sticky="NEWS")
-    AC_stepped_button= Button(Data_Frame, height = 1, width = 8, text = "Stepped Field", bg = "white", command = lambda: AC_stepped_create())
+    AC_stepped_button= Button(Data_Frame, height = 1, width = 10, text = "Stepped Field", bg = "white", command = lambda: AC_stepped_create())
     AC_stepped_button.grid(row=3, column = 3, sticky="NEWS")
-    AC_slim_button= Button(Data_Frame, height = 1, width = 8, text = "SLIM", bg = "red", state = DISABLED)
+    AC_slim_button= Button(Data_Frame, height = 1, width = 10, text = "SLIM", bg = "darkgrey", state = DISABLED)
     AC_slim_button.grid(row=3, column = 5, sticky="NEWS")
 
 def AC_hide():
@@ -590,7 +596,7 @@ def create_tools(PP_state,PW_state,MZ_state,DM_state,AC_state,PP_color="grey",PW
     except:
         pass
     if PP_state =="active":
-        PP = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "PNNL PreProcessor\n ˢᵘᵐ ᶠʳᵃᵐᵉˢ ᵃⁿᵈ ˢᵐᵒᵒᵗʰ ʳᵃʷ ᵈᵃᵗᵃ​",bordersize=1, command = lambda: [change_tool_color(PP),PP_create(),PP_create()])
+        PP = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "PNNL PreProcessor​",bordersize=1, command = lambda: [change_tool_color(PP),PP_create(),PP_create()])
     if PP_state == "disabled":
         PP = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "PNNL PreProcessor\n ˢᵘᵐ ᶠʳᵃᵐᵉˢ ᵃⁿᵈ ˢᵐᵒᵒᵗʰ ʳᵃʷ ᵈᵃᵗᵃ​",bordersize=1,bg=PP_color)
     PP.grid(row=1, column = 0, sticky="NEWS")
@@ -845,8 +851,8 @@ def empty_data():
     hide_single_workflow()
     hide_stepped_workflow()
     Data_Frame.rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17), minsize=int(0))
-    Data_Frame.rowconfigure(1, minsize=60)
-    l2=Label(Data_Frame,text="Select a tool on the left to begin your analysis.\nThen you will be prompted to upload your Data files\nand select parameters as needed. ", font=("default", 14),borderwidth=0, relief="solid", width = int(45//wf), justify="left",anchor="center")
+    Data_Frame.rowconfigure(1, minsize=70)
+    l2=Label(Data_Frame,text="Select a tool on the left to begin your analysis.\nThen you will be prompted to upload your Data\nfiles and select parameters as needed. ", font=("default", 14),borderwidth=0, relief="solid", width = int(45//wf), justify="left",anchor="center")
     l2.grid(row=4, column = 0, columnspan=10, rowspan=5, sticky="NEWS")
 
 
@@ -878,8 +884,8 @@ def Show_instructions():
         l5=Label(Cover_frame,text="You can also run multiple tools at once by selecting the Mode tab and choosing a pre-configured \nworkflow. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
         l5.grid(row=10, column = 5, columnspan=10, rowspan=2, sticky="NEWS")
 
-        l6=Label(Cover_frame,text="If you would like to run our pre-configured workflows, select one of the buttons below. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
-        l6.grid(row=13, column = 5, columnspan=10, rowspan=2, sticky="NEWS")
+        # l6=Label(Cover_frame,text="If you would like to run our pre-configured workflows, select one of the buttons below. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
+        # l6.grid(row=13, column = 5, columnspan=10, rowspan=2, sticky="NEWS")
     
     try:
         hide_tools()
@@ -1041,16 +1047,18 @@ def create_run():
     Hide_instructions()
     if freeze_run ==False:
         hide_run()
-        Run_Frame.rowconfigure((1,2,3,4,5,6,7), minsize=int(20))
-        
         if tool_check != "":
+            Run_Frame.rowconfigure((1,2,3,4,5,6,7), minsize=int(20))
             l47 = Label(Run_Frame,text="Please check parameters and file locations before\nrunning experiment. When complete, you may\nview a preview of the results and select a\nlocation to save the results folder.", font=("default", 14),borderwidth=0, relief="solid", width = int(45//wf), justify="left")
             l47.grid(row =2, column = 0,columnspan = 3)        
             Run_button = tk.Button(Run_Frame, text="Run\nExperiment", font=("default", 16), command = lambda: Run_Experiment(), height=3, width=12, bg="silver", fg= "darkgreen")
             Run_button.grid(row=4, column=0, rowspan=2, columnspan=2)
         elif tool_check == "":
-            l48 = Label(Run_Frame,text="Before running an experiment, a tool\n or workflow must be selected.", font=("default", 14),borderwidth=0, relief="solid", width = int(45//wf), justify="left")
-            l48.grid(row =2, column = 0)        
+            Run_Frame.rowconfigure((1,2,3,4,5,6,7), minsize=int(0))
+            Run_Frame.rowconfigure((1), minsize=int(70))
+            Run_Frame.rowconfigure((3), minsize=int(60))
+            l48 = Label(Run_Frame,text="Before running an experiment, a tool\n or workflow must be selected.", font=("default", 14),borderwidth=0, relief="solid", width = int(45//wf), justify="left",anchor="center")
+            l48.grid(row =2, column = 0,sticky="NEWS")        
 
 
 
@@ -1069,10 +1077,11 @@ def hide_run():
 
 
 def reset_results():
-    global freeze_run, global_file_dictionary, JE, Save_button, Reset_button
+    global freeze_run, global_file_dictionary, JE, Save_button, Reset_button,save_switch
     answer = askyesno("Reset Experiment and Data", "Are you sure that you want to reset the experiment? Please save all data before confirming.")
     if answer ==True:
         try:
+            save_switch = False
             Run_Frame.rowconfigure((1,2,3,4,5,6,7,8), minsize=int(0))
             freeze_run = False
             global_file_dictionary = {}
@@ -1239,6 +1248,9 @@ def save_results(all_results,window,run_name):
     for copy_from_here in all_results:
         if copy_from_here != "" and copy_to_dir != "" and copy_to_dir.isspace() == False and copy_to_dir != ("/" + run_name):
             copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
+            print("copy here: ", copy_to_here)
+            print("copy dir:", copy_to_dir)
+            print("copy from: ", copy_from_here)
             if platform.system().upper() == "DARWIN":
                 command_mac = "ls"
                 os.system(command_mac)
@@ -1253,11 +1265,13 @@ def save_results(all_results,window,run_name):
                 command_mac = 'mv "'  + "Run_summary.txt" + '" "' + copy_to_dir + '"'
                 os.system(command_mac)
             if platform.system().upper() == "WINDOWS":
-                command_PC = 'move /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
+                command_PC = 'mkdir "' + copy_to_dir + '"'
                 os.system(command_PC)
-                command_PC = 'move "'  + "sample.json" + '" "' + copy_to_dir + '"'
+                command_PC = 'move /y "'  + copy_from_here + '" "' + copy_to_here + '"'
                 os.system(command_PC)
-                command_PC = 'move "'  + "Run_summary.txt" + '" "' + copy_to_dir + '"'
+                command_PC = 'move /y "'  + "sample.json" + '" "' + copy_to_dir + '\sample.json"'
+                os.system(command_PC)
+                command_PC = 'move /y "'  + "Run_summary.txt" + '" "' + copy_to_dir + '\Run_summary.txt"'
                 os.system(command_PC)
             Save_button.config(text="Results saved.", font=("default", 12),state=DISABLED)
             view_results_at = copy_to_dir
