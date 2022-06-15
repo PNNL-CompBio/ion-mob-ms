@@ -1,7 +1,5 @@
 #!/usr/bin/env python3.9
 
-from email.utils import encode_rfc2231
-from fcntl import F_GETFD
 from time import sleep
 import tkinter as tk
 import tkinter.filedialog
@@ -9,6 +7,7 @@ from tkinter.ttk import *
 from tkinter import ttk
 from tkinter import *
 from tkinter.filedialog import askopenfile
+from tkinter.messagebox import askyesno
 import tkinter.scrolledtext as scrolledtext
 from tkinter import messagebox as msg
 from tkinter import font
@@ -25,12 +24,9 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
-import Pipeline
+import Pipeline_V2
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
-
-
-
 
 
 
@@ -66,7 +62,7 @@ if screen_height < window_height or screen_width < window_width:
     small_screen = True
 
 
-
+save_switch = False
 freeze_run = False
 global_file_dictionary = {}
 ExpName = ""
@@ -387,7 +383,7 @@ def AC_hide():
 
 
 def AC_single_create():
-    global l31,l32,l33,l34,l35,l36,l37,l38,l39,e8,e9,e10,e11,e12,b3,b4,b5,b6,ExpName,global_file_dictionary,ExpType,ToolType,tool_check,freeze_run
+    global l31,l32,l33,l34,l35,l36,l37,l38,l39,l66,e8,e9,e10,e11,e12,b3,b4,b5,b6,ExpName,global_file_dictionary,ExpType,ToolType,tool_check,freeze_run
     hide_empty_data()
     PP_hide()
     PW_hide()
@@ -403,69 +399,73 @@ def AC_single_create():
     ToolType = "AC"
     tool_check = True
     Data_Frame.columnconfigure((0,1,2,3,4,5,6,7), minsize=int(0))
-    Data_Frame.rowconfigure((0,1,2,3,4,5), minsize=int(0))
+    Data_Frame.rowconfigure((1,2,3,4,5), minsize=int(0))
+    Data_Frame.rowconfigure((1), minsize=int(40))
+    l66=Label(Data_Frame,text="Single Field", font=("default", 15, "bold"),borderwidth=1, relief="solid", justify="center", anchor="center")
+    l66.grid(row=1, column = 0, columnspan=9, rowspan=1, sticky="NWES")
+
     l31=Label(Data_Frame,text="Upload the required data below and select Run to begin analysis.", font=("default", 14, "bold"),borderwidth=0, relief="solid", justify="left", anchor="w")
-    l31.grid(row=1, column = 0, columnspan=5, rowspan=1, sticky="NWS")
+    l31.grid(row=2, column = 0, columnspan=5, rowspan=1, sticky="NWS")
 
     l32=Label(Data_Frame,text="Files", font=("default", 14, "bold"),borderwidth=0, relief="solid",justify="left", anchor="w")
-    l32.grid(row=3, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l32.grid(row=4, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     l33=Label(Data_Frame,text="Feature Data Folder", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l33.grid(row=4, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l33.grid(row=5, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e12_v = tk.StringVar()
     e12 = ttk.Entry(Data_Frame,textvariable=e12_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e12.grid(row=4, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e12.grid(row=5, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b3= Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("Feature Data Folder",global_file_dictionary,e12_v))
-    b3.grid(row=4,column=7)
+    b3.grid(row=5,column=7)
 
     l37=Label(Data_Frame,text="Metadata File", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l37.grid(row=5, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l37.grid(row=6, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e8_v = tk.StringVar()
     e8 = ttk.Entry(Data_Frame, textvariable=e8_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e8.grid(row=5, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e8.grid(row=6, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b4 = Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("Metadata File",global_file_dictionary,e8_v))
-    b4.grid(row=5,column=7)
+    b4.grid(row=6,column=7)
 
     l38=Label(Data_Frame,text="Calibrant File", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l38.grid(row=6, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l38.grid(row=7, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e9_v = tk.StringVar()
     e9 = ttk.Entry(Data_Frame,textvariable=e9_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e9.grid(row=6, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e9.grid(row=7, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b5 = Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("Calibrant File",global_file_dictionary,e9_v))
-    b5.grid(row=6,column=7)
+    b5.grid(row=7,column=7)
 
     l39=Label(Data_Frame,text="IMS Metadata Folder (optional)", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l39.grid(row=7, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l39.grid(row=8, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e10_v = tk.StringVar()
     e10 = ttk.Entry(Data_Frame,textvariable=e10_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e10.grid(row=7, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e10.grid(row=8, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b6 = Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("IMS Metadata Folder",global_file_dictionary,e10_v))
-    b6.grid(row=7,column=7)
+    b6.grid(row=8,column=7)
 
     l34=Label(Data_Frame,text="Parameters", font=("default", 14, "bold"),borderwidth=0, relief="solid",  justify="left", anchor="w")
-    l34.grid(row=8, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l34.grid(row=9, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     l35=Label(Data_Frame,text="Experiment Name", font=("default", 14),borderwidth=0, relief="solid",justify="left", anchor="w")
-    l35.grid(row=9, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l35.grid(row=10, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     ExpName = tk.StringVar()
     e11 = ttk.Entry(Data_Frame, textvariable=ExpName)
-    e11.grid(row=9, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e11.grid(row=10, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
 def AC_single_hide():
-    global l31,l32,l33,l34,l35,l36,l37,l38,l39,e8,e9,e10,e11,e12,ExpName,b3,b4,b5,b6
+    global l31,l32,l33,l34,l35,l36,l37,l38,l39,l66,e8,e9,e10,e11,e12,ExpName,b3,b4,b5,b6
     Data_Frame.rowconfigure((0,1,2,3,4,5), minsize=int(0))
     Data_Frame.columnconfigure((0,1,2,3,4,5), minsize=int(0))
     try:
-        for arg in [l31,l32,l33,l34,l35,l36,l37,l38,l39,e8,e9,e10,e11,e12,b3,b4,b5,b6]:
+        for arg in [l31,l32,l33,l34,l35,l36,l37,l38,l39,l66,e8,e9,e10,e11,e12,b3,b4,b5,b6]:
             arg.grid_remove()
             
     except:
@@ -477,7 +477,7 @@ def AC_single_hide():
         pass
 
 def AC_stepped_create():
-    global l40,l41,l42,l43,l44,l45,l46,e13,e14,e15,e16,b7,b8,b9,ExpName,global_file_dictionary,ExpType, ToolType,tool_check,freeze_run
+    global l40,l41,l42,l43,l44,l45,l46,l67,e13,e14,e15,e16,b7,b8,b9,ExpName,global_file_dictionary,ExpType, ToolType,tool_check,freeze_run
     hide_empty_data()
     PP_hide()
     PW_hide()
@@ -494,60 +494,63 @@ def AC_stepped_create():
     global_file_dictionary ={}
     Data_Frame.columnconfigure((0,1,2,3,4,5,6,7), minsize=int(0))
     Data_Frame.rowconfigure((0,1,2,3,4,5), minsize=int(0))
+    Data_Frame.rowconfigure((1), minsize=int(40))
+    l67=Label(Data_Frame,text="Stepped Field", font=("default", 15, "bold"),borderwidth=1, relief="solid", justify="center", anchor="center")
+    l67.grid(row=1, column = 0, columnspan=9, rowspan=1, sticky="NWES")
     l40=Label(Data_Frame,text="Upload the required data below and select Run to begin analysis.", font=("default", 14, "bold"),borderwidth=0, relief="solid", justify="left", anchor="w")
-    l40.grid(row=1, column = 0, columnspan=5, rowspan=1, sticky="NWS")
+    l40.grid(row=2, column = 0, columnspan=5, rowspan=1, sticky="NWS")
 
     l41=Label(Data_Frame,text="Files", font=("default", 14, "bold"),borderwidth=0, relief="solid",justify="left", anchor="w")
-    l41.grid(row=3, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l41.grid(row=4, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     l42=Label(Data_Frame,text="IMS Metadata Folder", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l42.grid(row=4, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l42.grid(row=5, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e13_v = tk.StringVar()
     e13 = ttk.Entry(Data_Frame,textvariable=e13_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e13.grid(row=4, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e13.grid(row=5, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b7 = Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("IMS Metadata Folder",global_file_dictionary,e13_v))
-    b7.grid(row=4,column=7)
+    b7.grid(row=5,column=7)
 
     l43=Label(Data_Frame,text="Feature Data Folder", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l43.grid(row=5, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l43.grid(row=6, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e14_v = tk.StringVar()
     e14= ttk.Entry(Data_Frame,textvariable=e14_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e14.grid(row=5, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e14.grid(row=6, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b8 = Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("Feature Data Folder",global_file_dictionary,e14_v))
-    b8.grid(row=5,column=7)    
+    b8.grid(row=6,column=7)    
 
     l44=Label(Data_Frame,text="Target List File", font=("default", 14),borderwidth=1, justify="left", anchor="w")
-    l44.grid(row=6, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l44.grid(row=7, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     e15_v = tk.StringVar()
     e15 = ttk.Entry(Data_Frame,textvariable=e15_v,state = DISABLED,width=50, font=("default",10,"bold"))
-    e15.grid(row=6, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e15.grid(row=7, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
     b9 = Button(Data_Frame, height=1, width =6, text="Browse", command = lambda: open_file("Target List File",global_file_dictionary,e15_v))
-    b9.grid(row=6,column=7)
+    b9.grid(row=7,column=7)
 
     l45=Label(Data_Frame,text="Parameters", font=("default", 14, "bold"),borderwidth=0, relief="solid",  justify="left", anchor="w")
-    l45.grid(row=8, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l45.grid(row=9, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     l46=Label(Data_Frame,text="Experiment Name", font=("default", 14),borderwidth=0, relief="solid",justify="left", anchor="w")
-    l46.grid(row=9, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+    l46.grid(row=10, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
     ExpName = tk.StringVar()
     e16 = ttk.Entry(Data_Frame, textvariable=ExpName)
-    e16.grid(row=9, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
+    e16.grid(row=10, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
 
 
 
 def AC_stepped_hide():
-    global l40,l41,l42,l43,l44,l45,l46,e13,e14,e15,e16,ExpName,b7,b8,b9
+    global l40,l41,l42,l43,l44,l45,l46,l67,e13,e14,e15,e16,ExpName,b7,b8,b9
     Data_Frame.rowconfigure((0,1,2,3,4,5,6,7), minsize=int(0))
     Data_Frame.columnconfigure((0,1,2,3,4,5,6,7), minsize=int(0))
     try:
-        for arg in [l40,l41,l42,l43,l44,l45,l46,e13,e14,e15,e16,b7,b8,b9]:
+        for arg in [l40,l41,l42,l43,l44,l45,l46,l67,e13,e14,e15,e16,b7,b8,b9]:
             arg.grid_remove()
     except:
         pass
@@ -763,7 +766,7 @@ def create_stepped_workflow():
     ToolType = ["PW","AC"]  # Edit code for this...
     tool_check = True
     Data_Frame.columnconfigure((0,1,2,3,4,5,6,7), minsize=int(0))
-    Data_Frame.rowconfigure((0,1,2,3,4,5), minsize=int(0))
+    Data_Frame.rowconfigure((0,1,2,3,4,5,6,7), minsize=int(0))
     l58=Label(Data_Frame,text="Upload the required data below and select Run to begin analysis.", font=("default", 14, "bold"),borderwidth=0, relief="solid", justify="left", anchor="w")
     l58.grid(row=1, column = 0, columnspan=5, rowspan=1, sticky="NWS")
 
@@ -980,7 +983,6 @@ def write_to_json(files):
     global_parameter_dictionary = collect_parameters()
     json_export = [global_parameter_dictionary,files]
     json_object = json.dumps(json_export, indent = 4)
-
     with open("sample.json", "w") as outfile:
         outfile.write(json_object)
     return json_export
@@ -1035,14 +1037,15 @@ def write_as_summary(files):
 
 def create_run():
     # Run_Frame.columnconfigure((1,2,3), minsize=int(20))
-    global Run_button, l47,l48,freeze_run
+    global Run_button, Reset_button, l47,l48,freeze_run
     Hide_instructions()
     if freeze_run ==False:
         hide_run()
-        Run_Frame.rowconfigure((1,2,3,4,5), minsize=int(20))
+        Run_Frame.rowconfigure((1,2,3,4,5,6,7), minsize=int(20))
+        
         if tool_check != "":
             l47 = Label(Run_Frame,text="Please check parameters and file locations before\nrunning experiment. When complete, you may\nview a preview of the results and select a\nlocation to save the results folder.", font=("default", 14),borderwidth=0, relief="solid", width = int(45//wf), justify="left")
-            l47.grid(row =2, column = 0)        
+            l47.grid(row =2, column = 0,columnspan = 3)        
             Run_button = tk.Button(Run_Frame, text="Run\nExperiment", font=("default", 16), command = lambda: Run_Experiment(), height=3, width=12, bg="silver", fg= "darkgreen")
             Run_button.grid(row=4, column=0, rowspan=2, columnspan=2)
         elif tool_check == "":
@@ -1054,7 +1057,7 @@ def create_run():
 def hide_run():
     global Run_button, l47,l48, Save_button
     try:
-        Run_Frame.rowconfigure((1,2,3,4,5), minsize=int(0))
+        Run_Frame.rowconfigure((0,1,2,3,4,5,6,7,8), minsize=int(0))
         Run_button.grid_forget()
         l47.grid_forget()
     except:
@@ -1065,25 +1068,79 @@ def hide_run():
         pass
 
 
+def reset_results():
+    global freeze_run, global_file_dictionary, JE, Save_button, Reset_button
+    answer = askyesno("Reset Experiment and Data", "Are you sure that you want to reset the experiment? Please save all data before confirming.")
+    if answer ==True:
+        try:
+            Run_Frame.rowconfigure((1,2,3,4,5,6,7,8), minsize=int(0))
+            freeze_run = False
+            global_file_dictionary = {}
+            Save_button.grid_forget()
+            Reset_button.grid_forget()
+            JE = []
+            hide_tools()
+            hide_tool_instructions()
+        except:
+            pass
+        try:
+            hide_empty_data()
+        except:
+            pass
+        try:
+            hide_modes()
+        except:
+            pass
+        try:
+            hide_run()
+        except:
+            pass
+        try:
+            hide_single_workflow()
+        except:
+            pass
+        try:
+            AC_hide()
+        except:
+            pass
+        try:
+            AC_single_hide()
+        except:
+            pass
+        try:
+            AC_stepped_hide()
+        except:
+            pass
+        try:
+            PW_hide()
+        except:
+            pass
+        try:
+            PP_hide()
+        except:
+            pass
+        try:
+            hide_stepped_workflow()
+        except:
+            pass
+        try:
+            Show_instructions()
+        except:
+            pass
+
+
 
 
 def Run_Experiment():
     global global_file_dictionary
     param_dict = collect_parameters()
     try:
-        print(param_dict)
         for k,v in param_dict.items():
-            print(k, " and... ", v)
             if isinstance(v,list) != True:
                 if v.isspace() == True:
-                    print("Here it fails")
-                    print(k,v)
                     Fail_the_test
-        print("now for files...")
         for k,v in global_file_dictionary.items():
-            print(k, " and... ", v)
             if v.isspace() == True or v =="":
-                print(k)
                 Fail_the_test
     except:
         msg.showerror("Error","Please enter all parameter values and upload all files before running experiment!", icon = "warning")
@@ -1098,23 +1155,32 @@ def Run_Experiment():
 def run_workflow(JE):    
     Run_name = JE[0]["ExpName"]
     if Run_name != "" and Run_name.isspace() == False :
-        global Run_button, window, Save_button, freeze_run
+        global Run_button, window, Save_button, freeze_run, Reset_button
         freeze_run = True
         Run_button.config(text="In progress", state=DISABLED)
         print("pipeline in progress. this is printed in function \"run_workflow\"")
-        all_results = Pipeline.execute_workflow("sample.json")
+        cur_dir = os.path.dirname(__file__)
+        os.chdir(cur_dir)
+        all_results = Pipeline_V2.execute_workflow("sample.json")
         if all_results[4] + all_results[3] != "":
             Run_button.config(text="Run Complete \nView Results", font=("default",14), command=lambda:open_results(JE),state=NORMAL)
         else:
             Run_button.config(text="Run Complete", font=("default",14), state=DISABLED)
         
         Run_Frame.rowconfigure((1,2,3,4,5,6,7), minsize=int(30))
+        Reset_button = tk.Button(Run_Frame, text="Clear\nExperiment", font=("default", 12), command = lambda: reset_results(), height=2, width=12, bg="silver", fg= "darkred")
+        Reset_button.grid(row=6, column=0, rowspan=2, columnspan=2)
         Save_button = tk.Button(Run_Frame, text="Save Results", font=("default", 14), command=lambda:save_results(all_results,window,Run_name), height=4, width=10, bg="silver", fg= "green")
-        Save_button.grid(row=7, column=0, rowspan=1, columnspan=2)
+        Save_button.grid(row=8, column=0, rowspan=1, columnspan=2)
     return 
 
 
 def open_results(JE):
+    global save_switch, view_results_at
+    if save_switch == False:
+        view_results_at = "."
+    print("save switch: ", save_switch)
+    
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     if JE[0]["ExpType"] == "Single" or JE[0]["ExpType"] == "SLIM":
@@ -1123,20 +1189,23 @@ def open_results(JE):
         front.title("Results")
         v1 = pdf.ShowPdf()
         if platform.system().upper() == "DARWIN":
+            view_file = view_results_at + "/IV_data/IV_Results/calibration_output.poly.pdf"
+            print("view file: ", view_file)
             v2 = v1.pdf_view(front,
-                    pdf_location =r"./IV_data/IV_Results/calibration_output.poly.pdf", bar=False)
+                    pdf_location =view_file, bar=False)
         elif platform.system().upper() == "WINDOWS":
+            view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.poly.pdf"
             v2 = v1.pdf_view(front,
-                    pdf_location =r".\\IV_data\\IV_Results\\calibration_output.poly.pdf", bar=False)
+                    pdf_location =view_file, bar=False)
         v2.grid()
     #step
     elif JE[0]["ExpType"] == "Stepped":
         matplotlib.use('TkAgg')
         if platform.system().upper() == "DARWIN":
-            results_loc = os.path.dirname(__file__) + "/IV_data/IV_Results/ccs_table.tsv"
+            view_file = view_results_at + "/IV_data/IV_Results/ccs_table.tsv"
         elif platform.system().upper() == "WINDOWS":
-             results_loc = os.path.dirname(__file__) + "\\IV_data\\IV_Results\\ccs_table.tsv"
-        df = pd.read_csv(results_loc, sep='\\t', engine='python')
+             view_file = view_results_at + "\\IV_data\\IV_Results\\ccs_table.tsv"
+        df = pd.read_csv(view_file, sep='\\t', engine='python')
 
         #set colors
         color_by_Tunemix = []
@@ -1162,26 +1231,40 @@ def open_results(JE):
         
 
 def save_results(all_results,window,run_name):
-    global Save_button
+    global Save_button, view_results_at, save_switch
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)
+    save_switch = False
     copy_to_dir = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory') +"/" + run_name
     for copy_from_here in all_results:
-        if copy_from_here != "" and copy_to_dir != "" and copy_to_dir.isspace() == False and copy_to_dir != ("/" + run_name) :
+        if copy_from_here != "" and copy_to_dir != "" and copy_to_dir.isspace() == False and copy_to_dir != ("/" + run_name):
             copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
             if platform.system().upper() == "DARWIN":
+                command_mac = "ls"
+                os.system(command_mac)
                 command_mac_mkdir = 'mkdir -p "' + copy_to_dir + '"'
                 os.system(command_mac_mkdir)
-                command_mac = 'cp -r "'  + copy_from_here + '" "' + copy_to_here + '"'
+                command_mac = "ls"
+                os.system(command_mac)
+                command_mac = 'mv "'  + copy_from_here + '" "' + copy_to_here + '"'
+                os.system(command_mac)
+                command_mac = 'mv "'  + "sample.json" + '" "' + copy_to_dir + '"'
+                os.system(command_mac)
+                command_mac = 'mv "'  + "Run_summary.txt" + '" "' + copy_to_dir + '"'
                 os.system(command_mac)
             if platform.system().upper() == "WINDOWS":
-                #command_PC = "copy "  + copy_from_here + " " + copy_to_here
-                command_PC = 'xcopy /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
-                # print("ffrom here:", copy_from_here)
-                # print("to here: ", copy_to_here)
+                command_PC = 'move /E /I "'  + copy_from_here + '" "' + copy_to_here + '"'
                 os.system(command_PC)
-            Save_button.config(text="Saved.\nSave again?", font=("default", 12))
-        #To Do - Change saved button after saving.        
-        #Save_button.config(text="Saved!", state=DISABLED)
-
+                command_PC = 'move "'  + "sample.json" + '" "' + copy_to_dir + '"'
+                os.system(command_PC)
+                command_PC = 'move "'  + "Run_summary.txt" + '" "' + copy_to_dir + '"'
+                os.system(command_PC)
+            Save_button.config(text="Results saved.", font=("default", 12),state=DISABLED)
+            view_results_at = copy_to_dir
+            save_switch = True
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)
+    
 
 
 
