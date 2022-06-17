@@ -57,7 +57,7 @@ def run_container(raw_file_folder):
 
     threads = [] 
     count = 0
-    for filepath in pathlib.Path(raw_file_folder).glob('**/*'):
+    for filepath in pathlib.Path(raw_file_folder).glob('*'):
         threads.append(threading.Thread(target=process(filepath,client,image,local_mem,command_list)))  
         threads[count].start()
         count +=1
