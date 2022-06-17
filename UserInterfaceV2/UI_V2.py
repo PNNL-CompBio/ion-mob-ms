@@ -23,6 +23,11 @@ import Pipeline_V2
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
 
+
+#possible bug - run, dont save, then run again.  files should be removed. also check wheere json and txt file are saved.
+#Also try to make PW data conversion work concurrently - all at once rather than 1by1.
+
+
 #Set working directory
 cur_dir = os.path.dirname(__file__)
 os.chdir(cur_dir)

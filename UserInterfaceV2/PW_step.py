@@ -53,10 +53,11 @@ def run_container(raw_file_folder):
     local_mem = os.getcwd() + "/III_mzML"
     print("locsl mem: ",local_mem)
     client = docker.from_env()
-    command_list = ["wine", "/wineprefix64/drive_c/pwiz/msconvert", "--zlib", "-e",".mzMZ.gz","-o","/III_mzML", "placeholder"]
+    command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
     threads = [] 
     count = 0
+
     for filepath in pathlib.Path(raw_file_folder).glob('*'):
         threads.append(threading.Thread(target=process(filepath,client,image,local_mem,command_list)))  
         threads[count].start()
