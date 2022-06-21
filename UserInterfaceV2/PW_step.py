@@ -32,14 +32,17 @@ def copy_some_files(client, src_list,dst):
 
 def process(filepath,client,image,local_mem,command_list):
     file_path = str(filepath.absolute())
-    cont_name = ("PW_container" + os.path.basename(file_path))
+    cont_name = ("PW_container_" + os.path.basename(file_path))
     client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/III_mzML', 'mode': 'rw'}}, detach=True, tty=True)
+    print("X")
     PW_container = client.containers.get(cont_name)
     copy_dst = cont_name + ":/III_mzML/"
     copy_a_file(client, file_path,copy_dst)
+    print("Y")
     command_list.pop()
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
     PW_container.exec_run(cmd=command_list)
+    print("Z")
     PW_container.stop()
     PW_container.remove()
 
@@ -57,8 +60,10 @@ def run_container(raw_file_folder):
 
     threads = [] 
     count = 0
+    file_list = pathlib.Path(raw_file_folder).glob('*')
 
-    for filepath in pathlib.Path(raw_file_folder).glob('*'):
+    #To do: Make this run concurrently
+    for filepath in file_list:
         threads.append(threading.Thread(target=process(filepath,client,image,local_mem,command_list)))  
         threads[count].start()
         count +=1
