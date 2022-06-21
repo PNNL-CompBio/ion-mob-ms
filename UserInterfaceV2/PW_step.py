@@ -60,14 +60,6 @@ def run_container(raw_file_folder):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
-    #image = "anubhav0fnu/proteowizard"    
-    # local_mem = os.getcwd() + "/III_mzML"
-    print("locsl mem: ",local_mem)
-    # client = docker.from_env()
-    #command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
-
-    # threads = [] 
-    # count = 0
     file_list = list(pathlib.Path(raw_file_folder).glob('*'))
     print("TYPE:  ", type(file_list))
     
@@ -77,14 +69,5 @@ def run_container(raw_file_folder):
 
     pool.close()
     pool.join()
-
-
-    # #To do: Make this run concurrently
-    # for filepath in file_list:
-    #     threads.append(threading.Thread(target=process(filepath,client,image,local_mem,command_list)))  
-    #     threads[count].start()
-    #     count +=1
-    # for t in threads:
-    #     t.join()
     return local_mem
 
