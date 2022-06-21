@@ -8,6 +8,14 @@ import time
 import platform
 import pathlib
 import threading
+from multiprocessing import Pool
+
+
+
+client = docker.from_env()
+image = "anubhav0fnu/proteowizard"    
+local_mem = os.getcwd() + "/III_mzML"
+command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
 #Copy file functions
 def copy_a_file(client, src,dst):
@@ -30,7 +38,8 @@ def copy_some_files(client, src_list,dst):
         dst = dst + srcname
         copy_a_file(client, src,dst)
 
-def process(filepath,client,image,local_mem,command_list):
+def process(filepath):
+    global client,image,local_mem,command_list
     file_path = str(filepath.absolute())
     cont_name = ("PW_container_" + os.path.basename(file_path))
     client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/III_mzML', 'mode': 'rw'}}, detach=True, tty=True)
@@ -46,28 +55,36 @@ def process(filepath,client,image,local_mem,command_list):
     PW_container.stop()
     PW_container.remove()
 
-
 def run_container(raw_file_folder):
-
+    global client,image,local_mem,command_list
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
-    image = "anubhav0fnu/proteowizard"    
-    local_mem = os.getcwd() + "/III_mzML"
+    #image = "anubhav0fnu/proteowizard"    
+    # local_mem = os.getcwd() + "/III_mzML"
     print("locsl mem: ",local_mem)
-    client = docker.from_env()
-    command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
+    # client = docker.from_env()
+    #command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
-    threads = [] 
-    count = 0
-    file_list = pathlib.Path(raw_file_folder).glob('*')
+    # threads = [] 
+    # count = 0
+    file_list = list(pathlib.Path(raw_file_folder).glob('*'))
+    print("TYPE:  ", type(file_list))
+    
+    process_num = len(file_list)
+    pool = Pool(processes=process_num)
+    pool.map(process, file_list)
 
-    #To do: Make this run concurrently
-    for filepath in file_list:
-        threads.append(threading.Thread(target=process(filepath,client,image,local_mem,command_list)))  
-        threads[count].start()
-        count +=1
-    for t in threads:
-        t.join()
+    pool.close()
+    pool.join()
+
+
+    # #To do: Make this run concurrently
+    # for filepath in file_list:
+    #     threads.append(threading.Thread(target=process(filepath,client,image,local_mem,command_list)))  
+    #     threads[count].start()
+    #     count +=1
+    # for t in threads:
+    #     t.join()
     return local_mem
 
