@@ -492,10 +492,12 @@ def hide_run():
         pass
 
 #Reset Everything - available after experiment is complete.
-def reset_results():
+def reset_results(all_results):
     global freeze_run, global_file_dictionary, JE, Save_button, Reset_button,save_switch
     answer = askyesno("Reset Experiment and Data", "Are you sure that you want to reset the experiment? Please save all data before confirming.")
     if answer ==True:
+        if save_switch == False:
+            delete_results(all_results)
         try:
             save_switch = False
             Run_Frame.rowconfigure((1,2,3,4,5,6,7,8), minsize=int(0))
@@ -586,12 +588,15 @@ def Run_Experiment():
     param_dict = collect_parameters()
     try:
         for k,v in param_dict.items():
-            if v == "" or v.isspace() == True:
+            if isinstance(v,list) != True:
+                if v == "" or v.isspace() == True:
+                    print("failed in params")
                     Fail_the_test
         if len(global_file_dictionary) == 0:
             Fail_the_test
         for k,v in global_file_dictionary.items():
             if v.isspace() == True or v =="":
+                print("failed in files")
                 Fail_the_test
     except:
         msg.showerror("Error","Please enter all parameter values and upload all files before running experiment!", icon = "warning")
@@ -675,7 +680,7 @@ def run_workflow(JE):
             Run_button.config(text="Run Complete", font=("default",14), state=DISABLED)
 
         Run_Frame.rowconfigure((1,2,3,4,5,6,7), minsize=int(30))
-        Reset_button = tk.Button(Run_Frame, text="Clear\nExperiment", font=("default", 12), command = lambda: reset_results(), height=2, width=12, bg="silver", fg= "darkred")
+        Reset_button = tk.Button(Run_Frame, text="Clear\nExperiment", font=("default", 12), command = lambda: reset_results(all_results), height=2, width=12, bg="silver", fg= "darkred")
         Reset_button.grid(row=6, column=0, rowspan=2, columnspan=2)
         Save_button = tk.Button(Run_Frame, text="Save Results", font=("default", 14), command=lambda:save_results(all_results,window,Run_name), height=4, width=10, bg="silver", fg= "green")
         Save_button.grid(row=8, column=0, rowspan=1, columnspan=2)
@@ -771,6 +776,26 @@ def save_results(all_results,window,run_name):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     
+
+def delete_results(all_results):
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)
+    for file in all_results:
+        if file != "":
+            if platform.system().upper() == "DARWIN":
+                print("File removed: ", file)
+                command_mac = 'rm -r "'  + file + '"'
+                os.system(command_mac)
+            if platform.system().upper() == "WINDOWS":
+                print("File removed: ", file)
+                command_PC = 'rd /s /q "'  + file + '"'
+                os.system(command_PC)
+
+
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)
+
+
 ####
 
 # Show Instructions when app opens!
