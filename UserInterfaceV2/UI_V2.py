@@ -22,15 +22,19 @@ import pandas as pd
 import Pipeline_V2
 from matplotlib.lines import Line2D
 from tkPDFViewer import tkPDFViewer as pdf
+import multiprocessing
 
 
 #possible bug - run, dont save, then run again.  files should be removed. also check wheere json and txt file are saved.
 #Also try to make PW data conversion work concurrently - all at once rather than 1by1.
 
 
+#issue with __name == main with pyinstaller
 
 # Initialize application
 if __name__=="__main__":
+    #This may be needed for pyinstaller.
+    multiprocessing.freeze_support()
     #Set working directory
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
@@ -283,33 +287,44 @@ if __name__=="__main__":
 
     # Create Tool Reqs
     #This function is responsible for generating all user inputs (labels, entry boxes, browse buttons)
-    def generate_tool_page(input_list):
+    def generate_tool_page(input_list,tool_title):
         global label_list,entry_list,entry_file_dict,entry_param_dict,button_list
         label_list = []
         entry_list = []
         entry_param_dict = {}
         button_list = []
         entry_file_dict = {}
+
+        row_counter = 1
+        lab_num = 0
+        if tool_title != "":
+            label_list.append(Label(Data_Frame,text=tool_title, font=("default", 14, "bold"),borderwidth=0, relief="solid", justify="center", anchor="center"))
+            label_list[lab_num].grid(row=row_counter, column = 0, columnspan=5, rowspan=1, sticky="NWS")
+            row_counter +=1
+            lab_num +=1
+
         label_list.append(Label(Data_Frame,text="Upload the required data below and select Run to begin analysis.", font=("default", 14, "bold"),borderwidth=0, relief="solid", justify="left", anchor="w"))
-        label_list[0].grid(row=1, column = 0, columnspan=5, rowspan=1, sticky="NWS")
+        label_list[lab_num].grid(row=row_counter, column = 0, columnspan=5, rowspan=1, sticky="NWS")
+        row_counter +=2
+        lab_num +=1
         label_list.append(Label(Data_Frame,text="Files", font=("default", 14, "bold"),borderwidth=0, relief="solid",justify="left", anchor="w"))
-        label_list[1].grid(row=3, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+        label_list[lab_num].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+        lab_num +=1
 
         row_counter = 4
-        label_counter = 2
         entry_counter = 0
         button_counter = 0
         param_label = False
         for item in input_list:
             if item in possible_files:
                 label_list.append(Label(Data_Frame,text=item, font=("default", 14),borderwidth=1, justify="left", anchor="w"))
-                label_list[label_counter].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+                label_list[lab_num].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
                 entry_file_dict[str(item)] = tk.StringVar()
                 entry_list.append(ttk.Entry(Data_Frame,textvariable = entry_file_dict[str(item)],state = DISABLED,width=50, font=("default",10,"bold")))
                 entry_list[entry_counter].grid(row=row_counter, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
                 button_list.append(Button(Data_Frame, height=1, width =6, text="Browse", command = lambda item=item: open_file(item,global_file_dictionary,entry_file_dict[item])))
                 button_list[button_counter].grid(row=row_counter, column = 7)
-                label_counter +=1
+                lab_num +=1
                 entry_counter +=1
                 row_counter +=1
                 button_counter +=1
@@ -317,19 +332,19 @@ if __name__=="__main__":
                 if param_label == False:
                     row_counter +=1
                     label_list.append(Label(Data_Frame,text="Parameters", font=("default", 14, "bold"),borderwidth=0, relief="solid",  justify="left", anchor="w"))
-                    label_list[label_counter].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+                    label_list[lab_num].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
                     param_label = True
-                    label_counter +=1
+                    lab_num +=1
                     row_counter +=1
                 label_list.append(Label(Data_Frame,text=item, font=("default", 14),borderwidth=1, justify="left", anchor="w"))
-                label_list[label_counter].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
+                label_list[lab_num].grid(row=row_counter, column = 0, columnspan=1, rowspan=1, sticky="NWS")
 
                 entry_param_dict[str(item)] = tk.StringVar()
                 entry_list.append(ttk.Entry(Data_Frame,textvariable = entry_param_dict[str(item)],width=50, font=("default",10,"bold")))
                 entry_list[entry_counter].grid(row=row_counter, column = 2, columnspan=3, rowspan=1, sticky="NEWS")
                 entry_counter +=1
                 row_counter +=1
-                label_counter +=1
+                lab_num +=1
 
     #PNNL PreProcessor
     def PP_create():
@@ -341,7 +356,7 @@ if __name__=="__main__":
         ExpType = "Any"
         ToolType = "PP"
         label_list = ["Raw Data Folder","Experiment Name","Drift Kernel","LC Kernel","Minimum Intensity"]
-        generate_tool_page(label_list)
+        generate_tool_page(label_list,"")
 
     #ProteoWizard
     def PW_create():
@@ -353,7 +368,7 @@ if __name__=="__main__":
         ExpType = "Any"
         ToolType = "PW"
         label_list = ["Raw Data Folder","Experiment Name"]
-        generate_tool_page(label_list)
+        generate_tool_page(label_list,"")
 
 
     #AutoCCS Page with buttons for single, stepped, and slim
@@ -384,7 +399,7 @@ if __name__=="__main__":
         ToolType = "AC"
         tool_check = True
         label_list = ["Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        generate_tool_page(label_list)
+        generate_tool_page(label_list,"Single Field")
 
     #AutoCCS Stepped Field
     def AC_stepped_create():
@@ -397,7 +412,7 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         label_list = ["Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
-        generate_tool_page(label_list)
+        generate_tool_page(label_list,"Stepped Field")
 
     #Single Field Workflow
     def create_single_field(Single_field_button):
@@ -413,7 +428,7 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         label_list = ["Raw Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        generate_tool_page(label_list)
+        generate_tool_page(label_list, "")
 
     #Stepped Field Workflow
     def create_stepped_field(Stepped_field_button):
@@ -429,7 +444,7 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         label_list = ["Raw Data Folder", "Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
-        generate_tool_page(label_list)
+        generate_tool_page(label_list, "")
 
 
     # Hide
@@ -592,13 +607,13 @@ if __name__=="__main__":
             for k,v in param_dict.items():
                 if isinstance(v,list) != True:
                     if v == "" or v.isspace() == True:
-                        print("failed in params")
+                        #print("failed in params")
                         Fail_the_test
             if len(global_file_dictionary) == 0:
                 Fail_the_test
             for k,v in global_file_dictionary.items():
                 if v.isspace() == True or v =="":
-                    print("failed in files")
+                    #print("failed in files")
                     Fail_the_test
         except:
             msg.showerror("Error","Please enter all parameter values and upload all files before running experiment!", icon = "warning")
