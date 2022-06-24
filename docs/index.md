@@ -6,13 +6,26 @@ You can use the [editor on GitHub](https://github.com/PNNL-CompBio/ion-mob-ms/ed
 
 This dashboard is designed to facilitate the numerous steps required to run analysis tools required for Ion Mobility Mass Spectrometry Analysis.
 
-## How to install
+## How to install  
+  
+While we will eventually write a script to automate the installation, the installation for either a Mac or a PC is as follows:  
+Mac Installation:  
+1. Download UI_V2  
+2. Download [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/)  
+3. Restart computer if prompted  
+4. Open Docker Desktop and UI_V2  
+  
+Windows Installation  
+1. Download UI_V2  
+2. Download [Docker Desktop for Windows](https://docs.docker.com/desktop/windows/install/)    
+3. Install WSL2 via Powershell. Open "Powershell" as an **Administrator**, then type the command "wsl --install -d ubuntu"  
+  
+<img src="PowerShell_Image.PNG" width="800">  
+  
+4. Restart computer  
+5. Open Docker Desktop and UI_V2  
 
-While we will eventually write a script to automate the installation, the installation for either a Mac or a PC is as follows:
-1. Download UI_V2
-2. Download Docker Desktop
-3. Open Docker Desktop and UI_V2
-
+**Dashboard Image**
 <img src="Dashboard_Open_Image.png" width="800">
 
 ## Prepare to run
