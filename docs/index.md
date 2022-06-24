@@ -19,7 +19,7 @@ While we will eventually write a script to automate the installation, the instal
 **Windows Installation**:  
 1. Download UI_V2  
 2. Download [Docker Desktop for Windows](https://docs.docker.com/desktop/windows/install/)    
-3. Install WSL2 via Powershell. Open "Powershell" as an **Administrator**, then type the command "wsl --install -d ubuntu"  
+3. Install WSL2 via PowerShell. Open "Powershell" as an **Administrator**, then type the command "wsl --install -d ubuntu"  
   
 <img src="PowerShell_Image.PNG" width="800">  
   
@@ -43,7 +43,7 @@ Drift tube ion mobility mass spectrometry requires knowledge of experiments and 
 Data from the SLIM machine.
 
 ### DTIMS Stepped field
-Drift tube ion mobiology mass spectrometry that requires specific known targets and their masses.
+Drift tube ion mobility mass spectrometry that requires specific known targets and their masses.
 Each mode has separate needs for input files, but runs a combination of the modules depicted below.
 
 ### Single Tool Option 
@@ -62,7 +62,7 @@ If AutoCCS is selected, choose single field, stepped field, or SLIM depending on
 ## Upload your files
   
 To upload files/folders, please sort each file type into their own folder, then select the folder by clicking "Browse".  
-For example, all Raw data files should be placed in a single folder without any other files. This is the same for Ims Metadata files, and Feature files.  
+For example, all Raw data files should be placed in a single folder without any other files. This is the same for IMS Metadata files, and Feature files.  
 While browsing, any "Folder" upload will hide all individual files to avoid improper selections.  
  
 Individual File uploads do not require folders and may be selected directly. These include: Calibrant File, Target List File, and Metadata File.  
@@ -84,7 +84,7 @@ Please confirm all variables and path locations before running experiment.
 When running experiment, do not exit the application or Docker. Doing so may result in temporary files (such as .tar files in data folders) not being deleted. 
 If exited early, please ensure no temporary files exist in experimental folders before running again.  
   
-## Viwing and Saving Results  
+## Viewing and Saving Results  
 
 
 After the experiment is completed, a "Save Results" button should appear. Press the button to choose a folder to move results to.  
@@ -100,7 +100,25 @@ To clear all parameters and results, select the "Clear Experiment" button and co
 
 <img src="Dashboard_Reset_Image.png" width="800"> 
 
+## Errors and Troubleshooting  
 
+**Docker Errors**  
+Connectivity issues between Docker Desktop and UI_V2 may lead to issues with experiments completing. When an error message is seen in the console, check which data file was running, then manually **Delete** all containers in docker desktop and **restart** both applications. Last, check data files to ensure that no intermediate files (.tar extension) were left behind.  
+  
+The most common error is a connectivity timeout error, this may occur when the computer logs out or enters sleep mode partway through a run. This issue becomes more frequent when Docker Desktop is not restarted between runs.   
+  
+Two docker containers with the same name can not be run at the same time, ensure that all files have unique names and no docker containers are running or stopped before starting an experiment (these must be deleted).  
+  
+<img src="Docker_Delete_Image.png" width="800"> 
+  
+**Recovering Data**  
+When a docker container exits on its own, its experiment was completed successfully. When left running indefinitely, it has failed.
+To retrieve any data from partial runs, see the message console to find the location or "Working Directory" of the run. Data is deleted upon exit of the application and must be retrieved before then.  
+  
+ **Docker Setup on Windows**  
+Docker requires WSL2 to be enabled. This should be automatically enabled, is not enter "Settings", then on the "General" page, select the box titled "Use the WSL 2 based engine". Then select "Apply and Restart".  
+   
+   
 ## Available Tools
 
 <<<<<< main
