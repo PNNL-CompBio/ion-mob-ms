@@ -100,7 +100,21 @@ To clear all parameters and results, select the "Clear Experiment" button and co
 
 <img src="Dashboard_Reset_Image.png" width="800"> 
 
+## Errors and Troubleshooting  
 
+**Docker Errors**
+Connectivity issues between Docker Desktop and UI_V2 may lead to issues with experiments completing. When an error message is seen in the console, check which data file was running, then manually **Delete** all containers in docker desktop and **restart** both applications. Last, check data files to ensure that no intermediate files (.tar extension) were left behind.  
+The most common error is a connectivity timeout error, this may occur when the computer logs out or enters sleep mode partway through a run. This issue becomes more frequent when Docker Desktop is not restarted between runs.   
+  
+Two docker containers with the same name can not be run at the same time, ensure that all files have unique names and no docker containers are are running or stopped before starting an experiment (these must be deleted).  
+  
+<img src="Docker_Delete_Image.png" width="800"> 
+  
+**Recovering Data**  
+When a docker container exits on its own, its experiment was completed successfully. When left running indefinitely, it has failed.
+To retrieve any data from partial runs, see the message console to find the location or "Working Directory" of the run. Data is deleted upon exit of the application and must be retrieved before then.  
+  
+   
 ## Available Tools
 
 <<<<<< main
