@@ -25,7 +25,7 @@ Windows Installation
 4. Restart computer  
 5. Open Docker Desktop and UI_V2  
 
-**Dashboard Image**
+**Dashboard Image**  
 <img src="Dashboard_Open_Image.png" width="800">
 
 ## Prepare to run
