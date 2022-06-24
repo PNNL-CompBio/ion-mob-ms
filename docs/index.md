@@ -9,13 +9,14 @@ This dashboard is designed to facilitate the numerous steps required to run anal
 ## How to install  
   
 While we will eventually write a script to automate the installation, the installation for either a Mac or a PC is as follows:  
-Mac Installation:  
+  
+**Mac Installation**:  
 1. Download UI_V2  
 2. Download [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/)  
 3. Restart computer if prompted  
 4. Open Docker Desktop and UI_V2  
   
-Windows Installation  
+**Windows Installation**:  
 1. Download UI_V2  
 2. Download [Docker Desktop for Windows](https://docs.docker.com/desktop/windows/install/)    
 3. Install WSL2 via Powershell. Open "Powershell" as an **Administrator**, then type the command "wsl --install -d ubuntu"  
