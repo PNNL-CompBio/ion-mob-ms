@@ -21,10 +21,11 @@ While we will eventually write a script to automate the installation, the instal
 2. Download [Docker Desktop for Windows](https://docs.docker.com/desktop/windows/install/)    
 3. Install WSL2 via PowerShell. Open "Powershell" as an **Administrator**, then type the command "wsl --install -d ubuntu"  
   
-<img src="PowerShell_Image.PNG" width="800">  
+<img src="PowerShell_Image.PNG" width="800">   
   
-4. Restart computer  
-5. Open Docker Desktop and UI_V2  
+4. Restart computer   
+5. Open Docker Desktop and UI_V2    
+  
 
 **Dashboard Image**  
 <img src="Dashboard_Open_Image.png" width="800">
