@@ -51,7 +51,7 @@ This option is selected to run tools individually.
 
 ## Select your Tool 
 
-Select which tool you would like to run. If AutoCCS is selected, choose single field, stepped field, or SLIM depending on your experiment.
+Select which tool you would like to run. Grey boxes are unavailable, white boxes are available, and the orange box indicates which is selected.
 
 <img src="Dashboard_Tool_Select_Image.png" width="800"> 
   
@@ -62,7 +62,10 @@ If AutoCCS is selected, choose single field, stepped field, or SLIM depending on
 ## Upload your files
   
 To upload files/folders, please sort each file type into their own folder, then select the folder by clicking "Browse".  
-For example, all Raw data files should be placed in a single folder without any other files. This is the same for IMS Metadata files, and Feature files.  
+For example, all Raw data files should be placed in a single folder without any other files. This includes data types such as Agilent (.d) which are folders themselves - ie: select the encompassing folder/directory which holds one or more raw data types, not the data files themselves.
+
+<img src="File_Select_Image.PNG" width="800"> 
+
 While browsing, any "Folder" upload will hide all individual files to avoid improper selections.  
  
 Individual File uploads do not require folders and may be selected directly. These include: Calibrant File, Target List File, and Metadata File.  
@@ -87,7 +90,7 @@ If exited early, please ensure no temporary files exist in experimental folders 
 ## Viewing and Saving Results  
 
 
-After the experiment is completed, a "Save Results" button should appear. Press the button to choose a folder to move results to.  
+After an experiment is completed, a "Save Results" button should appear. Select this button to find a folder to save results at. 
 
 <img src="Dashboard_Save_Results_Image.png" width="800"> 
   
@@ -96,7 +99,7 @@ If CCS Values were generated, a summary graph or PDF will be available to previe
 
 ## Running Additional Experiments
 
-To clear all parameters and results, select the "Clear Experiment" button and confirm.  
+To clear all parameters and results, select the "Clear Experiment" button and confirm. Save results before clearing or they will be lost.
 
 <img src="Dashboard_Reset_Image.png" width="800"> 
 
