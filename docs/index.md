@@ -8,23 +8,23 @@ This dashboard is designed to facilitate the numerous steps required to run anal
 
 ## How to install  
   
-While we will eventually write a script to automate the installation, the installation for either a Mac or a PC is as follows:  
+Two applications are required to run workflows, Docker Desktop, and UI_V2. 
   
 **Mac Installation**:  
 1. Download UI_V2  
 2. Download [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/)  
 3. Restart computer if prompted  
-4. Open Docker Desktop and UI_V2  
+4. Open Docker Desktop and then UI_V2 
   
 **Windows Installation**:  
-1. Download UI_V2  
+1. Download [Ion_Mob_PC.exe](https://github.com/PNNL-CompBio/ion-mob-ms/blob/main/UserInterfaceV2/Ion_Mob_PC.exe)  
 2. Download [Docker Desktop for Windows](https://docs.docker.com/desktop/windows/install/)    
 3. Install WSL2 via PowerShell. Open "Powershell" as an **Administrator**, then type the command "wsl --install -d ubuntu"  
   
 <img src="PowerShell_Image.PNG" width="800">   
   
 4. Restart computer   
-5. Open Docker Desktop and UI_V2    
+5. Open Docker Desktop and then UI_V2 
   
 
 **Dashboard Image**  
