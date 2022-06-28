@@ -8,8 +8,15 @@ The Ion Mobility Mass Spec Dashboard is designed to allow scientists to process 
   
   
   
-  ## Ion Mobility Background  
-  single vs stepped vs slim
+## Ion Mobility Spectrometry-Mass Spectrometry (IMS-MS) Background  
+  
+Mass Spectrometry (MS) is used to differentiate and identify molecules by comparing intensities and mass-to-charge-ratio (m/z). This is very important in clinical research and drug development, however, this method stuggles in accuracy with identifying small molecules, particularly isomers or enantiomers. To increase the accuracy of molecular identification, MS can be paired with Ion Mobility Spectrometry (IMS). IMS generates an additional descriptive variable called collision cross section (CCS) which can further differentiate between these molecules. 
+
+Ion mobility spectrometry works by... tomorrow
+
+
+
+single vs stepped vs slim
   
   drift time
   
