@@ -6,6 +6,9 @@ You can use the [editor on GitHub](https://github.com/PNNL-CompBio/ion-mob-ms/ed
   
 The Ion Mobility Mass Spec Dashboard is designed to allow scientists to process their own Ion Mobility-Mass Spectrometry raw data without requiring a third-party computer scientist or bioinformatician. This dashboard joins four sequential command line tools into a single user-friendly application. These tools are nessesary for performing quality control data processing, file type conversion (from proprietary to an open-source format), detect unique features, and calculate collision-Cross section values required for identifying and differentiating small molecules.  
   
+  
+  
+  ## Ion Mobility Background  
   single vs stepped vs slim
   
   drift time
@@ -152,23 +155,21 @@ Docker requires WSL2 to be enabled. This should be automatically enabled, is not
    
 ## Available Tools
 
-<<<<<< main
 Currently we have enabled the use of the following tools. 
 
-
-### PNNL PreProcessor Tool
+### PNNL PreProcessor Tool - Unavailable
 Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-spec.github.io/PNNL-PreProcessor).
 
 ### ProteoWizard Tool
 Docker image and script to run [ProteoWizard tool](https://proteowizard.sourceforge.io/)
 
-### MZMine Tool
+### MZMine Tool - Unavailable
 Docker image and script to run [MZMine Java Program](http://mzmine.github.io/).
 
 ### AutoCCS Tool
 Docker image and script to run [AutoCCS Python script](https://github.com/PNNL-Comp-Mass-Spec/AutoCCS).
 
-### ion-mob-UI
+### ion-mob-UI 
 This is the front-end for the entire workflow.  TODO: determine implementation and design.
 
 ## Citation
