@@ -3,12 +3,14 @@
 [to edit this]
 You can use the [editor on GitHub](https://github.com/PNNL-CompBio/ion-mob-ms/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files. Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-
-This dashboard is designed to facilitate the numerous steps required to run analysis tools required for Ion Mobility Mass Spectrometry Analysis.
-
+  
+The Ion Mobility Mass Spec Dashboard is designed to allow scientists to process their own Ion Mobility-Mass Spectrometry raw data without requiring a third-party computer scientist or bioinformatician. This dashboard joins four sequential command line tools into a single user-friendly application. These tools are nessesary for performing quality control data processing, file type conversion (from proprietary to an open-source format), detect unique features, and calculate collision-Cross section values required for identifying and differentiating small molecules.  
+  
+  
+  
 ## How to install  
   
-Two applications are required to run workflows, Docker Desktop, and UI_V2. 
+Two applications are required to run workflows: Docker Desktop, and UI_V2. 
   
 **Mac Installation**:  
 1. Download UI_V2  
@@ -31,7 +33,11 @@ Two applications are required to run workflows, Docker Desktop, and UI_V2.
 <img src="Dashboard_Open_Image.png" width="800">
 
 ## Prepare to run
-You will need a series of files to start, depending on the workflow you want to run.
+You will need a series of files to start, depending on the workflow you want to run. A brief description of how to identify each file type is below.
+
+
+
+
 
 ## Select your Workflow
 
