@@ -1,18 +1,23 @@
 ## Ion Mobility Mass Spec Dashboard
   
   
-The Ion Mobility Mass Spec Dashboard is designed to allow scientists to generate results from raw Ion Mobility-Mass Spectrometry data without requiring assistance from an engineer or bioinformatician. This dashboard links four sequential command line tools into a single user-friendly application. This application communicates with Docker Desktop to dynamically spin up docker containers and manage a filesystem. Each tool has been dockerized and together perform the floowing steps: quality control data processing, file type conversion (from proprietary to an open-source format), detection of unique features, and calculation of collision-cross section (CCS).
+  
+The Ion Mobility Mass Spec Dashboard is designed to allow scientists to generate results from raw Ion Mobility-Mass Spectrometry data without requiring assistance from an engineer or bioinformatician. This dashboard links four sequential command line tools into a single user-friendly application which communicates with Docker Desktop to dynamically spin up docker containers and manage the filesystem. Each tool has been dockerized and together they perform the following steps: quality control data processing, file type conversion (from proprietary to an open-source format), detection of unique features, and calculation of collision-cross section (CCS).
   
   
-## Ion Mobility Spectrometry-Mass Spectrometry (IMS-MS) Background  
   
-Mass Spectrometry (MS) is used to identify and differentiate unknown molecules by comparing intensities and mass-to-charge-ratio (m/z). This is important in clinical research and drug development, however, this method stuggles with identifying small molecules, isomers, or enantiomers. To increase the accuracy of molecular identification, MS can be paired with Ion Mobility Spectrometry (IMS). IMS generates an additional descriptive variable called collision cross section (CCS) which can further differentiate between these molecules.  
+## IMS-MS Background  
   
-This application analyzes three methods of ion mobility spectrometry: single field drift tube ion mobility spectrometry (single field DTIMS), stepped field drift tude ion mobility spectrometry (stepped field DTIMS), and structures for lossless ion manipulations (SLIM).   
+Mass Spectrometry (MS) is used to identify and differentiate unknown molecules by comparing intensities and mass-to-charge-ratio (m/z). This is important in clinical research and drug development, however, this method stuggles with identifying small molecules, isomers, and enantiomers. To increase the accuracy of molecular identification, MS can be paired with Ion Mobility Spectrometry (IMS). IMS generates an additional descriptive variable called the "collision cross section", or CCS, which is used to further differentiate between unknown molecules.  
+   
+This application analyzes the following three methods of ion mobility spectrometry:   
+1) Single Field Drift Tube Ion Mobility Spectrometry (single field DTIMS)  
+2) Stepped Field Drift Tube Ion Mobility Spectrometry (stepped field DTIMS)  
+3) Structures for Lossless Ion Manipulations (SLIM)   
   
 **Drift Tube Ion Mobility Spectrometry**  
   
-DTIMS seperates ions by collision cross section. This works accelerating ions through a straight tube filled with an inert buffer gas, as the ions pass through the tube, they bump into buffer gas molecules and are slowed down. Drift (retention) time is used as a predictor of CCS as ions with a greater CCS collide with and are slowed by buffer molecules, the inverse is true with small molecules. Single field DTIMS uses a single electrical field to accelerate ions through the tube. This differs from stepped field DTIMS which uses an alternating electrical curent to propel ions though the tube. Length of drift tube increases resolution and as such, both methods of DTIMS are limited by instrument space.
+DTIMS seperates ions by collision cross section. This works by accelerating ions through a straight tube filled with an inert buffer gas, as the ions pass through the tube, they bump into buffer gas molecules and are slowed down. Drift (retention) time is used as a predictor of CCS. Ions with a greater CCS collide with and are slowed down more by buffer molecules, the inverse is true with small molecules. Single field DTIMS uses a single electrical field to accelerate ions through the tube. This differs from stepped field DTIMS which uses an alternating electrical curent to propel ions though the tube. An increase in the length of drift tube increases resolution and both methods of DTIMS are limited by instrument space.
 
 **Structures for Lossless Ion Manipulations**  
   
@@ -36,23 +41,23 @@ Two applications are required to run workflows: Docker Desktop, and UI_V2.
   
 <img src="PowerShell_Image.PNG" width="800">   
   
-4. Restart computer   
-5. Open Docker Desktop and then UI_V2 
+ 4. Restart computer   
+ 5. Open Docker Desktop and then UI_V2 
   
-
+  
 **Dashboard Image**  
 <img src="Dashboard_Open_Image.png" width="800">
   
   
 ## Run Overview  
 1) Workflow choice will be dictated by which type of experiment you are running. The option to run any individual tool is also available.   
-2) Depending on which workflow you'd like to run,a set of files and folders must be prepared ahead of time. 
-3) Enter values for parameters and use a unique experiment name. Avoid spaces or any special characters in this name.  
-4) Double check parameter inputs, files, then run the experiment.
-5) If AutoCCS was performed, you will be able to view a preview of the results. If this does not appear, the experiment may have failed.
-6) Save results to folder. Do not use a duplicate folder name. Once results are saved, they will be removed from the application workspace.  
+2) Depending on which workflow you'd like to run,a set of files and folders must be prepared ahead of time.  
+3) Enter parameter values and use a unique experiment name. Avoid spaces or any special characters in this name.  
+4) Double check parameter inputs, files, then run the experiment.  
+5) If AutoCCS was performed, you will be able to view a preview of the results. If this does not appear, the experiment may have failed.  
+6) Save results to folder. Do not use a duplicate folder name. Once results are saved, they will be removed from the application workspace.   
 
-  
+   
 ## Select your Workflow  
   
 There are three types of workflows to run. Each mode has separate needs for input files, but runs a combination of the modules depicted below.
@@ -83,10 +88,10 @@ If AutoCCS is selected, choose single field, stepped field, or SLIM depending on
   
   
 ## Prepare your Files  
-Examples of each data type can be found in the test data in the [github repository](https://github.com/PNNL-CompBio/ion-mob-ms/).
+Examples of each data type can be found under [test data](https://github.com/PNNL-CompBio/ion-mob-ms/tree/main/test-data) in the [github repository](https://github.com/PNNL-CompBio/ion-mob-ms/).
 
 **Raw Data Folder**  
-Raw data is generated by vendor instruments. This data is commonly encoded in a propriatory format. All raw data must be together in an encompassing folder, some raw data types such as Agilent (.d) are folders themselves, these must still be isolated in an encompassing folder. See more details in section titled "Upload your files" below. Supported file types can be found [here](https://proteowizard.sourceforge.io/doc_users.html).    
+Raw data is generated by vendor instruments. This data is commonly encoded in a propriatory format. All raw data must be together in an encompassing folder, some raw data types such as Agilent (.d) are folders themselves, these must still be isolated in an encompassing folder. See more details in section titled "Upload your files" below. Supported file types can be found on the [proteowizard website](https://proteowizard.sourceforge.io/doc_users.html).    
     
  **IMS Metadata Folder**   
 This data is generated alongside and paired with the raw data by some vendors. It includes information such as instrument specifications, temperature deviations between runs, and electrical current changes. This is required for stepped field experiments and optional for single field experiments. Including this data for single field experiments improves accuracy of CCS value predictions.  
@@ -99,7 +104,7 @@ This excel file is required for stepped field experiments. This contains four co
 This must be created by the user with known molecules/standards and neutral masses in order to compare with sample data and calculate CCS values.
   
 **Metadata File**  
-This metadata files includes the following data for each sample: RawFileName, AcquiredTime, InstrumentName, IonPolarity, Well, Cartridge. This is generated for agilent data after PNNL PreProcessor. **How is this generated othwerwise...?**  
+This metadata files includes the following data for each sample: RawFileName, AcquiredTime, InstrumentName, IonPolarity, Well, Cartridge. This will be generated for agilent data during the AutoCCS step. **Currently requires manual creation**  
   
 **Calibrant File**  
 This text file includes calibrant information for single field experiments. Calibrant information includes: CCS values, mass(m), charge(z), m/z, and ionization.   
@@ -108,8 +113,7 @@ This text file includes calibrant information for single field experiments. Cali
   
 ## Upload your files  
   
-To upload files/folders, please sort each file type into their own folder, then select the folder by clicking "Browse".  
-For example, all Raw data files should be placed in a single folder without any other files. This includes data types such as Agilent (.d) which are folders themselves - ie: select the encompassing folder/directory which holds one or more raw data types, not the data files themselves.  
+Prior to uploading files, please sort each file type into their own folder, then select the folder by clicking "Browse". For example, all Raw data files should be placed in a single folder without any other files. This includes data types such as Agilent (.d) which are folders themselves - ie: select the encompassing folder/directory which holds one or more raw data types, not the data files themselves.  
   
 <img src="File_Select_Image.PNG" width="800">   
  
