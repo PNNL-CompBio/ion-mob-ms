@@ -1,3 +1,4 @@
+python==3.9
 appdirs==1.4.4
 attrs==21.4.0
 certifi==2021.10.8
@@ -42,7 +43,6 @@ py==1.11.0
 PyMuPDF==1.19.6
 pymzml==2.5.1
 pyparsing==3.0.8
-python==3.9
 python-dateutil==2.8.2
 pytz==2022.1
 PyYAML==6.0
