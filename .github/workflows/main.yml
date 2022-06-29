@@ -2,9 +2,9 @@ name: Pyinstaller Windows Executable Generation
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -23,3 +23,5 @@ jobs:
       with:
         name: name_2
         path: src/dist/windows
+
+
