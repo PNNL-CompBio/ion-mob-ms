@@ -1,26 +1,22 @@
 ## Ion Mobility Mass Spec Dashboard
-
-[to edit this]
-You can use the [editor on GitHub](https://github.com/PNNL-CompBio/ion-mob-ms/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files. Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
   
-The Ion Mobility Mass Spec Dashboard is designed to allow scientists to process their own Ion Mobility-Mass Spectrometry raw data without requiring a third-party computer scientist or bioinformatician. This dashboard joins four sequential command line tools into a single user-friendly application. These tools are nessesary for performing quality control data processing, file type conversion (from proprietary to an open-source format), detect unique features, and calculate collision-Cross section values required for identifying and differentiating small molecules.  
   
+The Ion Mobility Mass Spec Dashboard is designed to allow scientists to generate results from raw Ion Mobility-Mass Spectrometry data without requiring assistance from an engineer or bioinformatician. This dashboard links four sequential command line tools into a single user-friendly application. This application communicates with Docker Desktop to dynamically spin up docker containers and manage a filesystem. Each tool has been dockerized and together perform the floowing steps: quality control data processing, file type conversion (from proprietary to an open-source format), detection of unique features, and calculation of collision-cross section (CCS).
   
   
 ## Ion Mobility Spectrometry-Mass Spectrometry (IMS-MS) Background  
   
-Mass Spectrometry (MS) is used to differentiate and identify molecules by comparing intensities and mass-to-charge-ratio (m/z). This is very important in clinical research and drug development, however, this method stuggles in accuracy with identifying small molecules, particularly isomers or enantiomers. To increase the accuracy of molecular identification, MS can be paired with Ion Mobility Spectrometry (IMS). IMS generates an additional descriptive variable called collision cross section (CCS) which can further differentiate between these molecules. 
-
-Ion mobility spectrometry works by... tomorrow
-
-
-
-single vs stepped vs slim
+Mass Spectrometry (MS) is used to identify and differentiate unknown molecules by comparing intensities and mass-to-charge-ratio (m/z). This is important in clinical research and drug development, however, this method stuggles with identifying small molecules, isomers, or enantiomers. To increase the accuracy of molecular identification, MS can be paired with Ion Mobility Spectrometry (IMS). IMS generates an additional descriptive variable called collision cross section (CCS) which can further differentiate between these molecules.  
   
-  drift time
+This application analyzes three methods of ion mobility spectrometry: single field drift tube ion mobility spectrometry (single field DTIMS), stepped field drift tude ion mobility spectrometry (stepped field DTIMS), and structures for lossless ion manipulations (SLIM).   
   
-  ion mob
+**Drift Tube Ion Mobility Spectrometry**  
+  
+DTIMS seperates ions by collision cross section. This works accelerating ions through a straight tube filled with an inert buffer gas, as the ions pass through the tube, they bump into buffer gas molecules and are slowed down. Drift (retention) time is used as a predictor of CCS as ions with a greater CCS collide with and are slowed by buffer molecules, the inverse is true with small molecules. Single field DTIMS uses a single electrical field to accelerate ions through the tube. This differs from stepped field DTIMS which uses an alternating electrical curent to propel ions though the tube. Length of drift tube increases resolution and as such, both methods of DTIMS are limited by instrument space.
+
+**Structures for Lossless Ion Manipulations**  
+  
+SLIM uses the same principal as single field DTIMS without the limitation of drift tube length. This technology allows the ions to be pushed around corners without colliding with path walls; this allows for significantly longer paths resulting in much greater resolution of ion CCS values.  
   
   
 ## How to install  
@@ -46,10 +42,49 @@ Two applications are required to run workflows: Docker Desktop, and UI_V2.
 
 **Dashboard Image**  
 <img src="Dashboard_Open_Image.png" width="800">
-
-## Prepare to run
-You will need a series of files/folder to start, depending on the workflow you want to run. A brief description of how to identify each file type is below. Examples of each data type can be found in the [github repository](https://github.com/PNNL-CompBio/ion-mob-ms/).
   
+  
+## Run Overview  
+1) Workflow choice will be dictated by which type of experiment you are running. The option to run any individual tool is also available.   
+2) Depending on which workflow you'd like to run,a set of files and folders must be prepared ahead of time. 
+3) Enter values for parameters and use a unique experiment name. Avoid spaces or any special characters in this name.  
+4) Double check parameter inputs, files, then run the experiment.
+5) If AutoCCS was performed, you will be able to view a preview of the results. If this does not appear, the experiment may have failed.
+6) Save results to folder. Do not use a duplicate folder name. Once results are saved, they will be removed from the application workspace.  
+
+  
+## Select your Workflow  
+  
+There are three types of workflows to run. Each mode has separate needs for input files, but runs a combination of the modules depicted below.
+  
+**DTIMS Single field**  
+
+Drift tube ion mobility mass spectrometry requires knowledge of experiments and a table of calibration ions.  
+  
+**DTIMS Stepped field**  
+
+Drift tube ion mobility mass spectrometry that requires specific known targets and their masses.  
+  
+
+**SLIM**  
+Data from the SLIM machine.  
+   
+  
+### Single Tool Option 
+This option is selected to run tools individually.  
+  
+Select which tool you would like to run. Grey boxes are unavailable, white boxes are available, and the orange box indicates which is selected.
+ 
+<img src="Dashboard_Tool_Select_Image.png" width="800"> 
+  
+If AutoCCS is selected, choose single field, stepped field, or SLIM depending on your experiment.  
+  
+<img src="Dashboard_Experiment_Select_Image.png" width="800">   
+  
+  
+## Prepare your Files  
+Examples of each data type can be found in the test data in the [github repository](https://github.com/PNNL-CompBio/ion-mob-ms/).
+
 **Raw Data Folder**  
 Raw data is generated by vendor instruments. This data is commonly encoded in a propriatory format. All raw data must be together in an encompassing folder, some raw data types such as Agilent (.d) are folders themselves, these must still be isolated in an encompassing folder. See more details in section titled "Upload your files" below. Supported file types can be found [here](https://proteowizard.sourceforge.io/doc_users.html).    
     
@@ -65,37 +100,11 @@ This must be created by the user with known molecules/standards and neutral mass
   
 **Metadata File**  
 This metadata files includes the following data for each sample: RawFileName, AcquiredTime, InstrumentName, IonPolarity, Well, Cartridge. This is generated for agilent data after PNNL PreProcessor. **How is this generated othwerwise...?**  
-
   
 **Calibrant File**  
-This text file includes calibrant information for single field experiments. Calibrant information includes: CCS values, mass(m), charge(z), m/z, and ionization.    
+This text file includes calibrant information for single field experiments. Calibrant information includes: CCS values, mass(m), charge(z), m/z, and ionization.   
   
-## Select your Workflow  
   
-There are generally three types of workflows to run:  
-  
-### DTIMS Single field  
-Drift tube ion mobility mass spectrometry requires knowledge of experiments and a table of calibration ions.
-  
-### SLIM data (also single field)
-Data from the SLIM machine.
-  
-### DTIMS Stepped field
-Drift tube ion mobility mass spectrometry that requires specific known targets and their masses.
-Each mode has separate needs for input files, but runs a combination of the modules depicted below.
-  
-### Single Tool Option 
-This option is selected to run tools individually.
-  
-## Select your Tool 
-  
-Select which tool you would like to run. Grey boxes are unavailable, white boxes are available, and the orange box indicates which is selected.
- 
-<img src="Dashboard_Tool_Select_Image.png" width="800"> 
-  
-If AutoCCS is selected, choose single field, stepped field, or SLIM depending on your experiment.  
-  
-<img src="Dashboard_Experiment_Select_Image.png" width="800">   
   
 ## Upload your files  
   
@@ -103,8 +112,6 @@ To upload files/folders, please sort each file type into their own folder, then 
 For example, all Raw data files should be placed in a single folder without any other files. This includes data types such as Agilent (.d) which are folders themselves - ie: select the encompassing folder/directory which holds one or more raw data types, not the data files themselves.  
   
 <img src="File_Select_Image.PNG" width="800">   
-  
-While browsing, any "Folder" upload will hide all individual files to avoid improper selections.  
  
 Individual File uploads do not require folders and may be selected directly. These include: Calibrant File, Target List File, and Metadata File.  
   
@@ -114,7 +121,7 @@ Once files are uploaded, select the Run tab.
   
 ## Run Experiment  
   
-Prior to selecting "Run Experiment", Docker must be open. Docker is required to run each of the tools.  
+**Prior** to selecting "Run Experiment", Docker must be open.
   
  <img src="Docker_Image.png" width="800"> 
   
@@ -140,6 +147,7 @@ If CCS Values were generated, a summary graph or PDF will be available to previe
 To clear all parameters and results, select the "Clear Experiment" button and confirm. Save results before clearing or they will be lost.  
   
 <img src="Dashboard_Reset_Image.png" width="800"> 
+  
   
 ## Errors and Troubleshooting  
   
