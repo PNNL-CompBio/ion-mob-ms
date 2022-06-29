@@ -1,3 +1,4 @@
+Python==3.9
 appdirs==1.4.4
 attrs==21.4.0
 certifi==2021.10.8
