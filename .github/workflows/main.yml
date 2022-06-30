@@ -12,16 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout
+      - uses: actions/checkout@v3
 
-    - name: name_1
-      uses: actions/ion-mob-ms@v1
-      with:
-        path: src
+      - name: name_1
+        uses: ./github/actions
+        with:
+          path: src
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: name_2
-        path: src/dist
+      - uses: actions/upload-artifact@v2
+        with:
+          name: name_2
+          path: src/dist
 
 
