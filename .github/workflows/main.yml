@@ -19,10 +19,9 @@ jobs:
         uses: ./github/actions
         with:
           path: src
-
-      - uses: actions/upload-artifact@v2
+      - name: name_2
+        uses: actions/upload-artifact@v2
         with:
-          name: name_2
           path: src/dist
 
 
