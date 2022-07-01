@@ -2,9 +2,8 @@ name: 'Create Windows Executable'
 description: 'Create an executable for windows when files are updated'
 inputs: 
   path: 
-    description: 'Github Directory containing relevant files such as pyinstaller_script.py, UI, Pipeline, etc'
+    description: 'Pathway to different repos.'
     required: True
-    default: ./
   spec:
     description: 'File path to .spec file'
     required: False
