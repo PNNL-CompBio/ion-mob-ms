@@ -1,10 +1,10 @@
 name: 'Create Windows Executable'
 description: 'Create an executable for windows when files are updated'
 inputs: 
-  path_to_UI: 
+  path: 
     description: 'Github Directory containing relevant files such as pyinstaller_script.py, UI, Pipeline, etc'
     required: True
-    default: ./UserInterfaceV2
+    default: ./
   spec:
     description: 'File path to .spec file'
     required: False
@@ -13,12 +13,12 @@ inputs:
     description: 'File path to requirements.txt'
     required: False
 outputs:
-  output:
+  output:git
     description: 'Pyinstaller Output'
 runs: 
   using: 'docker'
   image: './wine_exe_Dockerfile'
   args: 
-    - ${{ inputs.path_to_UI }}
+    - ${{ inputs.path }}
     - ${{ inputs.spec }}
     - ${{ inputs.requirements }}

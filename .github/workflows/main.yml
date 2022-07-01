@@ -18,7 +18,7 @@ jobs:
       - name: 'name_1'
         uses: ./.github/actions
         with:
-          path: src
+          path: .
       - name: 'name_2'
         uses: actions/upload-artifact@v2
         with:
