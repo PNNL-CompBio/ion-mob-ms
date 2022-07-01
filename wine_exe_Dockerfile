@@ -32,7 +32,7 @@ COPY requirements.txt .
 # RUN pip install tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN chmod +x /UserInterfaceV2/pyinstaller_script.py
+RUN chmod +x ./UserInterfaceV2/pyinstaller_script.py
 
 
-ENTRYPOINT ["wine","python3.9", "/pyinstaller_script.py"]
+ENTRYPOINT ["wine","python3.9", "./UserInterfaceV2/pyinstaller_script.py"]
