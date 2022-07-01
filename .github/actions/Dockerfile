@@ -19,10 +19,13 @@ WORKDIR dist
 COPY . .
 RUN bash -c 'ls'
 
-COPY ./UserInterfaceV2/ .
-RUN bash -c 'ls dist'
-COPY ./src/pyinstaller_script.py .
-RUN bash -c 'ls dist'
+COPY . .
+
+RUN bash -c 'ls'
+# COPY ./UserInterfaceV2/ .
+# RUN bash -c 'ls dist'
+# COPY ./src/pyinstaller_script.py .
+# RUN bash -c 'ls dist'
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
