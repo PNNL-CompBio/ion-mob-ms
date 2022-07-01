@@ -21,6 +21,6 @@ runs:
   env:
     spec_file: 'UI_V2.spec'
   args: 
-    - ${{ github.event.inputs.path }}
-    - ${{ github.event.inputs.spec }}
-    - ${{ github.event.inputs.requirements }}
+    - ${{ inputs.path }}
+    - ${{ inputs.spec }}
+    - ${{ inputs.requirements }}

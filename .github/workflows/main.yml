@@ -12,16 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - name: 'Checkout'
+        uses: actions/checkout@v2
 
-    - name: name_1
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: src
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: name_2
-        path: src/dist/windows
-
+      - name: 'name_1'
+        uses: ./.github/actions
+        with:
+          path: src
+      - name: 'name_2'
+        uses: actions/upload-artifact@v2
+        with:
+          path: src/dist
+      - name: 'Reconnect to action repo'
+        uses: actions/checkout@v3 
 
