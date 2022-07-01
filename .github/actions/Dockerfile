@@ -13,9 +13,6 @@ RUN bash -c "(set -o posix ; set)"
 
 RUN apt-get update && apt-get install -y python3-pip
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
 
 ENV PORT 80
 WORKDIR dist
