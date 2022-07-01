@@ -3,11 +3,11 @@ FROM tobix/pywine:3.9
 #WORKDIR /usr/src/app
 
 
-RUN bash -c /bin/echo -e "hi"
+RUN echo"hi"
 
-RUN bash -c 'ls *'
-RUN bash -c /bin/echo -e "$spec_file"
-RUN bash -c /bin/echo -e "$spec"
+RUN bash -c 'ls'
+RUN echo $spec_file
+RUN echo $spec
 
 
 
