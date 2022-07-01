@@ -17,8 +17,8 @@ outputs:
     description: 'Pyinstaller Output'
 runs: 
   using: 'docker'
-  image: './.github/actions/wine_exe_Dockerfile'
+  image: './wine_exe_Dockerfile'
   args: 
-    - ${{ inputs.path }}
+    - ${{ inputs.path_to_UI }}
     - ${{ inputs.spec }}
     - ${{ inputs.requirements }}
