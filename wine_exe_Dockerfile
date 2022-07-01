@@ -26,8 +26,9 @@ RUN bash -c 'ls'
 # RUN bash -c 'ls dist'
 # COPY ./src/pyinstaller_script.py .
 # RUN bash -c 'ls dist'
-
+RUN bash -c "python --version"
 COPY requirements.txt .
+RUN pip install tk
 RUN pip install tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
 
