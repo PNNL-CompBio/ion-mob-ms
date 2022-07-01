@@ -7,11 +7,16 @@ FROM tobix/pywine:3.9
 RUN echo "hi"
 
 RUN bash -c 'ls'
-RUN bash ( set -o posix ; set ) 
+RUN compgen -v
+
 RUN echo $INPUT_spec_file
 RUN echo $spec
 
 RUN apt-get update && apt-get install -y python3-pip
+
+
+RUN ( set -o posix ; set ) 
+
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
