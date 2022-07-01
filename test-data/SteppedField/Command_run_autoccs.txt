@@ -1,5 +1,5 @@
 
-python E:/CCS_Calculations/a_Software/IV_autoCCS/autoCCS.py --config_file "E:/CCS-container-pipeline_test-data/SteppedField/autoCCS_config.xml" --framemeta_files "E:/CCS-container-pipeline_test-data/SteppedField/IV_ImsMetadata/*.txt" --feature_files "E:/CCS-container-pipeline_test-data/SteppedField/IV_Features_csv/*.csv" --output_dir "E:/CCS-container-pipeline_test-data/SteppedField/IV_Results" --mode multi --target_list_file "E:/CCS-container-pipeline_test-data/SteppedField/TargetList_NeutralMass.csv"
+python E:/CCS_Calculations/a_Software/IV_autoCCS/autoCCS.py --config_file "E:/CCS_Calculations/a_Software/ion-mob-ms/test-data/SteppedField/autoCCS_config.xml" --framemeta_files "E:/CCS_Calculations/a_Software/ion-mob-ms/test-data/SteppedField/IV_ImsMetadata/*.txt" --feature_files "E:/CCS_Calculations/a_Software/ion-mob-ms/test-data/SteppedField/IV_Features_csv/*.csv" --output_dir "E:/CCS_Calculations/a_Software/ion-mob-ms/test-data/SteppedField/IV_Results" --mode multi --target_list_file "E:/CCS_Calculations/a_Software/ion-mob-ms/test-data/SteppedField/TargetList_NeutralMass.csv"
 
 
 
