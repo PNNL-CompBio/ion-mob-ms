@@ -14,11 +14,10 @@ RUN echo $spec
 
 RUN apt-get update && apt-get install -y python3-pip
 
-RUN bash -c "compgen -v"
-RUN set -o posix ; set
+RUN bash -c "(set -o posix ; set)"
 
 
-COPY requirements.txt ./
+COPY ../../requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY pyinstaller_script.py /pyinstaller_script.py
