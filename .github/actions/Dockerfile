@@ -24,12 +24,12 @@ RUN apt-get update && apt-get install -y python3-pip
 ENV PORT 80
 WORKDIR dist
 COPY . dist
-RUN bash -c 'ls'
-
-COPY pyinstaller_script.py /pyinstaller_script.py
+RUN bash -c 'ls dist'
+RUN bash -c 'pwd'
 RUN bash -c "ls"
 RUN bash -c "ls /usr/src/apps"
 
+COPY ../../requirements.txt /requirements.txt
 
 RUN chmod +x /pyinstaller_script.py
 
