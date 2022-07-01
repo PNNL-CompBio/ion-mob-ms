@@ -12,13 +12,19 @@ RUN bash -c 'ls'
 RUN echo $INPUT_spec_file
 RUN echo $spec
 
-RUN apt-get update && apt-get install -y python3-pip
 
 RUN bash -c "(set -o posix ; set)"
 
+RUN apt-get update && apt-get install -y python3-pip
 
-COPY ../../requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# COPY ../../requirements.txt ./
+# RUN pip install --no-cache-dir -r requirements.txt
+
+
+ENV PORT 80
+WORKDIR dist
+COPY . dist
+RUN bash -c 'ls'
 
 COPY pyinstaller_script.py /pyinstaller_script.py
 RUN bash -c "ls"
