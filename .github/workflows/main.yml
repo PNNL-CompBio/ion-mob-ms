@@ -22,7 +22,7 @@ jobs:
       - name: 'name_2'
         uses: actions/upload-artifact@v2
         with:
-          path: src/dist
+          path: /dist/dist/UI_V2
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 

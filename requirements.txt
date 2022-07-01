@@ -69,3 +69,4 @@ traitlets==5.1.1
 urllib3==1.26.9
 wrapt==1.14.0
 yte==1.2.2
+pyinstaller==5.1
