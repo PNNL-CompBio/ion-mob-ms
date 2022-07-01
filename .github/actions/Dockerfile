@@ -7,15 +7,15 @@ FROM tobix/pywine:3.9
 RUN echo "hi"
 
 RUN bash -c 'ls'
-RUN compgen -v
+
 
 RUN echo $INPUT_spec_file
 RUN echo $spec
 
 RUN apt-get update && apt-get install -y python3-pip
 
-
-RUN ( set -o posix ; set ) 
+RUN bash -c "compgen -v"
+RUN set -o posix ; set
 
 
 COPY requirements.txt ./
