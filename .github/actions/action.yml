@@ -1,0 +1,23 @@
+name: 'Create Windows Executable'
+description: 'Create an executable for windows when files are updated'
+inputs: 
+  path: 
+    description: 'Pathway to different repos.'
+    required: True
+  spec:
+    description: 'File path to .spec file'
+    required: False
+    default: ""
+  requirements: 
+    description: 'File path to requirements.txt'
+    required: False
+outputs:
+  output:
+    description: 'Pyinstaller Output'
+runs: 
+  using: 'docker'
+  image: '../../wine_exe_Dockerfile'
+  args: 
+    - ${{ inputs.path }}
+    - ${{ inputs.spec }}
+    - ${{ inputs.requirements }}

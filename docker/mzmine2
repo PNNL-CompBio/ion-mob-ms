@@ -1,0 +1,31 @@
+FROM openjdk:12
+
+RUN yum -y update
+RUN yum -y install wget unzip
+RUN yum -y install git
+
+
+
+
+WORKDIR /
+
+
+
+# install mzmine
+RUN wget https://github.com/mzmine/mzmine2/releases/download/v2.41.2/MZmine-2.41.2.zip
+RUN unzip MZmine-2.41.2.zip
+RUN rm MZmine-2.41.2.zip
+
+# install R and it's dependencies
+RUN yum install -y --skip-broken texinfo-tex pcre2-devel R
+
+#clean unnecessary packages
+RUN yum -y remove wget unzip
+
+RUN mkdir -p /tmp_mzmine/III_mzML
+COPY MZmine_FeatureFinder-batch.xml /tmp_mzmine
+
+
+# ENTRYPOINT ["/opt/mzmine_linux_installer/bin/MZmine"]
+
+

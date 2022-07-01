@@ -1,0 +1,28 @@
+name: Pyinstaller Windows Executable Generation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'name_1'
+        uses: ./.github/actions
+        with:
+          path: .
+      - name: 'name_2'
+        uses: actions/upload-artifact@v2
+        with:
+          path: /dist/dist/UI_V2
+      # - name: 'Reconnect to action repo'
+      #   uses: actions/checkout@v3 
+
