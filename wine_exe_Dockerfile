@@ -26,13 +26,13 @@ RUN bash -c 'ls'
 # RUN bash -c 'ls dist'
 # COPY ./src/pyinstaller_script.py .
 # RUN bash -c 'ls dist'
-RUN bash -c "python --version"
+
 COPY requirements.txt .
-RUN pip install tk
-RUN pip install tkPDFViewer
+# RUN pip install tk
+# RUN pip install tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN chmod +x /pyinstaller_script.py
+RUN chmod +x /UserInterfaceV2/pyinstaller_script.py
 
 
-ENTRYPOINT ["python", "/pyinstaller_script.py"]
+ENTRYPOINT ["wine","python3.9", "/pyinstaller_script.py"]
