@@ -35,4 +35,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN chmod +x ./UserInterfaceV2/pyinstaller_script.py
 
 
-ENTRYPOINT ["wine","python3.9", "./UserInterfaceV2/pyinstaller_script.py"]
+ENTRYPOINT ["python3.9", "./UserInterfaceV2/pyinstaller_script.py"]
