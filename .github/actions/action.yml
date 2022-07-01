@@ -12,7 +12,7 @@ inputs:
     description: 'File path to requirements.txt'
     required: False
 outputs:
-  output:git
+  output:
     description: 'Pyinstaller Output'
 runs: 
   using: 'docker'
