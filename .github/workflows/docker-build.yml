@@ -36,6 +36,13 @@ jobs:
           file: docker/mzmine
           push: true
           tags: anubhav0fnu/mzmine:latest
+      - name: Build and push mzmine2
+        uses: docker/build-push-action@v2
+        with:
+          context: docker
+          file: docker/mzmine2
+          push: true
+          tags: anubhav0fnu/mzmine2:latest
       - name: Build and push autoccs
         uses: docker/build-push-action@v2
         with:
