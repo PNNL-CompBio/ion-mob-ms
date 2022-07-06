@@ -58,6 +58,7 @@ def copy_some_files(client, src_list,dst):
 
 def process(filepath):
     global client,image,local_mem,command_list_2
+    time.sleep(2)
     file_path = str(filepath.absolute())
     cont_name = ("MZ_container_" + os.path.basename(file_path))
     file_name = os.path.basename(file_path)
@@ -78,8 +79,8 @@ def process(filepath):
     MZ_container.exec_run(cmd=command_list_1)
     MZ_container.exec_run(cmd=command_list_2)
     print("MzMine completed in container: ", cont_name)
-    # MZ_container.stop()
-    # MZ_container.remove()
+    MZ_container.stop()
+    MZ_container.remove()
 
 def run_container(mzML_data_folder):
     global client,image,local_mem,command_list_2
@@ -98,13 +99,14 @@ def run_container(mzML_data_folder):
     print("TYPE:  ", type(file_list))
     print("file list: ",file_list)
 
+    #process_num = len(file_list)
     process_num = len(file_list)
+    if process_num > 10:
+        process_num = 10
+        
     pool = Pool(processes=process_num)
     pool.map(process, file_list)
 
     pool.close()
     pool.join()
     return local_mem
-
-if __name__ == '__main__':
-    run_container("../test-data/SingleField/III_mzML/")

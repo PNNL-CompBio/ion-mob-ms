@@ -83,6 +83,8 @@ def execute_workflow(json_file):
             PW_results = PW_step.run_container(data[1]["Raw Data Folder"])
         if "MZ" in data[0]["ToolType"]:
             print("MZMine searches for Features")
+            print(data[1]["mzML Data Folder"])
+            print(data[1])
             MZ_results = MZ_step.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"]:
             print("AutoCCS finds features through the enhanced method.")

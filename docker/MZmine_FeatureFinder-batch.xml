@@ -1,93 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <batch>
+
     <batchstep method="net.sf.mzmine.modules.rawdatamethods.rawdataimport.RawDataImportModule">
-        <parameter name="Raw data file names"><file>/tmp/III_mzML/AgTune_01_7V_POS_03Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML</file></parameter>
+
+REPLACE_THIS_LINE
+
     </batchstep>
+
     <batchstep method="net.sf.mzmine.modules.rawdatamethods.peakpicking.massdetection.MassDetectionModule">
+
         <parameter name="Raw data files" type="BATCH_LAST_FILES"/>
+
         <parameter name="Scans"/>
+
         <parameter name="Mass detector" selected="Wavelet transform">
+
             <module name="Wavelet transform">
+
                 <parameter name="Noise level">20.0</parameter>
+
                 <parameter name="Scale level">7</parameter>
+
                 <parameter name="Wavelet window size (%)">0.25</parameter>
+
             </module>
+
         </parameter>
+
         <parameter name="Mass list name">masses</parameter>
+
         <parameter name="Output netCDF filename (optional)" selected="false"/>
+
     </batchstep>
+
     <batchstep method="net.sf.mzmine.modules.masslistmethods.ADAPchromatogrambuilder.ADAPChromatogramBuilderModule">
+
         <parameter name="Raw data files" type="BATCH_LAST_FILES"/>
+
         <parameter name="Scans">
+
             <ms_level>1</ms_level>
+
             <scan_definition/>
+
         </parameter>
+
         <parameter name="Mass list">masses</parameter>
+
         <parameter name="Min group size in # of scans">3</parameter>
+
         <parameter name="Group intensity threshold">50.0</parameter>
+
         <parameter name="Min highest intensity">100.0</parameter>
+
         <parameter name="m/z tolerance">
+
             <absolutetolerance>0.008</absolutetolerance>
+
             <ppmtolerance>20.0</ppmtolerance>
+
         </parameter>
+
         <parameter name="Suffix">c</parameter>
+
     </batchstep>
+
     <batchstep method="net.sf.mzmine.modules.peaklistmethods.peakpicking.deconvolution.DeconvolutionModule">
+
         <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
+
         <parameter name="Suffix">dc</parameter>
+
         <parameter name="Algorithm" selected="Local minimum search">
+
             <module name="Local minimum search">
+
                 <parameter name="Chromatographic threshold">0.02</parameter>
+
                 <parameter name="Search minimum in RT range (min)">0.4</parameter>
+
                 <parameter name="Minimum relative height">0.15</parameter>
+
                 <parameter name="Minimum absolute height">200.0</parameter>
+
                 <parameter name="Min ratio of peak top/edge">1.0</parameter>
+
                 <parameter name="Peak duration range (min)">
+
                     <min>0.4</min>
+
                     <max>20.0</max>
+
                 </parameter>
+
             </module>
+
         </parameter>
+
         <parameter measure="MEDIAN" name="m/z center calculation" weighting="NONE">CenterFunction</parameter>
+
         <parameter name="m/z range for MS2 scan pairing (Da)" selected="false"/>
+
         <parameter name="RT range for MS2 scan pairing (min)" selected="false"/>
+
         <parameter name="Remove original feature list">true</parameter>
+
     </batchstep>
+
     <batchstep method="net.sf.mzmine.modules.peaklistmethods.isotopes.deisotoper.IsotopeGrouperModule">
+
         <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
+
         <parameter name="Name suffix">de</parameter>
+
         <parameter name="m/z tolerance">
+
             <absolutetolerance>0.008</absolutetolerance>
+
             <ppmtolerance>20.0</ppmtolerance>
+
         </parameter>
+
         <parameter name="Retention time tolerance" type="absolute">0.1</parameter>
+
         <parameter name="Monotonic shape">true</parameter>
+
         <parameter name="Maximum charge">2</parameter>
+
         <parameter name="Representative isotope">Lowest m/z</parameter>
+
         <parameter name="Remove original peaklist">true</parameter>
+
     </batchstep>
+
     <batchstep method="net.sf.mzmine.modules.peaklistmethods.io.csvexport.CSVExportModule">
+
         <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
-        <parameter name="Filename"><currrent_file>/tmp/III_mzML{}.csv</current_file></parameter>
+
+        <parameter name="Filename"><current_file>/tmp/IV_Features_csv/{}.csv</current_file></parameter>
+
         <parameter name="Field separator">,</parameter>
+
         <parameter name="Export common elements">
+
             <item>Export row ID</item>
+
         </parameter>
+
         <parameter name="Export data file elements">
+
             <item>Peak m/z</item>
+
             <item>Peak RT</item>
+
             <item>Peak RT start</item>
+
             <item>Peak RT end</item>
+
             <item>Peak duration time</item>
+
             <item>Peak height</item>
+
             <item>Peak area</item>
+
             <item>Peak charge</item>
+
             <item>Peak # data points</item>
+
             <item>Peak FWHM</item>
+
             <item>Peak tailing factor</item>
+
             <item>Peak asymmetry factor</item>
+
             <item>Peak m/z min</item>
+
             <item>Peak m/z max</item>
+
         </parameter>
+
     </batchstep>
+
 </batch>
+
+

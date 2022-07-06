@@ -1,14 +1,10 @@
-FROM openjdk:12
+FROM openjdk:buster
 
-RUN yum -y update
-RUN yum -y install wget unzip
-RUN yum -y install git
-
-
-
+RUN apt-get -y update
+RUN apt-get -y install wget unzip
+RUN apt-get -y install git
 
 WORKDIR /
-
 
 
 # install mzmine
@@ -17,14 +13,22 @@ RUN unzip MZmine-2.41.2.zip
 RUN rm MZmine-2.41.2.zip
 
 # install R and it's dependencies
-RUN yum install -y --skip-broken texinfo-tex pcre2-devel R
+RUN apt-get update && \
+        apt-get upgrade -y && \
+        apt-get install -y r-base
+
+RUN apt-get install -y r-base
+RUN apt install -y r-cran-doparallel
+
 
 #clean unnecessary packages
-RUN yum -y remove wget unzip
+# RUN apt-get -y remove wget unzip
 
-RUN mkdir -p /tmp_mzmine/III_mzML
-COPY MZmine_FeatureFinder-batch.xml /tmp_mzmine
+RUN mkdir -p /tmp/III_mzML
+COPY MZmine_FeatureFinder-batch.xml /tmp
+COPY R_PARSE_II.R /tmp
 
+WORKDIR /MZmine-2.41.2
 
 # ENTRYPOINT ["/opt/mzmine_linux_installer/bin/MZmine"]
 

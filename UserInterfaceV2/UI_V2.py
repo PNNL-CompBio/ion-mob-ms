@@ -431,7 +431,7 @@ if __name__=="__main__":
         global global_file_dictionary, ExpType,ToolType,tool_check
         change_mode_color(Single_field_button)
         hide_tools()
-        create_tools("disabled","disabled","disabled","disabled","disabled","grey","#FBB80F","grey","grey","#FBB80F")
+        create_tools("disabled","disabled","disabled","disabled","disabled","grey","#FBB80F","#FBB80F","grey","#FBB80F")
         hide_data_frame()
         create_modes()
         global_file_dictionary = {}
@@ -441,8 +441,6 @@ if __name__=="__main__":
         Data_Frame.rowconfigure((1), minsize=int(40))
         # label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
         label_list = ["Raw Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
-        global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
         generate_tool_page(label_list, "")
 
 
@@ -464,7 +462,7 @@ if __name__=="__main__":
         global global_file_dictionary, ExpType,ToolType,tool_check
         change_mode_color(Stepped_field_button)
         hide_tools()
-        create_tools("disabled","disabled","disabled","disabled","disabled","grey","#FBB80F","grey","grey","#FBB80F")
+        create_tools("disabled","disabled","disabled","disabled","disabled","grey","#FBB80F","#FBB80F","grey","#FBB80F")
         hide_data_frame()
         create_modes()
         global_file_dictionary = {}
@@ -472,7 +470,9 @@ if __name__=="__main__":
         ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
+        label_list = ["Raw Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
+        global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
+        global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
         generate_tool_page(label_list, "")
 
 
