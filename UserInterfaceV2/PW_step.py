@@ -16,7 +16,8 @@ import io
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
 local_mem = os.getcwd() + "/III_mzML"
-command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
+# command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
+command_list = ["wine", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
 
 
 #Copy file functions
