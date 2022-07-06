@@ -1,0 +1,35 @@
+FROM openjdk:buster
+
+RUN apt-get -y update
+RUN apt-get -y install wget unzip
+RUN apt-get -y install git
+
+WORKDIR /
+
+
+# install mzmine
+RUN wget https://github.com/mzmine/mzmine2/releases/download/v2.41.2/MZmine-2.41.2.zip
+RUN unzip MZmine-2.41.2.zip
+RUN rm MZmine-2.41.2.zip
+
+# install R and it's dependencies
+RUN apt-get update && \
+        apt-get upgrade -y && \
+        apt-get install -y r-base
+
+RUN apt-get install -y r-base
+RUN apt install -y r-cran-doparallel
+
+
+#clean unnecessary packages
+# RUN apt-get -y remove wget unzip
+
+RUN mkdir -p /tmp/III_mzML
+COPY MZmine_FeatureFinder-batch.xml /tmp
+COPY R_PARSE_II.R /tmp
+
+WORKDIR /MZmine-2.41.2
+
+# ENTRYPOINT ["/opt/mzmine_linux_installer/bin/MZmine"]
+
+

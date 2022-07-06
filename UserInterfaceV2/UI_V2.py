@@ -95,7 +95,7 @@ if __name__=="__main__":
     Tool_Frame = LabelFrame(window)
     Tool_Frame.grid(row=1, column = 1, sticky="NSWE")
     Tool_Frame.grid_columnconfigure(0, weight=1)
-    Gen_tool_buttons = tkButton.Button(Tool_Frame, text = "Tools", height = 40, width = 160, command=lambda: [create_tools("disabled","active","disabled","disabled","active"),hide_instructions()],bg='lightgrey', bordersize=1)
+    Gen_tool_buttons = tkButton.Button(Tool_Frame, text = "Tools", height = 40, width = 160, command=lambda: [create_tools("disabled","active","active","disabled","active"),hide_instructions()],bg='lightgrey', bordersize=1)
     Gen_tool_buttons.grid(row=0, column = 0, sticky="NEWS")
 
     Data_Frame = LabelFrame(window)
@@ -149,7 +149,7 @@ if __name__=="__main__":
     def create_modes(*args):
         global Single_tool_button,Single_field_button, Stepped_field_button,SLIM_button, mode_create_switch
         if mode_create_switch == True:
-            Single_tool_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Tools", bordersize=1, command = lambda: [hide_tools(),create_tools("disabled","active","disabled","disabled","active"),change_mode_color(Single_tool_button)])
+            Single_tool_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Tools", bordersize=1, command = lambda: [hide_tools(),create_tools("disabled","active","active","disabled","active"),change_mode_color(Single_tool_button)])
             Single_tool_button.grid(row=1, column = 0, sticky="NEWS")
             Single_field_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Field", bordersize=1, command = lambda: create_single_field(Single_field_button))
             Single_field_button.grid(row=2, column = 0, sticky="NEWS")
@@ -231,7 +231,7 @@ if __name__=="__main__":
             PW = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "ProteoWizard", bordersize=1,bg=PW_color)
         PW.grid(row=2, column = 0, sticky="NEWS")
         if MZ_state == "active":
-            MZ = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "MZmine", bordersize=1,command = lambda: [change_tool_color(MZ)])
+            MZ = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "MZmine", bordersize=1,command = lambda: [change_tool_color(MZ),MZ_create()])
         if MZ_state == "disabled":
             MZ = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "MZmine", bordersize=1,bg=MZ_color)
         MZ.grid(row=3, column = 0, sticky="NEWS")
@@ -245,7 +245,7 @@ if __name__=="__main__":
         if AC_state == "disabled":
             AC = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "AutoCCS", bordersize=1,bg=AC_color)
         AC.grid(row=5, column = 0, sticky="NEWS")
-        Mode_buttons = tkButton.Button(Mode_Frame, text = "Workflow", height = 40, width = 120, bordersize=1,bg='lightgrey', command=lambda: [create_modes(),create_tools("disabled","active","disabled","disabled","active"),hide_instructions()])
+        Mode_buttons = tkButton.Button(Mode_Frame, text = "Workflow", height = 40, width = 120, bordersize=1,bg='lightgrey', command=lambda: [create_modes(),create_tools("disabled","active","active","disabled","active"),hide_instructions()])
         Mode_buttons.grid(row=0, column = 0, sticky="NEWS")
         create_tool_instructions()
 
@@ -370,6 +370,18 @@ if __name__=="__main__":
         label_list = ["Raw Data Folder","Experiment Name"]
         generate_tool_page(label_list,"")
 
+    def MZ_create():
+        global global_file_dictionary, ExpType,ToolType
+        hide_data_frame()
+        create_modes()
+        change_mode_color(Single_tool_button)
+        global_file_dictionary = {}
+        ExpType = "Any"
+        ToolType = "MZ"
+        label_list = ["mzML Data Folder","Experiment Name"]
+        generate_tool_page(label_list,"")
+
+
 
     #AutoCCS Page with buttons for single, stepped, and slim
     def AC_page_create():
@@ -424,11 +436,28 @@ if __name__=="__main__":
         create_modes()
         global_file_dictionary = {}
         ExpType = "Single"
-        ToolType = ["PW","AC"]
+        ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        label_list = ["Raw Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
+        # label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
+        label_list = ["Raw Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
+        global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
+        global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
         generate_tool_page(label_list, "")
+
+
+                # elif file_variable == "Feature Data Folder":
+                #     if platform.system().upper() == "DARWIN":
+                #         global_files["Feature Data Folder"]= (os.path.abspath(file) + "/*.csv")
+                #     elif platform.system().upper() == "WINDOWS":
+                #         global_files["Feature Data Folder"]= (os.path.abspath(file) + "\*.csv")
+                # elif file_variable == "mzML Data Folder":
+                #     global_files["mzML Data Folder"]=os.path.abspath(file)
+
+
+
+
+
 
     #Stepped Field Workflow
     def create_stepped_field(Stepped_field_button):
@@ -440,10 +469,10 @@ if __name__=="__main__":
         create_modes()
         global_file_dictionary = {}
         ExpType = "Stepped"
-        ToolType = ["PW","AC"]
+        ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        label_list = ["Raw Data Folder", "Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
+        label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
         generate_tool_page(label_list, "")
 
 
@@ -551,34 +580,35 @@ if __name__=="__main__":
         """
         if file_variable == "IMS Metadata Folder (optional)":
             file_variable = "IMS Metadata Folder"
-        if file_variable in ["Raw Data Folder","IMS Metadata Folder","Feature Data Folder"]:
+        if file_variable in ["Raw Data Folder","IMS Metadata Folder","Feature Data Folder", "mzML Data Folder"]:
             file = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
             
             if file != "":
                 if file_variable == "Raw Data Folder":
                     global_files["Raw Data Folder"]=os.path.abspath(file)
-
                 elif file_variable == "IMS Metadata Folder":
                     if platform.system().upper() == "DARWIN":
                         global_files["IMS Metadata Folder"]=(os.path.abspath(file) + "/*.txt")
                     elif platform.system().upper() == "WINDOWS":
                         global_files["IMS Metadata Folder"]=(os.path.abspath(file) + "\*.txt")
-
                 elif file_variable == "Feature Data Folder":
                     if platform.system().upper() == "DARWIN":
                         global_files["Feature Data Folder"]= (os.path.abspath(file) + "/*.csv")
                     elif platform.system().upper() == "WINDOWS":
                         global_files["Feature Data Folder"]= (os.path.abspath(file) + "\*.csv")
+                elif file_variable == "mzML Data Folder":
+                    global_files["mzML Data Folder"]=os.path.abspath(file)
+                    # if platform.system().upper() == "DARWIN":
+                    #     global_files["mzML Data Folder"]= (os.path.abspath(file) + "/*.mzML")
+                    # elif platform.system().upper() == "WINDOWS":
+                    #     global_files["mzML Data Folder"]= (os.path.abspath(file) + "\*.mzML")
                 value_for_entry.set(str(os.path.abspath(file)))
 
         else:
             file = askopenfile(parent=window, mode = 'rb',title = "Select a file")
             if file != None:
                 value_for_entry.set(str(os.path.abspath(file.name)))
-                if file_variable == "mzML Data Folder":
-                    global_files["mzML Data Folder"] = os.path.abspath(file.name)
-
-                elif file_variable == "Metadata File":
+                if file_variable == "Metadata File":
                     global_files["Metadata File"]= os.path.abspath(file.name)
 
                 elif file_variable == "calibrant_curves":
@@ -589,8 +619,6 @@ if __name__=="__main__":
 
                 elif file_variable == "Target List File":
                     global_files["Target List File"] = os.path.abspath(file.name)
-
-
 
 
 
