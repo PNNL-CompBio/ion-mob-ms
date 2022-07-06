@@ -6,6 +6,12 @@
 ParseDTasRTmzML = function(nCores,
                             pathTomzML)
 {
+
+  # Installing and loading packages:
+  if(!"doParallel" %in% installed.packages())
+    install.packages("doParallel")
+  library("doParallel") # this paralellization package is used because it works for Windows and Unix-like systems
+
   # Load all files in directory
   myPattern = ".+\\.mzML$"
   allRawFiles = list.files(path = pathTomzML, full.names = FALSE, recursive = TRUE)
