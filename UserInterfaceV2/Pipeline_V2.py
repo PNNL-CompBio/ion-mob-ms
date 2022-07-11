@@ -12,6 +12,7 @@ import time
 import platform
 import PW_step
 import MZ_step
+import PP_step
 
 
 def execute_workflow(json_file):
@@ -33,6 +34,7 @@ def execute_workflow(json_file):
         print("Single Field Begins here.")
         if "PP" in data[0]["ToolType"]:
             print("PNNL Preprocessor does Filtering and Smoothing")
+            PP_results = PP_step.run_container(data[1]["Raw Data Folder"],data[0]["DriftKernel"],data[0]["LCKernel"],data[0]["MinIntensity"])
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_step.run_container(data[1]["Raw Data Folder"])
@@ -88,7 +90,7 @@ def execute_workflow(json_file):
             MZ_results = MZ_step.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"]:
             print("AutoCCS finds features through the enhanced method.")
-            AC_results= AC_step.run_container("step","enhanced",False, data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], data[1]["Target List File"],False)
+            AC_results= AC_step.run_container("step","enhanced",False, data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], data[1]["Target List File"], data[1]["Metadata File"])
     
     all_results = [PP_results, PW_results, MZ_results, DM_results, AC_results]
     return all_results

@@ -22,6 +22,15 @@ RUN apt-get update && \
       /usr/share/locale \
       /usr/share/zoneinfo
 
+
+
+#Install R and its Dependancies
+RUN apt-get update && \
+        apt-get upgrade -y && \
+        apt-get install -y r-base
+RUN apt-get install -y r-base
+    
+
 # create UIDs that Galaxy uses in default configs to launch docker containers; the UID must exist for sudo to work
 RUN groupadd -r galaxy -g 1450 && \
     useradd -u 1450 -r -g galaxy -d /home/galaxy -c "Galaxy user" galaxy && \
@@ -62,13 +71,17 @@ RUN apt-get install -y mono-devel=5.16.0.220-0xamarin4+ubuntu1604b1 msbuild=1:16
 WORKDIR /
 COPY ./PNNL-Preprocessor_4.0_2022.02.17.zip /
 RUN unzip /PNNL-Preprocessor_4.0_2022.02.17.zip
-RUN rm /PNNL-Preprocessor_4.0_2022.02.17.zip
+
+
+COPY R_Metadata_I.R /tmp
+RUN mkdir -p /tmp/II_Preprocessed
+
 
 #clean unnecessary packages
-RUN  apt-get -y remove  curl \
-                        git \
-                        unzip \
-                        libcurl3 \
-     &&  apt-get -y autoremove && apt-get clean
+# RUN  apt-get -y remove  curl \
+#                         git \
+#                         unzip \
+#                         libcurl3 \
+#      &&  apt-get -y autoremove && apt-get clean
 # Run
 # ENTRYPOINT ["wine", "/PNNL-Preprocessor_4.0_2022.02.17/PNNL-PreProcessor.exe"]

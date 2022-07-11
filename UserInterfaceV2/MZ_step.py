@@ -79,8 +79,8 @@ def process(filepath):
     MZ_container.exec_run(cmd=command_list_1)
     MZ_container.exec_run(cmd=command_list_2)
     print("MzMine completed in container: ", cont_name)
-    MZ_container.stop()
-    MZ_container.remove()
+    # MZ_container.stop()
+    # MZ_container.remove()
 
 def run_container(mzML_data_folder):
     global client,image,local_mem,command_list_2
