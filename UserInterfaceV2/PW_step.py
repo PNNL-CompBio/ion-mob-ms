@@ -85,6 +85,9 @@ def run_container(raw_file_folder):
     # print("file list: ",file_list)
 
     process_num = len(file_list)
+    if process_num > 10:
+        process_num = 10
+        
     pool = Pool(processes=process_num)
     pool.map(process, file_list)
 
