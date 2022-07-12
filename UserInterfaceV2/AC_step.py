@@ -90,7 +90,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
         elif exp == "step":
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_step_config.xml", "--framemeta_files",
-            '/tmp/FMF/*.txt', "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
+            '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
         if platform.system().upper() == "DARWIN":
             framemeta_files=framemeta_files.replace(" ", "\ ")
             cmd1 = "echo " + framemeta_files
@@ -143,7 +143,6 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         print("B\n")
         if version == "enhanced":
             copy_some_files_mac(client, test1, 'AC_container:/tmp/FMF/framemeta_files')
-            copy_a_file_mac(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
         print("C\n")
         copy_some_files_mac(client, test2, 'AC_container:/tmp/FF/feature_files')
         print("D\n")

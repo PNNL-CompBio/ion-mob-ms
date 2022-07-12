@@ -423,7 +423,7 @@ if __name__=="__main__":
         ToolType = "AC"
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        label_list = ["Feature Data Folder","IMS Metadata Folder","Target List File","Metadata File","Experiment Name"]
+        label_list = ["Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
         generate_tool_page(label_list,"Stepped Field")
 
     #Single Field Workflow
@@ -440,8 +440,8 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         # label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        label_list = ["Raw Data Folder","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        global_file_dictionary["Metadata File"] = os.path.dirname(__file__) + "/II_Preprocessed/RawFiles_Metadata.csv"
+        label_list = ["Raw Data Folder","Calibrant File","IMS Metadata Folder (optional)","Metadata File","Experiment Name"]
+        #global_file_dictionary["Metadata File"] = os.path.dirname(__file__) + "/II_Preprocessed/RawFiles_Metadata.csv"
         global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
         global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
         generate_tool_page(label_list, "")

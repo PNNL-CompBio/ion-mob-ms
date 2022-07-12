@@ -90,7 +90,7 @@ def execute_workflow(json_file):
             MZ_results = MZ_step.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"]:
             print("AutoCCS finds features through the enhanced method.")
-            AC_results= AC_step.run_container("step","enhanced",False, data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], data[1]["Target List File"], data[1]["Metadata File"])
+            AC_results= AC_step.run_container("step","enhanced",False, data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], data[1]["Target List File"], False)
     
     all_results = [PP_results, PW_results, MZ_results, DM_results, AC_results]
     return all_results
