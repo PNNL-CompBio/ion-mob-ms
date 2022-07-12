@@ -14,7 +14,7 @@ import io
 
 
 client = docker.from_env()
-image = "jjacobson95/mzmine2:latest"
+image = "anubhav0fnu/mzmine:latest"
 local_mem = os.getcwd() + "/IV_Features_csv"
 command_list_2 = ["bash", "startMZmine_Linux.sh", "/tmp/MZmine_FeatureFinder-batch.xml"]
 
