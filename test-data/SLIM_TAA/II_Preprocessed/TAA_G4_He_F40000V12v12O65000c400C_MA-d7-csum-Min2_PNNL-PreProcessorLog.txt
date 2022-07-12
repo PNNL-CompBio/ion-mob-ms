@@ -1,0 +1,7 @@
+-------------------------- 4/13/2020 9:06:23 PM
+PNNL PreProcessor v2020.04.14
+Summing frames
+Moving average smoothing number of points: drift 7, 
+Signal intensity lower threshold (counts): 2
+4/13/2020 9:07:25 PM
+Total time 61.9228312 seconds

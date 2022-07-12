@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<batch>
+    <batchstep method="net.sf.mzmine.modules.rawdatamethods.rawdataimport.RawDataImportModule">
+        <parameter name="Raw data file names"></parameter>
+    </batchstep>
+    <batchstep method="net.sf.mzmine.modules.rawdatamethods.peakpicking.massdetection.MassDetectionModule">
+        <parameter name="Raw data files" type="BATCH_LAST_FILES"/>
+        <parameter name="Scans"/>
+        <parameter name="Mass detector" selected="Wavelet transform">
+            <module name="Wavelet transform">
+                <parameter name="Noise level">1.0</parameter>
+                <parameter name="Scale level">7</parameter>
+                <parameter name="Wavelet window size (%)">0.25</parameter>
+            </module>
+        </parameter>
+        <parameter name="Mass list name">masses</parameter>
+        <parameter name="Output netCDF filename (optional)" selected="false"/>
+    </batchstep>
+    <batchstep method="net.sf.mzmine.modules.masslistmethods.ADAPchromatogrambuilder.ADAPChromatogramBuilderModule">
+        <parameter name="Raw data files" type="BATCH_LAST_FILES"/>
+        <parameter name="Scans">
+            <ms_level>1</ms_level>
+            <scan_definition/>
+        </parameter>
+        <parameter name="Mass list">masses</parameter>
+        <parameter name="Min group size in # of scans">5</parameter>
+        <parameter name="Group intensity threshold">1.0</parameter>
+        <parameter name="Min highest intensity">1.0</parameter>
+        <parameter name="m/z tolerance">
+            <absolutetolerance>0.1</absolutetolerance>
+            <ppmtolerance>50.0</ppmtolerance>
+        </parameter>
+        <parameter name="Suffix">c</parameter>
+    </batchstep>
+    <batchstep method="net.sf.mzmine.modules.peaklistmethods.peakpicking.deconvolution.DeconvolutionModule">
+        <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
+        <parameter name="Suffix">dc</parameter>
+        <parameter name="Algorithm" selected="Noise amplitude">
+            <module name="Noise amplitude">
+                <parameter name="Min peak height">15.0</parameter>
+                <parameter name="Peak duration range (min)">
+                    <min>1.0</min>
+                    <max>250.0</max>
+                </parameter>
+                <parameter name="Amplitude of noise">100.0</parameter>
+            </module>
+        </parameter>
+        <parameter measure="MEDIAN" name="m/z center calculation" weighting="NONE">CenterFunction</parameter>
+        <parameter name="m/z range for MS2 scan pairing (Da)" selected="false"/>
+        <parameter name="RT range for MS2 scan pairing (min)" selected="false"/>
+        <parameter name="Remove original feature list">true</parameter>
+    </batchstep>
+    <batchstep method="net.sf.mzmine.modules.peaklistmethods.isotopes.deisotoper.IsotopeGrouperModule">
+        <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
+        <parameter name="Name suffix">de</parameter>
+        <parameter name="m/z tolerance">
+            <absolutetolerance>0.01</absolutetolerance>
+            <ppmtolerance>50.0</ppmtolerance>
+        </parameter>
+        <parameter name="Retention time tolerance" type="absolute">5</parameter>
+        <parameter name="Monotonic shape">true</parameter>
+        <parameter name="Maximum charge">2</parameter>
+        <parameter name="Representative isotope">Lowest m/z</parameter>
+        <parameter name="Remove original peaklist">true</parameter>
+    </batchstep>
+    <batchstep method="net.sf.mzmine.modules.peaklistmethods.io.csvexport.CSVExportModule">
+        <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
+        <parameter name="Filename"></parameter>
+        <parameter name="Field separator">,</parameter>
+        <parameter name="Export common elements">
+            <item>Export row ID</item>
+        </parameter>
+        <parameter name="Export data file elements">
+            <item>Peak m/z</item>
+            <item>Peak RT</item>
+            <item>Peak RT start</item>
+            <item>Peak RT end</item>
+            <item>Peak duration time</item>
+            <item>Peak height</item>
+            <item>Peak area</item>
+            <item>Peak charge</item>
+            <item>Peak # data points</item>
+            <item>Peak FWHM</item>
+            <item>Peak tailing factor</item>
+            <item>Peak asymmetry factor</item>
+            <item>Peak m/z min</item>
+            <item>Peak m/z max</item>
+        </parameter>
+    </batchstep>
+</batch>
