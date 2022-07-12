@@ -95,13 +95,13 @@ if __name__=="__main__":
     Tool_Frame = LabelFrame(window)
     Tool_Frame.grid(row=1, column = 1, sticky="NSWE")
     Tool_Frame.grid_columnconfigure(0, weight=1)
-    Gen_tool_buttons = tkButton.Button(Tool_Frame, text = "Tools", height = 40, width = 160, command=lambda: [create_tools("active","active","active","disabled","active"),hide_instructions()],bg='lightgrey', bordersize=1)
+    Gen_tool_buttons = tkButton.Button(Tool_Frame, text = "Tools", height = 40, width = 160, command=lambda: [create_tools("disabled","active","active","disabled","active"),hide_instructions()],bg='lightgrey', bordersize=1)
     Gen_tool_buttons.grid(row=0, column = 0, sticky="NEWS")
 
     Data_Frame = LabelFrame(window)
     Data_Frame.grid(row=1, column = 2, sticky="NSWE")
     Data_Frame.grid_columnconfigure(0, weight=1)
-    Gen_Data_Stuff = tkButton.Button(Data_Frame, text = "Data", height = 40, width = 400, command=lambda: [create_modes(),create_tools("active","active","disabled","disabled","active"),hide_instructions(),data_instruction()],bg='lightgrey', bordersize=1)
+    Gen_Data_Stuff = tkButton.Button(Data_Frame, text = "Data", height = 40, width = 400, command=lambda: [create_modes(),create_tools("disabled","active","active","disabled","active"),hide_instructions(),data_instruction()],bg='lightgrey', bordersize=1)
     Gen_Data_Stuff.grid(row=0, column = 0, columnspan=10, sticky="NEWS")
 
     Run_Frame = LabelFrame(window)
@@ -149,7 +149,7 @@ if __name__=="__main__":
     def create_modes(*args):
         global Single_tool_button,Single_field_button, Stepped_field_button,SLIM_button, mode_create_switch
         if mode_create_switch == True:
-            Single_tool_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Tools", bordersize=1, command = lambda: [hide_tools(),create_tools("active","active","active","disabled","active"),change_mode_color(Single_tool_button)])
+            Single_tool_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Tools", bordersize=1, command = lambda: [hide_tools(),create_tools("disabled","active","active","disabled","active"),change_mode_color(Single_tool_button)])
             Single_tool_button.grid(row=1, column = 0, sticky="NEWS")
             Single_field_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Field", bordersize=1, command = lambda: create_single_field(Single_field_button))
             Single_field_button.grid(row=2, column = 0, sticky="NEWS")
@@ -245,7 +245,7 @@ if __name__=="__main__":
         if AC_state == "disabled":
             AC = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "AutoCCS", bordersize=1,bg=AC_color)
         AC.grid(row=5, column = 0, sticky="NEWS")
-        Mode_buttons = tkButton.Button(Mode_Frame, text = "Workflow", height = 40, width = 120, bordersize=1,bg='lightgrey', command=lambda: [create_modes(),create_tools("active","active","active","disabled","active"),hide_instructions()])
+        Mode_buttons = tkButton.Button(Mode_Frame, text = "Workflow", height = 40, width = 120, bordersize=1,bg='lightgrey', command=lambda: [create_modes(),create_tools("disabled","active","active","disabled","active"),hide_instructions()])
         Mode_buttons.grid(row=0, column = 0, sticky="NEWS")
         create_tool_instructions()
 
