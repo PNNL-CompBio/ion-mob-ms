@@ -19,7 +19,7 @@ local_mem = os.getcwd() + "/II_Preprocessed"
 command_0 = """Rscript /tmp/R_Metadata_I.R"""
 command_list_1 = ["wine", "PNNL-PreProcessor.exe", "-smooth","-driftKernel","placeholder_1","-lcKernel","placeholder_2","-minIntensity","placeholder_3","-split,I_Raw,II_Preprocessed"]
 
-# wine ./PNNL-Preprocessor/PNNL-PreProcessor.exe -smooth -driftKernel 1 -lcKernel 0 -minIntensity 20 -split -r -d "./tmp/I_Raw/"
+# wine PNNL-PreProcessor.exe -smooth -driftKernel 1 -lcKernel 0 -minIntensity 20 -split -r -d "./tmp/I_Raw/"
 
 
 #Copy file functions
