@@ -3,7 +3,6 @@
 import argparse
 import json
 import subprocess
-import AC_step
 import sys
 import docker
 import os
@@ -13,6 +12,8 @@ import platform
 import PW_step
 import MZ_step
 import PP_step
+import DM_step
+import AC_step
 
 
 def execute_workflow(json_file):
@@ -38,10 +39,9 @@ def execute_workflow(json_file):
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_step.run_container(data[1]["Raw Data Folder"])
-        if "DM_1" in data[0]["ToolType"]:
+        if "DM" in data[0]["ToolType"]:
             print("Deimos searches for Features")
-        if "DM_2" in data[0]["ToolType"]:
-            print("Deimos finds CCS values")
+            DM_results=DM_step.run_container(data[1]["mzML Data Folder"])
         if "MZ" in data[0]["ToolType"]:
             print("MZMine searches for Features")
             print(data[1]["mzML Data Folder"])
@@ -63,10 +63,9 @@ def execute_workflow(json_file):
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_step.run_container(data[1]["Raw Data Folder"])
-        if data[0]["ToolType"] == "DM" and "....":
+        if "DM" in data[0]["ToolType"]:
             print("Deimos searches for Features")
-        if data[0]["ToolType"] == "DM" and "......":
-            print("Deimos finds CCS values")
+            DM_results=DM_step.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"] and "IMS Metadata Folder" not in data[1]:
             print("AutoCCS finds features through the standard method.")
             AC_results= AC_step.run_container("single","standard",data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], False, data[1]["Metadata File"])
@@ -83,6 +82,9 @@ def execute_workflow(json_file):
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_step.run_container(data[1]["Raw Data Folder"])
+        if "DM" in data[0]["ToolType"]:
+            print("Deimos searches for Features")
+            DM_results=DM_step.run_container(data[1]["mzML Data Folder"])
         if "MZ" in data[0]["ToolType"]:
             print("MZMine searches for Features")
             print(data[1]["mzML Data Folder"])

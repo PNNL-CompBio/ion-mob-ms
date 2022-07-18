@@ -95,13 +95,13 @@ if __name__=="__main__":
     Tool_Frame = LabelFrame(window)
     Tool_Frame.grid(row=1, column = 1, sticky="NSWE")
     Tool_Frame.grid_columnconfigure(0, weight=1)
-    Gen_tool_buttons = tkButton.Button(Tool_Frame, text = "Tools", height = 40, width = 160, command=lambda: [create_tools("disabled","active","active","disabled","active"),hide_instructions()],bg='lightgrey', bordersize=1)
+    Gen_tool_buttons = tkButton.Button(Tool_Frame, text = "Tools", height = 40, width = 160, command=lambda: [create_tools("disabled","active","active","active","active"),hide_instructions()],bg='lightgrey', bordersize=1)
     Gen_tool_buttons.grid(row=0, column = 0, sticky="NEWS")
 
     Data_Frame = LabelFrame(window)
     Data_Frame.grid(row=1, column = 2, sticky="NSWE")
     Data_Frame.grid_columnconfigure(0, weight=1)
-    Gen_Data_Stuff = tkButton.Button(Data_Frame, text = "Data", height = 40, width = 400, command=lambda: [create_modes(),create_tools("disabled","active","active","disabled","active"),hide_instructions(),data_instruction()],bg='lightgrey', bordersize=1)
+    Gen_Data_Stuff = tkButton.Button(Data_Frame, text = "Data", height = 40, width = 400, command=lambda: [create_modes(),create_tools("disabled","active","active","active","active"),hide_instructions(),data_instruction()],bg='lightgrey', bordersize=1)
     Gen_Data_Stuff.grid(row=0, column = 0, columnspan=10, sticky="NEWS")
 
     Run_Frame = LabelFrame(window)
@@ -149,7 +149,7 @@ if __name__=="__main__":
     def create_modes(*args):
         global Single_tool_button,Single_field_button, Stepped_field_button,SLIM_button, mode_create_switch
         if mode_create_switch == True:
-            Single_tool_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Tools", bordersize=1, command = lambda: [hide_tools(),create_tools("disabled","active","active","disabled","active"),change_mode_color(Single_tool_button)])
+            Single_tool_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Tools", bordersize=1, command = lambda: [hide_tools(),create_tools("disabled","active","active","active","active"),change_mode_color(Single_tool_button)])
             Single_tool_button.grid(row=1, column = 0, sticky="NEWS")
             Single_field_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Single Field", bordersize=1, command = lambda: create_single_field(Single_field_button))
             Single_field_button.grid(row=2, column = 0, sticky="NEWS")
@@ -236,7 +236,7 @@ if __name__=="__main__":
             MZ = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "MZmine", bordersize=1,bg=MZ_color)
         MZ.grid(row=3, column = 0, sticky="NEWS")
         if DM_state=="active":
-            DM = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "DEIMoS", bordersize=1,command = lambda: change_tool_color(DM))
+            DM = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "DEIMoS", bordersize=1,command = lambda: [change_tool_color(DM), DM_create()])
         if DM_state =="disabled":
             DM = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "DEIMoS", bordersize=1,bg=DM_color)
         DM.grid(row=4, column = 0, sticky="NEWS")
@@ -245,7 +245,7 @@ if __name__=="__main__":
         if AC_state == "disabled":
             AC = tkButton.Button(Tool_Frame, height = 40, width = 100, text = "AutoCCS", bordersize=1,bg=AC_color)
         AC.grid(row=5, column = 0, sticky="NEWS")
-        Mode_buttons = tkButton.Button(Mode_Frame, text = "Workflow", height = 40, width = 120, bordersize=1,bg='lightgrey', command=lambda: [create_modes(),create_tools("disabled","active","active","disabled","active"),hide_instructions()])
+        Mode_buttons = tkButton.Button(Mode_Frame, text = "Workflow", height = 40, width = 120, bordersize=1,bg='lightgrey', command=lambda: [create_modes(),create_tools("disabled","active","active","active","active"),hide_instructions()])
         Mode_buttons.grid(row=0, column = 0, sticky="NEWS")
         create_tool_instructions()
 
@@ -381,6 +381,16 @@ if __name__=="__main__":
         label_list = ["mzML Data Folder","Experiment Name"]
         generate_tool_page(label_list,"")
 
+    def DM_create():
+        global global_file_dictionary, ExpType,ToolType
+        hide_data_frame()
+        create_modes()
+        change_mode_color(Single_tool_button)
+        global_file_dictionary = {}
+        ExpType = "Any"
+        ToolType = "DM"
+        label_list = ["mzML Data Folder","Experiment Name"]
+        generate_tool_page(label_list,"")
 
 
     #AutoCCS Page with buttons for single, stepped, and slim
@@ -440,10 +450,14 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         # label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        label_list = ["Raw Data Folder","Calibrant File","IMS Metadata Folder (optional)","Metadata File","Experiment Name"]
+        label_list = ["Raw Data Folder","IMS Metadata Folder (optional)","Calibrant File","Metadata File","Experiment Name"]
         #global_file_dictionary["Metadata File"] = os.path.dirname(__file__) + "/II_Preprocessed/RawFiles_Metadata.csv"
-        global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
-        global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
+        if platform.system().upper() == "DARWIN":
+            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
+            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
+        elif platform.system().upper() == "WINDOWS":
+            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
+            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
 
 
@@ -457,6 +471,11 @@ if __name__=="__main__":
 
 
 
+
+#THIS DOES NOT WORK - check mz_step for output
+#First test if this works for windows!!!  Then do the same for single field.
+#then work on slim
+#and deimos
 
     #Stepped Field Workflow
     def create_stepped_field(Stepped_field_button):
@@ -472,8 +491,12 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         label_list = ["Raw Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
-        global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
-        global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
+        if platform.system().upper() == "DARWIN":
+            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
+            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
+        elif platform.system().upper() == "WINDOWS":
+            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
+            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
 
 
