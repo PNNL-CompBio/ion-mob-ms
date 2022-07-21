@@ -3,4 +3,4 @@ E:/CCS_Calculations/a_Software/I_PNNL-Preprocessor_4.0_2022.02.17/PNNL-PreProces
 I_Extract-Agilent-d-file-metadata.R,,I_Raw,RawFiles_Metadata.csv
 C:/Program Files/ProteoWizard/ProteoWizard 3.0.19228.a2fc6eda4/msconvert.exe,--zlib --gzip -e .mzML.gz,II_Preprocessed,III_mzML
 II_Parse-DT-as-RT-mzML.R,,III_mzML,III_mzML
-C:\Users\bilb280\Desktop\MZmine-2.41.2\startMZmine_Windows.bat,MZmine_FeatureFinder-batch.xml,III_mzML,IV_Features_csv
+C:/Users/myuser/Desktop/MZmine-2.41.2/startMZmine_Windows.bat,MZmine_FeatureFinder-batch.xml,III_mzML,IV_Features_csv
