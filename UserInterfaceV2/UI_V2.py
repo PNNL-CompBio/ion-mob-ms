@@ -79,7 +79,7 @@ if __name__=="__main__":
     last_tool=""
     tool_check = ""
     last_mode=""
-    possible_files = ["Raw Data Folder","Feature Data Folder","IMS Metadata Folder","IMS Metadata Folder (optional)",
+    possible_files = ["Raw Data Folder","PreProcessed Data Folder","Feature Data Folder","IMS Metadata Folder","IMS Metadata Folder (optional)",
                         "Calibrant File","Target List File","Metadata File","mzML Data Folder"]
 
 
@@ -155,7 +155,7 @@ if __name__=="__main__":
             Single_field_button.grid(row=2, column = 0, sticky="NEWS")
             Stepped_field_button = tkButton.Button(Mode_Frame, height = 50, width = 100, text = "Stepped Field", bordersize=1, command = lambda:create_stepped_field(Stepped_field_button))
             Stepped_field_button.grid(row=3, column = 0, sticky="NEWS")
-            SLIM_button= tkButton.Button(Mode_Frame, height = 50, width = 100, text = "SLIM", bordersize=1, bg = "grey")
+            SLIM_button= tkButton.Button(Mode_Frame, height = 50, width = 100, text = "SLIM", bordersize=1, command = lambda:create_slim_field(SLIM_button))
             SLIM_button.grid(row=4, column = 0, sticky="NEWS")
             mode_create_switch = False
 
@@ -367,7 +367,7 @@ if __name__=="__main__":
         global_file_dictionary = {}
         ExpType = "Any"
         ToolType = "PW"
-        label_list = ["Raw Data Folder","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","Experiment Name"]
         generate_tool_page(label_list,"")
 
     def MZ_create():
@@ -408,7 +408,7 @@ if __name__=="__main__":
         AC_single_button.grid(row=3, column = 1, sticky="NEWS")
         AC_stepped_button= Button(Data_Frame, height = 1, width = 10, text = "Stepped Field", bg = "white", command = lambda: AC_stepped_create())
         AC_stepped_button.grid(row=3, column = 3, sticky="NEWS")
-        AC_slim_button= Button(Data_Frame, height = 1, width = 10, text = "SLIM", bg = "darkgrey", state = DISABLED)
+        AC_slim_button= Button(Data_Frame, height = 1, width = 10, text = "SLIM", bg = "white", command = lambda: AC_slim_create())
         AC_slim_button.grid(row=3, column = 5, sticky="NEWS")
 
     #AutoCCS Single Field
@@ -436,6 +436,17 @@ if __name__=="__main__":
         label_list = ["Feature Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
         generate_tool_page(label_list,"Stepped Field")
 
+    def AC_slim_create():
+        global global_file_dictionary, ExpType,ToolType,tool_check
+        hide_data_frame()
+        change_mode_color(Single_tool_button)
+        global_file_dictionary = {}
+        ExpType = "SLIM"
+        ToolType = "AC"
+        tool_check = True
+        label_list = ["Feature Data Folder","Metadata File","Calibrant File","Experiment Name"]
+        generate_tool_page(label_list,"Structures for Lossless Ion Manipulations")
+
     #Single Field Workflow
     def create_single_field(Single_field_button):
         global global_file_dictionary, ExpType,ToolType,tool_check
@@ -449,8 +460,8 @@ if __name__=="__main__":
         ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        # label_list = ["Raw Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        label_list = ["Raw Data Folder","IMS Metadata Folder (optional)","Calibrant File","Metadata File","Experiment Name"]
+        # label_list = ["PreProcessed Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","IMS Metadata Folder (optional)","Calibrant File","Metadata File","Experiment Name"]
         #global_file_dictionary["Metadata File"] = os.path.dirname(__file__) + "/II_Preprocessed/RawFiles_Metadata.csv"
         if platform.system().upper() == "DARWIN":
             global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
@@ -459,23 +470,6 @@ if __name__=="__main__":
             global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
             global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
-
-
-                # elif file_variable == "Feature Data Folder":
-                #     if platform.system().upper() == "DARWIN":
-                #         global_files["Feature Data Folder"]= (os.path.abspath(file) + "/*.csv")
-                #     elif platform.system().upper() == "WINDOWS":
-                #         global_files["Feature Data Folder"]= (os.path.abspath(file) + "\*.csv")
-                # elif file_variable == "mzML Data Folder":
-                #     global_files["mzML Data Folder"]=os.path.abspath(file)
-
-
-
-
-#THIS DOES NOT WORK - check mz_step for output
-#First test if this works for windows!!!  Then do the same for single field.
-#then work on slim
-#and deimos
 
     #Stepped Field Workflow
     def create_stepped_field(Stepped_field_button):
@@ -490,7 +484,7 @@ if __name__=="__main__":
         ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        label_list = ["Raw Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","IMS Metadata Folder","Target List File","Experiment Name"]
         if platform.system().upper() == "DARWIN":
             global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
             global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
@@ -498,6 +492,30 @@ if __name__=="__main__":
             global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
             global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
+
+
+    def create_slim_field(SLIM_button):
+        global global_file_dictionary, ExpType,ToolType,tool_check
+        change_mode_color(SLIM_button)
+        hide_tools()
+        create_tools("disabled","disabled","disabled","disabled","disabled","grey","#FBB80F","#FBB80F","grey","#FBB80F")
+        hide_data_frame()
+        create_modes()
+        global_file_dictionary = {}
+        ExpType = "SLIM"
+        ToolType = ["PW","MZ","AC"]
+        tool_check = True
+        Data_Frame.rowconfigure((1), minsize=int(40))
+        label_list = ["PreProcessed Data Folder","Calibrant File","Metadata File","Experiment Name"]
+        if platform.system().upper() == "DARWIN":
+            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
+            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
+        elif platform.system().upper() == "WINDOWS":
+            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
+            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
+        generate_tool_page(label_list, "")
+
+
 
 
     # Hide
@@ -598,18 +616,20 @@ if __name__=="__main__":
     def open_file(file_variable,global_files,value_for_entry):
         global entry_file_dict
         """ 
-        Raw Data Folder - Choose a folder
-
-        All others - Choose a file
+        Choose a folder
+        OR
+        Choose a file
         """
         if file_variable == "IMS Metadata Folder (optional)":
             file_variable = "IMS Metadata Folder"
-        if file_variable in ["Raw Data Folder","IMS Metadata Folder","Feature Data Folder", "mzML Data Folder"]:
+        if file_variable in ["Raw Data Folder","PreProcessed Data Folder","IMS Metadata Folder","Feature Data Folder", "mzML Data Folder"]:
             file = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
             
             if file != "":
                 if file_variable == "Raw Data Folder":
                     global_files["Raw Data Folder"]=os.path.abspath(file)
+                elif file_variable == "PreProcessed Data Folder":
+                    global_files["PreProcessed Data Folder"]=os.path.abspath(file)
                 elif file_variable == "IMS Metadata Folder":
                     if platform.system().upper() == "DARWIN":
                         global_files["IMS Metadata Folder"]=(os.path.abspath(file) + "/*.txt")
@@ -743,7 +763,7 @@ if __name__=="__main__":
             cur_dir = os.path.dirname(__file__)
             os.chdir(cur_dir)
             all_results = Pipeline_V2.execute_workflow("sample.json")
-            if all_results[4] + all_results[3] != "":
+            if all_results[4] != "":
                 Run_button.config(text="Run Complete \nView Results", font=("default",14), command=lambda:open_results(JE),state=NORMAL)
             else:
                 Run_button.config(text="Run Complete", font=("default",14), state=DISABLED)

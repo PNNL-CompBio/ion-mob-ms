@@ -48,17 +48,27 @@ def process(filepath):
     file_path = str(filepath.absolute())
     cont_name = ("DM_container_" + os.path.basename(file_path))
     file_name = os.path.basename(file_path)
-    client.containers.run(image,name=cont_name, detach=True, tty=True)
+    #this needs a volume!
+    #add the volume!!!!!! 
+    #then make a python script to run the following codde:
+
+
+    #data = deimos.load('path/to/input.mzML.gz', accession={'drift_time': 'MS:1002476'})
+    # define ms_level
+    #peaks = deimos.peakpick.persistence_homology(data[ms_level], dims=['mz', 'drift_time'])
+    #peaks.to_csv('path/to/output.csv', index=False)
+    client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/IV_Features_csv', 'mode': 'rw'}}, mem_limit="10g",detach=True, tty=True)
     print("Container started: ", cont_name)
     DM_container = client.containers.get(cont_name)
     copy_dst = cont_name + ":/III_mzML/"
+    #copy_dst = cont_name + ":/tmp/III_mzML/"
     copy_a_file(client, file_path,copy_dst)
     print("Files copied to container: ", cont_name)
     print("Deimos started in container: ",cont_name)
-
+    DM_container.exec_run(cmd="python /tmp/deimos_feature_finder.py")
     print("Deimos completed in container: ", cont_name)
-    # DM_container.stop()
-    # DM_container.remove()
+    DM_container.stop()
+    DM_container.remove()
 
 def run_container(mzML_data_folder):
     global client,image,local_mem
@@ -79,8 +89,8 @@ def run_container(mzML_data_folder):
 
     #process_num = len(file_list)
     process_num = len(file_list)
-    if process_num > 10:
-        process_num = 10
+    if process_num > 2:
+        process_num = 2
         
     pool = Pool(processes=process_num)
     pool.map(process, file_list)

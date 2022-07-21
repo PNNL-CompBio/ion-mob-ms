@@ -79,13 +79,22 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         local_mem = os.getcwd() + "\\IV_data"
 
     if version == "standard":
-        command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
-        "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
-        "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
+        if exp == "single":
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
+            "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
+            "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
+        elif exp == "slim":
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_slim_config.xml", "--feature_files", '/tmp/FF/*.csv', 
+            "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
+            "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
     
     if version == "enhanced": 
         if exp == "single":
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
+            ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
+            "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
+        elif exp =="slim":
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_slim_config.xml", "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
             ("/tmp/MD/" + os.path.basename(raw_file_metadata)), "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
             "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
         elif exp == "step":
@@ -128,6 +137,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
 
     command_single = ["mv", "/tmp_autoccs/autoCCS_single_config.xml", "/tmp/CF"]
     command_step = ["mv", "/tmp_autoccs/autoCCS_step_config.xml", "/tmp/CF"]
+    command_slim = ["mv", "/tmp_autoccs/autoCCS_slim_config.xml", "/tmp/CF"]
 
 
     client = docker.from_env()
@@ -140,6 +150,11 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             AC_Container.exec_run(cmd=command_single)
             copy_a_file_mac(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
             copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
+        print("B\n")
+        if exp == "slim":
+            AC_Container.exec_run(cmd=command_slim)
+            copy_a_file_PC(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
+            copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
         print("B\n")
         if version == "enhanced":
             copy_some_files_mac(client, test1, 'AC_container:/tmp/FMF/framemeta_files')
@@ -166,6 +181,11 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             copy_a_file_PC(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
             copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
         print("B\n")
+        if exp == "slim":
+            AC_Container.exec_run(cmd=command_slim)
+            copy_a_file_PC(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
+            copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
+        print("B\n")
         if version == "enhanced":
             copy_some_files_PC(client, test1, 'AC_container:/tmp/FMF/framemeta_files')
         print("C\n")
@@ -179,7 +199,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         AC_Container.exec_run(cmd=command_list)
         print("G\n")
         AC_Container.stop()
-        print("H\n")
+        # print("H\n")
         AC_Container.remove()
         print("I\n")
         return local_mem

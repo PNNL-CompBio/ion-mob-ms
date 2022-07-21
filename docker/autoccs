@@ -15,6 +15,7 @@ RUN pip install -r /AutoCCS/requirements.txt
 RUN mkdir /tmp_autoccs
 COPY autoCCS_single_config.xml /tmp_autoccs
 COPY autoCCS_step_config.xml /tmp_autoccs
+COPY autoCCS_slim_config.xml /tmp_autoccs
 
 # set work directory
 WORKDIR /AutoCCS
