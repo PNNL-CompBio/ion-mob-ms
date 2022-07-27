@@ -22,7 +22,7 @@ import io
 
 
 client = docker.from_env()
-image = "jjacobson95/deimos"
+image = "anubhav0fnu/ccs_comparison"
 local_mem = os.getcwd() + "/IV_Features_csv"
 #command_list_2 = ["bash", "startMZmine_Linux.sh", "/tmp/MZmine_FeatureFinder-batch.xml"]
 

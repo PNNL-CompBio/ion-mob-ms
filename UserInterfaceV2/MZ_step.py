@@ -85,8 +85,8 @@ def run_container(mzML_data_folder):
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
     process_num = len(file_list)
-    if process_num > 10:
-        process_num = 10
+    if process_num > 6:
+        process_num = 6
         
     pool = Pool(processes=process_num)
     pool.map(process, file_list)
