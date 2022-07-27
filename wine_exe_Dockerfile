@@ -1,6 +1,5 @@
 FROM tobix/pywine:3.9
 
-RUN echo "hi"
 
 RUN bash -c 'ls'
 
@@ -11,7 +10,8 @@ RUN echo $spec
 
 RUN bash -c "(set -o posix ; set)"
 
-RUN apt-get update && apt-get install -y python3-pip
+RUN apt-get -y update && \
+    apt-get install -y python3-pip
 
 
 ENV PORT 80
@@ -28,8 +28,8 @@ RUN bash -c 'ls'
 # RUN bash -c 'ls dist'
 
 COPY requirements.txt .
-# RUN pip install tk
-# RUN pip install tkPDFViewer
+RUN pip install -y tk
+# RUN pip install -y tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
 
 
