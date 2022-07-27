@@ -1,12 +1,9 @@
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
-
 FROM ubuntu:21.10
 
 
 ARG DEBIAN_FRONTEND=noninteractive
 #install Git
-RUN apt-get update -y&& \
+RUN apt-get update -y && \
     apt-get install -y wget && \
     apt-get install -y git-all && \
     apt-get clean && \
