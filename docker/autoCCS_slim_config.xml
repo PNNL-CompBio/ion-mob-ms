@@ -6,15 +6,15 @@
 		<adduct mass="0.0" name="." charges="+1"/>
 		<adduct mass="38.963706861" name="K" charges="+1"/>
 	</parameter>
-	<parameter name="mz_tolerance" desc="m/z tolerance ppm">150</parameter>
-	<parameter name="suffix_raw" desc="Suffix string preprocessed raw">_MA-d7-csum-Min2.mzML_c_dc_de</parameter>
+	<parameter name="mz_tolerance" desc="m/z tolerance ppm">50</parameter>
+	<parameter name="suffix_raw" desc="Suffix string preprocessed raw">_csum-Min2_DC3.mzML_c_dc_de</parameter>
 	<parameter name="suffix_meta" desc="Suffix string frame metadata">_FrameMetadata</parameter>
 	<parameter name="frame_offset" desc="Selected frame for each field by offset to get metadata (e.g., field, pressure, temperature)">1</parameter>
 	<parameter name="num_fields" desc="Number of fields">7</parameter>
 	<parameter name="drift_tube_length" desc="Drift tube length cm">90.33</parameter>
 	<parameter name="old_drift_tube_length" desc="Drift tube length used by the acquisition software cm">90.33</parameter>
 	<parameter name="neutral_mass" desc="Neutral mass of the ion mobility buffer gas">4.002603</parameter>
-	<parameter name="substring_tunemix" desc="prefix string for the tune mix sample files">TAA_G</parameter>
+	<parameter name="substring_tunemix" desc="prefix string for the tune mix sample files">Cal</parameter>
 	<parameter name="accumulation_time" desc="long accumulation time (ms) in the SLIM-based IMS-MS">400</parameter>
 	<parameter name="C" desc="C can be found within the control software of the Synapt Q-IM-o-ToF instrument and is designated as the EDC (Enhanced Duty Cycle) delay coefficient. (Ruotolo et al. 2008)">0</parameter>
 </configuration>

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3.9
 
+# Author: Jeremy Jacobson 
+# Email: jeremy.jacobson@pnnl.gov
+
 import sys
 import docker
 import os
@@ -11,6 +14,11 @@ import threading
 from multiprocessing import Pool
 import io
 
+
+
+#This is Deimos!
+#More optimization is required here. Deimos should run much faster, but 
+#due to some issue with container resources, it runs quite slow at this time.
 
 
 client = docker.from_env()
@@ -40,24 +48,14 @@ def copy_some_files(client, src_list,dst):
         copy_a_file(client, src,dst)
 
 
-
-
 def process(filepath):
     global client,image,local_mem
     time.sleep(2)
     file_path = str(filepath.absolute())
     cont_name = ("DM_container_" + os.path.basename(file_path))
     file_name = os.path.basename(file_path)
-    #this needs a volume!
-    #add the volume!!!!!! 
-    #then make a python script to run the following codde:
-
-
-    #data = deimos.load('path/to/input.mzML.gz', accession={'drift_time': 'MS:1002476'})
-    # define ms_level
-    #peaks = deimos.peakpick.persistence_homology(data[ms_level], dims=['mz', 'drift_time'])
-    #peaks.to_csv('path/to/output.csv', index=False)
-    client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/IV_Features_csv', 'mode': 'rw'}}, mem_limit="10g",detach=True, tty=True)
+    #If memory issues are occuring, increase the maximum here (mem_limit). This should be enough for any files.
+    client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/IV_Features_csv', 'mode': 'rw'}}, mem_limit="14g",detach=True, tty=True)
     print("Container started: ", cont_name)
     DM_container = client.containers.get(cont_name)
     copy_dst = cont_name + ":/III_mzML/"
@@ -67,7 +65,9 @@ def process(filepath):
     print("Deimos started in container: ",cont_name)
     DM_container.exec_run(cmd="python /tmp/deimos_feature_finder.py")
     print("Deimos completed in container: ", cont_name)
+    time.sleep(1)
     DM_container.stop()
+    time.sleep(2)
     DM_container.remove()
 
 def run_container(mzML_data_folder):
@@ -88,9 +88,12 @@ def run_container(mzML_data_folder):
     print("file list: ",file_list)
 
     #process_num = len(file_list)
+    
+    #At this time, 3 in parallel seems to finish correctly, and be the fastest option. (still slow)
+    #If more processes are added, issues occur more regularly.
     process_num = len(file_list)
-    if process_num > 2:
-        process_num = 2
+    if process_num > 3:
+        process_num = 3
         
     pool = Pool(processes=process_num)
     pool.map(process, file_list)

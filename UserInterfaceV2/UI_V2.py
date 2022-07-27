@@ -1,5 +1,8 @@
 #!/usr/bin/env python3.9
 
+# Author: Jeremy Jacobson 
+# Email: jeremy.jacobson@pnnl.gov
+
 from time import sleep
 import tkinter as tk
 import tkinter.filedialog
@@ -25,13 +28,11 @@ from tkPDFViewer import tkPDFViewer as pdf
 import multiprocessing
 
 
-#possible bug - run, dont save, then run again.  files should be removed. also check wheere json and txt file are saved.
-#Also try to make PW data conversion work concurrently - all at once rather than 1by1.
 
-
-#issue with __name == main with pyinstaller
+#issue with __name == main with pyinstaller ??
 
 # Initialize application
+#This first line is required to allow this to work with pyinstaller / subprocesses.
 if __name__=="__main__":
     #This may be needed for pyinstaller.
     multiprocessing.freeze_support()
@@ -42,22 +43,6 @@ if __name__=="__main__":
     window = ThemedTk(theme="none")
     window.title("IMMS Workflow Automation Dashboard",)
     window.config(bg='#0C74BA')
-    #window.geometry("1500x900")
-
-
-    #Set down-scaling variables based on screen size
-    # screen_width = window.winfo_screenwidth()
-    # screen_height = (window.winfo_screenheight()-50)
-    # window_height = 900
-    # window_width = 1500
-
-    # wf = 1
-    # hf = 1
-    # small_screen = False
-    # if screen_height < window_height or screen_width < window_width:
-    #     wf = window_width/screen_width
-    #     hf = window_height/screen_height
-    #     small_screen = True
 
 
     #initilize variables
@@ -79,13 +64,13 @@ if __name__=="__main__":
     last_tool=""
     tool_check = ""
     last_mode=""
+
+    #Modify this list and also "open_file" function to allow for more files types.
     possible_files = ["Raw Data Folder","PreProcessed Data Folder","Feature Data Folder","IMS Metadata Folder","IMS Metadata Folder (optional)",
                         "Calibrant File","Target List File","Metadata File","mzML Data Folder"]
 
 
-
-
-    #create initial buttons.   - instructions/ "IMMS dashboard" are created at end of script because it includes functions created later.
+    #Create Initial Buttons on screen. - Instructions/"IMMS dashboard" buttons are created at end of script because they includes functions created later.
     Mode_Frame = LabelFrame(window)
     Mode_Frame.grid(row=1, column = 0, sticky="NSWE")
     Mode_Frame.grid_columnconfigure(0, weight=1)
@@ -145,7 +130,7 @@ if __name__=="__main__":
         except:
             pass
 
-
+#These are located below "Workflow" in GUI
     def create_modes(*args):
         global Single_tool_button,Single_field_button, Stepped_field_button,SLIM_button, mode_create_switch
         if mode_create_switch == True:
@@ -159,7 +144,7 @@ if __name__=="__main__":
             SLIM_button.grid(row=4, column = 0, sticky="NEWS")
             mode_create_switch = False
 
-
+#These are located below "Tools" in GUI
     def create_tool_instructions():
         global Tool_instruction_frame,freeze_run
         if freeze_run ==False: 
@@ -203,7 +188,7 @@ if __name__=="__main__":
         l17=Label(Tool_instruction_frame,text='Calculate collision cross-section values from feature files \nusing "standard" or "enhanced" methods.', font=("default", 14),borderwidth=0, relief="solid",anchor="w", justify="left")
         l17.grid(row=16, column = 3, columnspan=10, rowspan=1, sticky="NEWS")
 
-
+#These are located below "Data" in GUI
     def data_instruction():
         global l2
         hide_data_frame()
@@ -212,7 +197,7 @@ if __name__=="__main__":
         l2=Label(Data_Frame,text="Select a tool on the left to begin your analysis.\nThen you will be prompted to upload your Data\nfiles and select parameters as needed. ", font=("default", 14),borderwidth=0, relief="solid", width = 45, justify="left",anchor="center")
         l2.grid(row=4, column = 0, columnspan=10, rowspan=5, sticky="NEWS")
 
-
+#This function controls which tools are "active"/"disabled" (state) and their colors.
     def create_tools(PP_state,PW_state,MZ_state,DM_state,AC_state,PP_color="grey",PW_color="grey",MZ_color="grey",DM_color="grey",AC_color="grey"):
         global PP,PW,MZ,DM,AC
         try:
@@ -249,7 +234,7 @@ if __name__=="__main__":
         Mode_buttons.grid(row=0, column = 0, sticky="NEWS")
         create_tool_instructions()
 
-
+#These two functions change colors of the current button and the previous button when selected.
     def change_mode_color(button):
         global last_mode
         button.configurebg(bg="#FBB80F")
@@ -265,7 +250,7 @@ if __name__=="__main__":
         last_tool = button
         tool_check = button
 
-
+#These are located below "Run" in GUI
     def create_run():
         global Run_button, Reset_button, l47,l48,freeze_run
         hide_instructions()
@@ -287,6 +272,8 @@ if __name__=="__main__":
 
     # Create Tool Reqs
     #This function is responsible for generating all user inputs (labels, entry boxes, browse buttons)
+    #that populate the "Data" region.
+    #This function is re-used for each tool/workflow.
     def generate_tool_page(input_list,tool_title):
         global label_list,entry_list,entry_file_dict,entry_param_dict,button_list
         label_list = []
@@ -346,6 +333,15 @@ if __name__=="__main__":
                 row_counter +=1
                 lab_num +=1
 
+#In the following functions:
+#Exptype and Tooltype are used in Pipeline.py to determine which workflow/tools will be used.
+#Modify Tooltype in workflows to change which tools should be run.
+#For example: ToolType = ["PW","DM","AC"] will run PW, then DM, then AC.
+#To replace DM (Deimos) with MZmine (MZ), use ToolType = ["PW","MZ","AC"] instead.
+#Label list informs what files and parameters must be entered. Replace values to change it.
+
+
+
     #PNNL PreProcessor
     def PP_create():
         global global_file_dictionary, ExpType,ToolType
@@ -390,7 +386,7 @@ if __name__=="__main__":
         ExpType = "Any"
         ToolType = "DM"
         label_list = ["mzML Data Folder","Experiment Name"]
-        generate_tool_page(label_list,"")
+        generate_tool_page(label_list,"Not yet supported with SLIM.\n")
 
 
     #AutoCCS Page with buttons for single, stepped, and slim
@@ -420,7 +416,7 @@ if __name__=="__main__":
         ExpType = "Single"
         ToolType = "AC"
         tool_check = True
-        label_list = ["Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","Feature Data Folder","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
         generate_tool_page(label_list,"Single Field")
 
     #AutoCCS Stepped Field
@@ -444,7 +440,7 @@ if __name__=="__main__":
         ExpType = "SLIM"
         ToolType = "AC"
         tool_check = True
-        label_list = ["Feature Data Folder","Metadata File","Calibrant File","Experiment Name"]
+        label_list = ["Feature Data Folder","Calibrant File","Metadata File","Experiment Name"]
         generate_tool_page(label_list,"Structures for Lossless Ion Manipulations")
 
     #Single Field Workflow
@@ -461,8 +457,9 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         # label_list = ["PreProcessed Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        label_list = ["PreProcessed Data Folder","IMS Metadata Folder (optional)","Calibrant File","Metadata File","Experiment Name"]
-        #global_file_dictionary["Metadata File"] = os.path.dirname(__file__) + "/II_Preprocessed/RawFiles_Metadata.csv"
+        label_list = ["PreProcessed Data Folder","IMS Metadata Folder (optional)","Calibrant File","Experiment Name"]
+        
+        #Because mzML files and feature files are generated within the workflow, these are not specified by the user
         if platform.system().upper() == "DARWIN":
             global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
             global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
@@ -503,6 +500,7 @@ if __name__=="__main__":
         create_modes()
         global_file_dictionary = {}
         ExpType = "SLIM"
+        #A Note: Don't replace MZ with Deimos here. It does not currently work with slim.
         ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
@@ -516,10 +514,8 @@ if __name__=="__main__":
         generate_tool_page(label_list, "")
 
 
-
-
-    # Hide
-    # The following functions are used to hide the previous results of the tabs they refer to.
+    # Hide Functions
+    # The following functions are used to hide/delete/refresh the previous results of the tabs they refer to.
 
     def hide_instructions():
         global Cover_frame
@@ -561,7 +557,6 @@ if __name__=="__main__":
             l2.grid_remove()
         except:
             pass
-        #try?
         Tool_instruction_frame.grid_remove()
         if freeze_run == False:
             hide_run()
@@ -579,7 +574,8 @@ if __name__=="__main__":
         except:
             pass
 
-    #Reset Everything - available after experiment is complete.
+    #Reset Everything - available after experiment is complete. 
+    #If code is run in the future
     def reset_results(all_results):
         global freeze_run, global_file_dictionary, JE, Save_button, Reset_button,save_switch
         answer = askyesno("Reset Experiment and Data", "Are you sure that you want to reset the experiment? Please save all data before confirming.")
@@ -669,7 +665,7 @@ if __name__=="__main__":
     # Connection to the Backend
     # The following functions are responsible for gathering all user inputs, 
     # writing json files, writing summary files, and passing them to the backend.
-    # The Backend connects to Pipeline which calls the docker scripts based on the json file.
+    # The Backend connects to Pipeline.py which calls the docker scripts based on the json file.
 
 
     def Run_Experiment():
@@ -696,7 +692,7 @@ if __name__=="__main__":
             thread1.start()
             return
 
-
+#Required for json and summary files
     def collect_parameters():
         global entry_param_dict, ExpType, ToolType
         p_dict ={}
@@ -707,6 +703,7 @@ if __name__=="__main__":
             pass
         return p_dict
 
+#Generate json file 
     def write_to_json(files):
         global_parameter_dictionary = collect_parameters()
         json_export = [global_parameter_dictionary,files]
@@ -715,6 +712,7 @@ if __name__=="__main__":
             outfile.write(json_object)
         return json_export
 
+#Generate Run_summary.txt
     def write_as_summary(files):
         f = open("Run_summary.txt", "w")
         f.write("Ion Mobility Application  -  User Selected Input\n\n")
@@ -752,7 +750,8 @@ if __name__=="__main__":
             f.write(fline)
         f.close()
 
-
+#Connect to Pipeline.py - pass json file.
+#This also changes the Run button to disabled / Complete.
     def run_workflow(JE):    
         Run_name = JE[0]["ExpName"]
         if Run_name != "" and Run_name.isspace() == False :
@@ -774,7 +773,12 @@ if __name__=="__main__":
             Save_button = tk.Button(Run_Frame, text="Save Results", font=("default", 14), command=lambda:save_results(all_results,window,Run_name), height=4, width=10, bg="silver", fg= "green")
             Save_button.grid(row=8, column=0, rowspan=1, columnspan=2)
 
+#To Do:
+#Add cancel_run Function that stops the workflow mid-run.
 
+
+# Show Results Preview. 
+#either display generated PDF or generate a new kind-of helpful summary graph
     def open_results(JE):
         global save_switch, view_results_at
         if save_switch == False:
@@ -788,13 +792,17 @@ if __name__=="__main__":
             front.title("Results")
             v1 = pdf.ShowPdf()
             if platform.system().upper() == "DARWIN":
-                view_file = view_results_at + "/IV_data/IV_Results/calibration_output.poly.pdf"
-                v2 = v1.pdf_view(front,
-                        pdf_location =view_file, bar=False)
+                if  JE[0]["ExpType"] == "Single":
+                    view_file = view_results_at + "/IV_data/IV_Results/calibration_output.poly.pdf"
+                elif  JE[0]["ExpType"] == "SLIM":
+                    view_file = view_results_at + "/IV_data/IV_Results/calibration_output.power.pdf"
+                v2 = v1.pdf_view(front, pdf_location =view_file, bar=False)
             elif platform.system().upper() == "WINDOWS":
-                view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.poly.pdf"
-                v2 = v1.pdf_view(front,
-                        pdf_location =view_file, bar=False)
+                if  JE[0]["ExpType"] == "Single":
+                    view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.poly.pdf"
+                elif  JE[0]["ExpType"] == "SLIM":
+                    view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.power.pdf"
+                v2 = v1.pdf_view(front, pdf_location =view_file, bar=False)
             v2.grid()
         #step
         elif JE[0]["ExpType"] == "Stepped":
@@ -827,7 +835,9 @@ if __name__=="__main__":
             ax.legend(handles=legend_elements, loc='lower right')
             plt.show()
             
-
+#Save results.
+#This moves it from the temp directory to a new directory
+#Could alter to have the option to copy instead (and this way it could be saved multiple times)
     def save_results(all_results,window,run_name):
         global Save_button, view_results_at, save_switch
         cur_dir = os.path.dirname(__file__)
@@ -883,6 +893,7 @@ if __name__=="__main__":
 
         cur_dir = os.path.dirname(__file__)
         os.chdir(cur_dir)
+
 
 
     ####

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3.9
 
+# Author: Jeremy Jacobson 
+# Email: jeremy.jacobson@pnnl.gov
+
 import sys
 import docker
 import os
@@ -12,6 +15,11 @@ from multiprocessing import Pool
 import io
 
 
+# This one is a mess. Never got PNNL PreProcessor to work due to a DLL issue.
+# When ImsBrower (Agilent) is installed inside the container, a version of this has worked before. 
+# However, that is proprietary software, so it can't be used here.
+
+#Sorry to leave this one in a mess, but maybe its for the best. New ideas are needed.
 
 client = docker.from_env()
 image = "jjacobson95/pnnl_preprocessor4"    
@@ -61,16 +69,11 @@ def copy_some_files(client, src_list,dst):
         copy_a_file(client, src,dst)
 
 
-
-# os.makedirs("./III_mzML", exist_ok=True)
-
-
 def copy_files_V2_windows(src,loc):
     cmd = "Xcopy " + '"' + src + '"'+ " " + '"' + loc + "/I_Raw" + '"' + " /E /H /I"
     print("command is ", cmd)
     os.system(cmd)
     #cont.exec_run(cmd=command_0)
-
 
 
 def process(filepath,drift_val,lc_val,minI_val):

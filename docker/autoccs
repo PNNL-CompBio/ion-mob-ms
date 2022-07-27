@@ -1,3 +1,6 @@
+# Author: Jeremy Jacobson 
+# Email: jeremy.jacobson@pnnl.gov
+
 FROM python:3.8-buster
 
 # set environment variables
@@ -6,6 +9,12 @@ ENV PYTHONUNBUFFERED 1
 
 RUN pip install --upgrade pip
 RUN export LDFLAGS="-L/usr/local/opt/openssl/lib"
+
+#install R
+RUN apt-get update && \
+        apt-get upgrade -y && \
+        apt-get install -y r-base
+RUN apt-get install -y r-base
 
 # install autoccs
 RUN git clone https://github.com/PNNL-Comp-Mass-Spec/AutoCCS.git
@@ -16,6 +25,10 @@ RUN mkdir /tmp_autoccs
 COPY autoCCS_single_config.xml /tmp_autoccs
 COPY autoCCS_step_config.xml /tmp_autoccs
 COPY autoCCS_slim_config.xml /tmp_autoccs
+
+#add template metadata script
+COPY fix_metadata.py /
+COPY R_Metadata_I.R /
 
 # set work directory
 WORKDIR /AutoCCS

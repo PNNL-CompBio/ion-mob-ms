@@ -86,4 +86,4 @@ ExtractAgilentdFileMetadata = function(input,
 }
 
 #Added to connect to MZ_Step
-ExtractAgilentdFileMetadata("/tmp/I_Raw", "/tmp/II_Preprocessed/RawFiles_Metadata.csv")
+ExtractAgilentdFileMetadata("/tmp/PP", "/tmp/MD/RawFiles_Metadata.csv")

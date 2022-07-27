@@ -1,5 +1,8 @@
 #!/usr/bin/env python3.9
 
+# Author: Jeremy Jacobson 
+# Email: jeremy.jacobson@pnnl.gov
+
 import sys
 import docker
 import os
@@ -12,10 +15,12 @@ from multiprocessing import Pool
 import io
 
 
-
 client = docker.from_env()
 image = "anubhav0fnu/mzmine:latest"
 local_mem = os.getcwd() + "/IV_Features_csv"
+
+#This is the command line usage. Nice and simple. Must be run from the MZmine folder. This is in linux!!
+#It first requires modification of a xml batch file (below with sed).
 command_list_2 = ["bash", "startMZmine_Linux.sh", "/tmp/MZmine_FeatureFinder-batch.xml"]
 
 #Copy file functions
@@ -41,21 +46,6 @@ def copy_some_files(client, src_list,dst):
         copy_a_file(client, src,dst)
 
 
-# def edit_xml_file(file_name):
-#     with open("/tmp/MZmine_FeatureFinder-batch.xml","w") as file:
-#         counter = 1
-#         for line in file:
-#             if counter == 7:
-#                 edited_line = '        <parameter name="Raw data file names"><file>/tmp/III_mzML/' + file_name + "</file></parameter>"
-#                 file.write(edited_line)
-#             else:
-#                 file.write(line)
-#             counter +=1
-
-
-
-
-
 def process(filepath):
     global client,image,local_mem,command_list_2
     time.sleep(2)
@@ -65,9 +55,8 @@ def process(filepath):
     client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/tmp/IV_Features_csv', 'mode': 'rw'}}, detach=True, tty=True)
     print("Container started: ", cont_name)
     MZ_container = client.containers.get(cont_name)
-    # edited_line = '        <parameter name="Raw data file names"><file>/tmp/III_mzML/' + file_name + "</file></parameter>"
-    # line_replace = "'s/REPLACE_THIS_LINE/" + edited_line + "/'"
-    # command_list_1 = ["sed", "-i", line_replace, "/tmp/MZmine_FeatureFinder-batch.xml"]
+
+    #This line is required to modify the template xml file.
     command_list_1 = """sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/tmp\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /tmp/MZmine_FeatureFinder-batch.xml"""
     print("command_list_one:   ", command_list_1 )
     copy_dst = cont_name + ":/tmp/III_mzML/"
@@ -80,6 +69,7 @@ def process(filepath):
     MZ_container.exec_run(cmd=command_list_2)
     print("MzMine completed in container: ", cont_name)
     MZ_container.stop()
+    time.sleep(2)
     MZ_container.remove()
 
 def run_container(mzML_data_folder):
@@ -89,17 +79,11 @@ def run_container(mzML_data_folder):
 
     local_mem = os.getcwd() + "/IV_Features_csv"
     print("MzMine Working Directory: ", local_mem)
-    # print("directory is:", os.getcwd())
-    # print("local mem is: ", local_mem)
-    os.makedirs("./IV_Features_csv", exist_ok=True)
-    # file_list = list(pathlib.Path(raw_file_folder).glob('*'))
-    # print("TYPE:  ", type(file_list))
-    print("mzml data folder varible: ",mzML_data_folder)
-    file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
-    print("TYPE:  ", type(file_list))
-    print("file list: ",file_list)
 
-    #process_num = len(file_list)
+    os.makedirs("./IV_Features_csv", exist_ok=True)
+
+    file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
+
     process_num = len(file_list)
     if process_num > 10:
         process_num = 10
