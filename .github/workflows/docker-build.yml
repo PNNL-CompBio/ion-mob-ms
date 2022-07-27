@@ -49,7 +49,7 @@ jobs:
           context: docker
           push: true
           file: docker/deimos
-          tags: anubhav0fnu/ccs_comparison:latest
+          tags: jjacobson95/deimos:latest
 #       - name: Build and push ccs-comparison
 #         uses: docker/build-push-action@v2
 #         with:
