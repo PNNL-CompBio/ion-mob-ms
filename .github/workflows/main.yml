@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: "Windows Exe"
-          path: UserInterfaceV2/dist/*
+          path: home/runner/work/ion-mob-ms/ion-mob-ms/dist/*
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 
