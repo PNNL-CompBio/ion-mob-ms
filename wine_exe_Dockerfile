@@ -37,6 +37,5 @@ RUN bash -c "pwd"
 WORKDIR /UserInterfaceV2
 RUN bash -c "wine pyinstaller -F UI_V2.py"
 
-RUN chmod +x ./UserInterfaceV2/pyinstaller_script.py
 
 #ENTRYPOINT ["wine","python3.9", "./UserInterfaceV2/pyinstaller_script.py"]
