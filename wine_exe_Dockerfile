@@ -19,7 +19,7 @@ ENV PORT 80
 COPY . .
 RUN bash -c 'ls'
 
-COPY . .
+# COPY . .
 
 RUN bash -c 'ls'
 # COPY ./UserInterfaceV2/ .
@@ -29,13 +29,9 @@ RUN bash -c 'ls'
 
 COPY requirements.txt .
 RUN apt install -y python3.9-tk
-# RUN apt install -y python3.9-tkPDFViewer
 RUN pip install tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
-#next try this
 RUN bash -c "pwd"
 WORKDIR /UserInterfaceV2
 RUN bash -c "wine pyinstaller -F UI_V2.py"
-
-
-#ENTRYPOINT ["wine","python3.9", "./UserInterfaceV2/pyinstaller_script.py"]
+RUN bash -c "ls"
