@@ -12,18 +12,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: name_1
+    - name: 'Step 1 - Create a temporary artifact downloads folder'
+      run: mkdir downloadsX
+
+    - name: Step 2 - Create artifact
       uses: ./.github/actions
       with:
         path: .
-    - name: 'name_2'
+    - name: 'Step 3 Upload artifact'
       uses: actions/upload-artifact@v3
       with:
         name: "Windows Exe"
-        uses: ./.github/actions
-        path: ./dist/*
+        path: /home/runner/work/ion-mob-ms/ion-mob-ms/dist/*
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 
