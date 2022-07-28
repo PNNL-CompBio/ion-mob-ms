@@ -22,7 +22,7 @@ jobs:
       - name: 'name_2'
         uses: actions/upload-artifact@v2
         with:
-          path: /github/workspace/UserInterfaceV2/dist/UI_V2
+          path: /home/runner/work/ion-mob-ms/ion-mob-ms/UserInterfaceV2/dist/UI_V2.exe
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 
