@@ -4,10 +4,6 @@ FROM tobix/pywine:3.9
 RUN bash -c 'ls'
 
 
-RUN echo $INPUT_spec_file
-RUN echo $spec
-
-
 RUN bash -c "(set -o posix ; set)"
 
 RUN apt-get -y update && \
@@ -33,9 +29,8 @@ RUN pip install tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
 RUN bash -c "pwd"
 WORKDIR /UserInterfaceV2
-RUN bash -c "wine pyinstaller -F UI_V2.py"
+RUN bash -c "wine pyinstaller --clean -y --dist ./dist/windows --workpath /tmp -F UI_V2.py"
 RUN bash -c "ls"
 
 ENTRYPOINT echo "Completed"
-# ENTRYPOINT ["wine", "pyinstaller", "-F", "Z:\github\workspace\UserInterfaceV2\UI_V2.py"]
-
+# ENTRYPOINT ["wine", "pyinstaller", "--clean", "y", "--dist", "./dist/windows", "-F", "Z:\github\workspace\UserInterfaceV2\UI_V2.py"]
