@@ -19,10 +19,10 @@ jobs:
       with:
         path: .
     - name: 'name_2'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: "Windows Exe"
-        path: dist/windows/UI_V2.exe
+        path: *
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 
