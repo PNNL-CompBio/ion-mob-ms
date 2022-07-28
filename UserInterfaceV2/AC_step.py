@@ -13,6 +13,12 @@ import platform
 #This step defines the run method of autoCCS.
 #Code could certainly be improved.
 #Tip for improving: look at other step.py files.
+#could share a copy function that works for both mac and windows
+
+
+command_0 = """Rscript /R_Metadata_I.R"""
+command_tmp_fix_for_0 = """python3.8 /fix_metadata.py"""
+command_annotate = """Rscript /R_Annotate_features_V.R"""
 
 #Copy Functions: Copy from local Path to Path destination in a container.
 #These require files to be in .tar format (so these are converted here, then transfered).
@@ -63,7 +69,7 @@ def copy_some_files_PC(client, src_list,dst):
 
 
 
-def run_container(exp,version,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files):
+def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
@@ -142,6 +148,7 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_step_config.xml", "--framemeta_files",
             '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
        
+
        #Reformat string paths depending on mac or windows
         if platform.system().upper() == "DARWIN":
             framemeta_files=framemeta_files.replace(" ", "\ ")
@@ -198,12 +205,12 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             AC_Container.exec_run(cmd=command_single)
             copy_some_files_mac(client, PP_files, 'AC_container:/tmp/PP/files')
             copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
-        print("B\n")
+            print("B\n")
         if exp == "slim":
             AC_Container.exec_run(cmd=command_slim)
-            copy_a_file_PC(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
-            copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
-        print("B\n")
+            copy_a_file_mac(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
+            copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
+            print("B\n")
         if version == "enhanced":
             copy_some_files_mac(client, new_framefiles, 'AC_container:/tmp/FMF/framemeta_files')
         print("C\n")
@@ -214,13 +221,14 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
             copy_a_file_mac(client, target_list_file, 'AC_container:/tmp/TLF/target_list_file')
         time.sleep(5)
         print("F\n")
+        if annotate == True:
+            copy_a_file_mac(client,target_list_file, 'AC_container:/tmp/TLF/target_list_file')
+
         #single field performs automated metadata extraction.
         #If this is ever not working, code can be modified to include this. See Notes in UI_V2.py.
         #slim requires user-generated metadata
         #stepped field determines metadata from filename.
         if exp == "single":
-            command_0 = """Rscript /R_Metadata_I.R"""
-            command_tmp_fix_for_0 = """python3.8 /fix_metadata.py"""
             AC_Container.exec_run(cmd=command_0)
             print("Metadata extracted")
             AC_Container.exec_run(cmd=command_tmp_fix_for_0)
@@ -228,7 +236,12 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         time.sleep(3)
         #run autoCCS
         AC_Container.exec_run(cmd=command_list)
+        time.sleep(3)
         print("G\n")
+        if annotate == True:
+            AC_Container.exec_run(cmd=command_annotate)
+            print("Annotations complete")
+            time.sleep(3)
         #You can comment out .stop and .remove to use interactive mode with the AC_Container.
         AC_Container.stop()
         print("H\n")
@@ -256,20 +269,26 @@ def run_container(exp,version,calibrant_file,framemeta_files, feature_files, tar
         if exp == "step":
             AC_Container.exec_run(cmd=command_step)
             copy_a_file_PC(client, target_list_file, 'AC_container:/tmp/TLF/target_list_file')
-        
+        if annotate == True:
+            copy_a_file_PC(client,target_list_file, 'AC_container:/tmp/TLF/target_list_file')
+
+
         if exp == "single":
-            command_0 = """Rscript /R_Metadata_I.R"""
-            command_tmp_fix_for_0 = """python3.8 /fix_metadata.py"""
             AC_Container.exec_run(cmd=command_0)
             print("Metadata extracted")
             AC_Container.exec_run(cmd=command_tmp_fix_for_0)
             print("Metadata Fixed")
         time.sleep(3)
-        time.sleep(5)
         print("F\n")
-        print("THE COMMAND IS\n\n",command_list)
         AC_Container.exec_run(cmd=command_list)
+        time.sleep(3)
         print("G\n")
+        print("THE value of annotate is: ", annotate)
+        print("The value of command_annotate is: ", command_annotate)
+        if annotate == True:
+            AC_Container.exec_run(cmd=command_annotate)
+            print("Annotations complete")
+            time.sleep(3)
         AC_Container.stop()
         # print("H\n")
         AC_Container.remove()
