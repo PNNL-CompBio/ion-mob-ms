@@ -36,7 +36,7 @@ AnnotateCalibratedFeatures = function(pathToCalibratedFeatures = "IV_Results",
       tb = tb[which(abs(tb$mz_difference_ppm) < mzTolerancePpm),]
       if(length(tb[,1]) > 0)
       {
-        tb$RawFileName = rawfilesmeta$IonPolarity[indexMeta]
+        tb$RawFileName = rawfilesmeta$RawFileName[indexMeta]
         tb = cbind(targets[k,], tb, row.names = NULL)
         dat = rbind(dat, tb)
       }else{
