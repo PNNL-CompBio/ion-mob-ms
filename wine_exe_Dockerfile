@@ -29,10 +29,11 @@ RUN bash -c 'ls'
 
 COPY requirements.txt .
 RUN apt install -y python3.9-tk
-RUN apt install -y python3.9-tkPDFViewer
+# RUN apt install -y python3.9-tkPDFViewer
 RUN pip install tkPDFViewer
 RUN pip install --no-cache-dir -r requirements.txt
-
+#next try this
+# RUN bash -c "wine pyinstaller -F UI_V2.py"
 
 RUN chmod +x ./UserInterfaceV2/pyinstaller_script.py
 
