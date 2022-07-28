@@ -12,18 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: 'name_1'
-        uses: ./.github/actions
-        with:
-          path: .
-      - name: 'name_2'
-        uses: actions/upload-artifact@v2
-        with:
-          name: "Windows Exe"
-          path: home/runner/work/ion-mob-ms/ion-mob-ms/dist/*
+    - name: name_1
+      uses: ./.github/actions
+      with:
+        path: .
+    - name: 'name_2'
+      uses: actions/upload-artifact@v2
+      with:
+        name: "Windows Exe"
+        path: dist/*
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 
