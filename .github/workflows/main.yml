@@ -22,7 +22,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: "Windows Exe"
-        path: dist/windows
+        path: dist/windows/UI_V2.exe
       # - name: 'Reconnect to action repo'
       #   uses: actions/checkout@v3 
 
