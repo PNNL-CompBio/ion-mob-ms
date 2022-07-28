@@ -36,4 +36,4 @@ WORKDIR /UserInterfaceV2
 #RUN bash -c "wine pyinstaller -F UI_V2.py"
 RUN bash -c "ls"
 
-ENTRYPOINT ["wine", "pyinstaller", "-F", "UI_V2.py"]
+ENTRYPOINT ["wine", "pyinstaller", "-F", "Z:\github\workspace\UserInterfaceV2\UI_V2.py"]
