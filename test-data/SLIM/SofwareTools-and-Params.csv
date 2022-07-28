@@ -2,3 +2,4 @@ Software,Parameters,InputFiles,Output
 C:/Program Files/ProteoWizard/ProteoWizard 3.0.22139.aa8be89/msconvert.exe,--zlib -e .mzML.gz,II_Preprocessed,III_mzML
 II_Parse-DT-as-RT-mzML.R,,III_mzML,III_mzML
 C:/Users/myuser/Desktop/MZmine-2.41.2/startMZmine_Windows.bat,MZmine_FeatureFinder-batch.xml,III_mzML,IV_Features_csv
+V_Annotate-calibrated-features.R,,IV_Results,IV_Results
