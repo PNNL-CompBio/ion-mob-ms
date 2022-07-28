@@ -1,8 +1,9 @@
 Software,Parameters,InputFiles,Output
 E:/CCS_Calculations/a_Software/I_PNNL-Preprocessor_4.0_2022.02.17/PNNL-PreProcessor.exe,-smooth -driftKernel 1 -lcKernel 0 -minIntensity 20 -split,I_Raw,II_Preprocessed
-# --> add a command at this line to delete any MS/MS files (file names with substring _[2-6].d) from the folder II_Preprocessed
-# --> add a command at this line to extract the Frame metadata from the folder II_Preprocessed
+# --> add a command at this line to delete any MS/MS files (file names with substring _[2-6].d) from the folder II_Preprocessed,,,
+# --> add a command at this line to extract the Frame metadata from the folder II_Preprocessed,,,
 I_Extract-Agilent-d-file-metadata.R,,II_Preprocessed,RawFiles_Metadata.csv
 C:/Program Files/ProteoWizard/ProteoWizard 3.0.19228.a2fc6eda4/msconvert.exe,--zlib --gzip -e .mzML.gz,II_Preprocessed,III_mzML
 II_Parse-DT-as-RT-mzML.R,,III_mzML,III_mzML
 C:/Users/myuser/Desktop/MZmine-2.41.2/startMZmine_Windows.bat,MZmine_FeatureFinder-batch.xml,III_mzML,IV_Features_csv
+V_Annotate-calibrated-features.R,,IV_Results,IV_Results
