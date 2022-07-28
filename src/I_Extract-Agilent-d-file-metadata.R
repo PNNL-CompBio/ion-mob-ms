@@ -1,7 +1,7 @@
 # This script reads all Agilent .d files in a directory
 # extract metadata from xml files (e.g., acquisition time)
 # generates a single csv with the metadata of all .d files found.
-# Author: Bilbao Pena, Aivett <aivett.bilbao@pnnl.gov>
+# Author: Bilbao, Aivett <aivett.bilbao@pnnl.gov>
 
 ExtractAgilentdFileMetadata = function(input,
                                        outputFile)

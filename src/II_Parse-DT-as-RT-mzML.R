@@ -1,6 +1,6 @@
 # This script reads all .mzML files in a directory
 # find and replace some XML tags to set the DT as RT, to be able to use MZmine feature finder.
-# Author: Bilbao Pena, Aivett <aivett.bilbao@pnnl.gov>
+# Author: Bilbao, Aivett <aivett.bilbao@pnnl.gov>
 # maintainer: Anubhav, Fnu <anubhav@pnnl.gov>
 
 ParseDTasRTmzML = function(nCores,
