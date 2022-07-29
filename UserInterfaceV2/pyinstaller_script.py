@@ -13,7 +13,7 @@ if platform.system().upper() == "WINDOWS":
 if platform.system().upper() == "DARWIN":
     command = 'pyinstaller -F UI_V2.py'
 if platform.system().upper() == "LINUX":
-    command = 'pyinstaller -F UI_V2.py'
+    command = 'wine pyinstaller -F UI_V2.py'
 os.system(command)
 
 if platform.system().upper() == "WINDOWS":

@@ -67,7 +67,7 @@ if __name__=="__main__":
 
     #Modify this list and also "open_file" function to allow for more files types.
     possible_files = ["Raw Data Folder","PreProcessed Data Folder","Feature Data Folder","IMS Metadata Folder","IMS Metadata Folder (optional)",
-                        "Calibrant File","Target List File","Metadata File","mzML Data Folder"]
+                        "Calibrant File","Target List File","Target List File (optional)","Metadata File","mzML Data Folder"]
 
 
     #Create Initial Buttons on screen. - Instructions/"IMMS dashboard" buttons are created at end of script because they includes functions created later.
@@ -416,7 +416,7 @@ if __name__=="__main__":
         ExpType = "Single"
         ToolType = "AC"
         tool_check = True
-        label_list = ["PreProcessed Data Folder","Feature Data Folder","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","Feature Data Folder","Calibrant File","IMS Metadata Folder (optional)","Target List File (optional)","Experiment Name"]
         generate_tool_page(label_list,"Single Field")
 
     #AutoCCS Stepped Field
@@ -440,7 +440,7 @@ if __name__=="__main__":
         ExpType = "SLIM"
         ToolType = "AC"
         tool_check = True
-        label_list = ["Feature Data Folder","Calibrant File","Metadata File","Experiment Name"]
+        label_list = ["Feature Data Folder","Calibrant File","Metadata File","Target List File (optional)","Experiment Name"]
         generate_tool_page(label_list,"Structures for Lossless Ion Manipulations")
 
     #Single Field Workflow
@@ -457,7 +457,7 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         # label_list = ["PreProcessed Data Folder","mzML Data Folder","Feature Data Folder","Metadata File","Calibrant File","IMS Metadata Folder (optional)","Experiment Name"]
-        label_list = ["PreProcessed Data Folder","IMS Metadata Folder (optional)","Calibrant File","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","Calibrant File", "IMS Metadata Folder (optional)","Target List File (optional)","Experiment Name"]
         
         #Because mzML files and feature files are generated within the workflow, these are not specified by the user
         if platform.system().upper() == "DARWIN":
@@ -504,7 +504,7 @@ if __name__=="__main__":
         ToolType = ["PW","MZ","AC"]
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
-        label_list = ["PreProcessed Data Folder","Calibrant File","Metadata File","Experiment Name"]
+        label_list = ["PreProcessed Data Folder","Calibrant File","Metadata File","Target List File (optional)","Experiment Name"]
         if platform.system().upper() == "DARWIN":
             global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
             global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
@@ -618,6 +618,9 @@ if __name__=="__main__":
         """
         if file_variable == "IMS Metadata Folder (optional)":
             file_variable = "IMS Metadata Folder"
+        if file_variable == "Target List File (optional)":
+            file_variable = "Target List File"
+
         if file_variable in ["Raw Data Folder","PreProcessed Data Folder","IMS Metadata Folder","Feature Data Folder", "mzML Data Folder"]:
             file = tkinter.filedialog.askdirectory(parent=window,title='Select a file directory')
             
