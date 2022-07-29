@@ -201,13 +201,13 @@ Docker image and script to run [PNNL Pre-Processor tool](https://pnnl-comp-mass-
 ### ProteoWizard Tool
 Docker image and script to run [ProteoWizard tool](https://proteowizard.sourceforge.io/)
 
-### MZMine Tool - Unavailable
+### MZMine Tool
 Docker image and script to run [MZMine Java Program](http://mzmine.github.io/).
 
 ### AutoCCS Tool
 Docker image and script to run [AutoCCS Python script](https://github.com/PNNL-Comp-Mass-Spec/AutoCCS).
 
-### ion-mob-UI 
-This is the front-end for the entire workflow.  TODO: determine implementation and design.
+### Ion_Mob_PC.exe (or UI_V2)
+This is the GUI for the dashboard.
 
 ## Citation
