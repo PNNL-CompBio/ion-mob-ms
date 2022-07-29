@@ -41,7 +41,7 @@ AnnotateCalibratedFeatures = function(pathToCalibratedFeatures,
         next
       
       tb = read.csv(file = file.path(pathToCalibratedFeatures, f), stringsAsFactors = FALSE, sep = ',')
-      colnames(tb) = sub("(.+\\.mzML )", "", colnames(tb)) # remove file name prefix from column names
+      colnames(tb) = sub("(.+\\.mzML.)", "", colnames(tb)) # remove file name prefix from column names
       colnames(tb) = sub(paste(f,""), "", colnames(tb))
       
       tb$mz_difference_ppm = (tb$Peak.m.z - targets$Adduct_mz[k]) / targets$Adduct_mz[k] * 1E6
