@@ -183,6 +183,10 @@ To retrieve any data from partial runs, see the message console to find the loca
  **Docker Setup on Windows**  
 Docker requires WSL2 to be enabled. This should be automatically enabled, is not enter "Settings", then on the "General" page, select the box titled "Use the WSL 2 based engine". Then select "Apply and Restart".  
    
+ **Current Issues Exist with the Annotation Script**
+ This script is paired with autoCCS and usually works for SLIM data, however it has had some issues running on the single workflow. This is activated by including a target list file. Currently it works better with the single tool option.
+   
+   
    
 ## Available Tools
 
