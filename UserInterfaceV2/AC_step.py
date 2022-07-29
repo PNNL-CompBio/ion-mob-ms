@@ -184,8 +184,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     os.makedirs("./IV_data/MD", exist_ok=True)
     os.makedirs("./IV_data/CBF", exist_ok=True)
     time.sleep(5)
-    print("Z\n")
-
+    print("AutoCCS IV_data filesystem created")
     #choose which config file will be used
     command_single = ["mv", "/tmp_autoccs/autoCCS_single_config.xml", "/tmp/CF"]
     command_step = ["mv", "/tmp_autoccs/autoCCS_step_config.xml", "/tmp/CF"]
@@ -196,31 +195,27 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     #in the container, all the subdirectories above are in /tmp path
     #Container is interactive. You can open a terminal (recc: then use bash) and see data & manually run autoCCS.
     client = docker.from_env()
-    print("Y\n")
+    print("AutoCCS Container Started")
     client.containers.run(image,name="AC_container",volumes={local_mem: {'bind': '/tmp', 'mode': 'rw'}}, detach=True, tty=True)
     AC_Container = client.containers.get('AC_container')
-    print("A\n")
     if platform.system().upper() == "DARWIN":
         if exp == "single":
             AC_Container.exec_run(cmd=command_single)
             copy_some_files_mac(client, PP_files, 'AC_container:/tmp/PP/files')
             copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
-            print("B\n")
         if exp == "slim":
             AC_Container.exec_run(cmd=command_slim)
             copy_a_file_mac(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
             copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
-            print("B\n")
         if version == "enhanced":
             copy_some_files_mac(client, new_framefiles, 'AC_container:/tmp/FMF/framemeta_files')
-        print("C\n")
+
         copy_some_files_mac(client, F_files, 'AC_container:/tmp/FF/feature_files')
-        print("D\n")
+
         if exp == "step":
             AC_Container.exec_run(cmd=command_step)
             copy_a_file_mac(client, target_list_file, 'AC_container:/tmp/TLF/target_list_file')
         time.sleep(5)
-        print("F\n")
         if annotate == True:
             copy_a_file_mac(client,target_list_file, 'AC_container:/tmp/TLF/target_list_file')
 
@@ -228,25 +223,23 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
         #If this is ever not working, code can be modified to include this. See Notes in UI_V2.py.
         #slim requires user-generated metadata
         #stepped field determines metadata from filename.
+
         if exp == "single":
             AC_Container.exec_run(cmd=command_0)
             print("Metadata extracted")
             AC_Container.exec_run(cmd=command_tmp_fix_for_0)
             print("Metadata Fixed")
         time.sleep(3)
-        #run autoCCS
+        print("Running AutoCCS")
         AC_Container.exec_run(cmd=command_list)
         time.sleep(3)
-        print("G\n")
         if annotate == True:
             AC_Container.exec_run(cmd=command_annotate)
             print("Annotations complete")
             time.sleep(3)
         #You can comment out .stop and .remove to use interactive mode with the AC_Container.
         AC_Container.stop()
-        print("H\n")
         AC_Container.remove()
-        print("I\n")
         return local_mem
         
     if platform.system().upper() == "WINDOWS":
@@ -255,17 +248,15 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
             AC_Container.exec_run(cmd=command_single)
             copy_some_files_PC(client, PP_files, 'AC_container:/tmp/PP/files')
             copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
-            print("B\n")
         if exp == "slim":
             AC_Container.exec_run(cmd=command_slim)
             copy_a_file_PC(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
             copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
-            print("B\n")
         if version == "enhanced":
             copy_some_files_PC(client, new_framefiles, 'AC_container:/tmp/FMF/framemeta_files')
-        print("C\n")
+
         copy_some_files_PC(client, F_files, 'AC_container:/tmp/FF/feature_files')
-        print("D\n")
+
         if exp == "step":
             AC_Container.exec_run(cmd=command_step)
             copy_a_file_PC(client, target_list_file, 'AC_container:/tmp/TLF/target_list_file')
@@ -279,20 +270,15 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
             AC_Container.exec_run(cmd=command_tmp_fix_for_0)
             print("Metadata Fixed")
         time.sleep(3)
-        print("F\n")
+        print("Running AutoCCS")
         AC_Container.exec_run(cmd=command_list)
         time.sleep(3)
-        print("G\n")
-        print("THE value of annotate is: ", annotate)
-        print("The value of command_annotate is: ", command_annotate)
         if annotate == True:
             AC_Container.exec_run(cmd=command_annotate)
-            print("Annotations complete")
+            print("Attempted to Run Annotation Script")
             time.sleep(3)
         AC_Container.stop()
-        # print("H\n")
         AC_Container.remove()
-        print("I\n")
         return local_mem
 
 

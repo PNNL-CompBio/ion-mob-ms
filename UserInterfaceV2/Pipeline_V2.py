@@ -38,6 +38,7 @@ def execute_workflow(json_file):
 
     ## Single Field
     if data[0]["ExpType"] == "Single" or data[0]["ExpType"] == "Any":
+        print("Json file passed to Pipeline.py")
         print("Single Field Begins here.")
         if "PP" in data[0]["ToolType"]:
             print("PNNL Preprocessor does Filtering and Smoothing")
@@ -72,6 +73,7 @@ def execute_workflow(json_file):
 
     ## Slim 
     if data[0]["ExpType"] == "SLIM":
+        print("Json file passed to Pipeline.py")
         print("SLIM Begins here.")
         # if data[1]["Experiment"]
         if "PP" in data[0]["ToolType"]:
@@ -96,6 +98,7 @@ def execute_workflow(json_file):
 
     ## Stepped Field
     if data[0]["ExpType"] == "Stepped":
+        print("Json file passed to Pipeline.py")
         print("Stepped Field Begins here.")
         # if data[1]["Experiment"]
         if "PP" in data[0]["ToolType"]:

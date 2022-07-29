@@ -82,14 +82,11 @@ def run_container(mzML_data_folder):
     os.makedirs("./IV_Features_csv", exist_ok=True)
     # file_list = list(pathlib.Path(raw_file_folder).glob('*'))
     # print("TYPE:  ", type(file_list))
-    print("mzml data folder varible: ",mzML_data_folder)
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
-    print("TYPE:  ", type(file_list))
-    print("file list: ",file_list)
 
     #process_num = len(file_list)
     
-    #At this time, 3 in parallel seems to finish correctly, and be the fastest option. (still slow)
+    #At this time, 3 in parallel seems to finish correctly and be the fastest option. (still slow)
     #If more processes are added, issues occur more regularly.
     process_num = len(file_list)
     if process_num > 3:

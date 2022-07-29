@@ -66,7 +66,7 @@ def process(filepath):
     print("Files copied to container: ", cont_name)
     command_list.pop()
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
-    print("Proteowizard started in container: ",cont_name)
+    print("Proteowizard msconvert started in container: ",cont_name)
     PW_container.exec_run(cmd=command_list)
     print("Proteowizard completed in container: ", cont_name)
     

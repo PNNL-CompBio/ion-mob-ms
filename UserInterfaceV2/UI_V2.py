@@ -28,7 +28,6 @@ from tkPDFViewer import tkPDFViewer as pdf
 import multiprocessing
 
 
-
 #issue with __name == main with pyinstaller ??
 
 # Initialize application
@@ -112,10 +111,10 @@ if __name__=="__main__":
             l3=Label(Cover_frame,text="Welcome to the Ion Mobility Mass Spec workflow automation tool. This dashboard is designed to \nfacilitate processing multiple rounds of Ion Mobility MS using previously developed tools.", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
             l3.grid(row=2, column = 5, columnspan=10, rowspan=2, sticky="NEWS")
 
-            l4=Label(Cover_frame,text="The default mode of operation is in Single Tool mode. You can begin to run a single tool by \nselecting the Tools tab above. This will bring you to the Data tab to begin uploading files, selecting \nfolders, and adding parameters for your analysis. Then you can Run the pipeline to analyze your \nresults. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
+            l4=Label(Cover_frame,text="The default mode of operation is the Single Tool mode. You can run any single tool by selecting \nthe Tools tab above. This will populate the Data tab where you may upload files, select folders,\nand add parameters to your analysis. Then you may Run the pipeline to analyze your results. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
             l4.grid(row=6, column = 5, columnspan=10, rowspan=2, sticky="NEWS")
 
-            l5=Label(Cover_frame,text="You can also run multiple tools at once by selecting the Mode tab and choosing a pre-configured \nworkflow. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
+            l5=Label(Cover_frame,text="You can also run multiple tools at once by selecting the Workflow tab and choosing a \npre-configured workflow. ", font=("default", 14),borderwidth=0, relief="solid", justify="left", anchor = "w")
             l5.grid(row=10, column = 5, columnspan=10, rowspan=2, sticky="NEWS")
         try:
             hide_tools()
@@ -161,7 +160,7 @@ if __name__=="__main__":
         l8=Label(Tool_instruction_frame,text="PNNL PreProcessor", font=("default", 14, "bold"),borderwidth=0, relief="solid",anchor="w")
         l8.grid(row=3, column = 3, columnspan=10, rowspan=1, sticky="NEWS")
 
-        l9=Label(Tool_instruction_frame,text="Sum frames and smooth raw data.", font=("default", 14),borderwidth=0, relief="solid",anchor="w")
+        l9=Label(Tool_instruction_frame,text="Sum frames and smooth raw data. (Unavailable)", font=("default", 14),borderwidth=0, relief="solid",anchor="w")
         l9.grid(row=4, column = 3, columnspan=10, rowspan=1, sticky="NEWS")
 
         l10=Label(Tool_instruction_frame,text="ProteoWizard", font=("default", 14, "bold"),borderwidth=0, relief="solid",anchor="w")
@@ -179,7 +178,7 @@ if __name__=="__main__":
         l14=Label(Tool_instruction_frame,text="DEIMoS", font=("default", 14, "bold"),borderwidth=0, relief="solid",anchor="w")
         l14.grid(row=12, column = 3, columnspan=10, rowspan=1, sticky="NEWS")
 
-        l15=Label(Tool_instruction_frame,text="Detect features and calculate collision cross-section values.", font=("default", 14),borderwidth=0, relief="solid",anchor="w")
+        l15=Label(Tool_instruction_frame,text="Feature detection is used from this advanced suite of tools.", font=("default", 14),borderwidth=0, relief="solid",anchor="w")
         l15.grid(row=13, column = 3, columnspan=10, rowspan=1, sticky="NEWS")
 
         l16=Label(Tool_instruction_frame,text="AutoCCS", font=("default", 14, "bold"),borderwidth=0, relief="solid",anchor="w")
@@ -851,12 +850,8 @@ if __name__=="__main__":
             if copy_from_here != "" and copy_to_dir != "" and copy_to_dir.isspace() == False and copy_to_dir != ("/" + run_name):
                 copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
                 if platform.system().upper() == "DARWIN":
-                    command_mac = "ls"
-                    os.system(command_mac)
                     command_mac_mkdir = 'mkdir -p "' + copy_to_dir + '"'
                     os.system(command_mac_mkdir)
-                    command_mac = "ls"
-                    os.system(command_mac)
                     command_mac = 'mv "'  + copy_from_here + '" "' + copy_to_here + '"'
                     os.system(command_mac)
                     command_mac = 'mv "'  + "sample.json" + '" "' + copy_to_dir + '"'

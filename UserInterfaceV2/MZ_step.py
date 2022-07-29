@@ -58,7 +58,6 @@ def process(filepath):
 
     #This line is required to modify the template xml file.
     command_list_1 = """sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/tmp\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /tmp/MZmine_FeatureFinder-batch.xml"""
-    print("command_list_one:   ", command_list_1 )
     copy_dst = cont_name + ":/tmp/III_mzML/"
     copy_a_file(client, file_path,copy_dst)
     command_list_0 = """Rscript /tmp/R_PARSE_II.R"""
