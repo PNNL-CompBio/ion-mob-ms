@@ -1,6 +1,8 @@
 # ion-mob-ms
 This is a workflow for analyzing Ion Mobility Mass-Spectrometry data. The primary goal is to facilitate the numerous steps required to analyze and interpret this type of data, as it requires numerous steps and file management can be a burden.
 
+The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed [here](https://pnnl-compbio.github.io/ion-mob-ms). 
+
 ## Architecture
 The system is designed to enable users to run individual parts via the command line, using a graphical user interface, or using Nextflow.
 
