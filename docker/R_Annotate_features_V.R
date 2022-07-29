@@ -41,6 +41,9 @@ AnnotateCalibratedFeatures = function(pathToCalibratedFeatures,
         next
       
       tb = read.csv(file = file.path(pathToCalibratedFeatures, f), stringsAsFactors = FALSE, sep = ',')
+      colnames(tb) = sub("(.+\\.mzML )", "", colnames(tb)) # remove file name prefix from column names
+      colnames(tb) = sub(paste(f,""), "", colnames(tb))
+      
       tb$mz_difference_ppm = (tb$Peak.m.z - targets$Adduct_mz[k]) / targets$Adduct_mz[k] * 1E6
       tb = tb[which(abs(tb$mz_difference_ppm) < mzTolerancePpm),]
       if(length(tb[,1]) > 0)
@@ -69,6 +72,7 @@ AnnotateCalibratedFeatures = function(pathToCalibratedFeatures,
                 col.names = TRUE, row.names = FALSE, sep = ",")
   }
 }
+
 
 #Added as an optional step to end of autoCCS_step
 #works for single field and SLIM
