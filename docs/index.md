@@ -29,11 +29,11 @@ SLIM uses the same principal as single field DTIMS without the limitation of dri
 Two applications are required to run workflows: Docker Desktop, and Ion_Mob_PC.exe (or UI_V2). 
   
 **Mac Installation**:  
-1. Download the github repository, in terminal, navigate to the repository. Then run "pip install -r requirememnts.txt".
-2. Next, navigate to UserInterfaceV2, then run "python3.9 pyinstaller_script.py" inside it. UI_V2 will be located inside new "dist" folder.
+1. Download the github repository, in terminal, navigate to the repository. Then run "pip install -r requirememnts.txt".  
+2. Next, navigate to UserInterfaceV2, then run "python3.9 pyinstaller_script.py" inside it. UI_V2 will be located inside new "dist" folder.  
 3. Download [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/)  
 4. Restart computer if prompted  
-5. Open Docker Desktop and then UI_V2
+5. Open Docker Desktop and then UI_V2. 
   
 **Windows Installation**:  
 1. Download [Ion_Mob_PC.exe](https://github.com/PNNL-CompBio/ion-mob-ms/blob/main/Ion_Mob_PC.exe)  
@@ -43,8 +43,8 @@ Two applications are required to run workflows: Docker Desktop, and Ion_Mob_PC.e
 <img src="PowerShell_Image.PNG" width="800">   
   
  4. Restart computer   
- 5. **First** open Docker Desktop, and then Ion_Mob_PC.exe.
-  
+ 5. **First** open Docker Desktop, and then Ion_Mob_PC.exe.  
+    
   
 **Dashboard Image**  
 <img src="Dashboard_Open_Image.png" width="800">
@@ -185,12 +185,12 @@ To retrieve any data from partial runs, see the message console to find the loca
  **Docker Setup on Windows**  
 Docker requires WSL2 to be enabled. This should be automatically enabled, is not enter "Settings", then on the "General" page, select the box titled "Use the WSL 2 based engine". Then select "Apply and Restart".  
    
- **Current Issues Exist with DEIMos in the workflow**
-DEIMos generates a slightly different output from mzMine, autoCCS requires the mzMine values. DEIMos has received some modifications to allow it to work, however some small differences exist. DEIMos is best suited for single field usage at this time. 
-
-DEIMos is a very efficient and accurate tool that also outperforms mzMine in terms of speed. However, the current version is not entirely compatible with usage in a docker container and as such, it runs slower than expected and may run into memory issues. We hope this can be resolved in future versions of this application. We also hope to incorporate additional DEIMos functions in the future.
-   
-
+ **Current Issues Exist with DEIMos in the workflow**   
+DEIMos generates a slightly different output from mzMine, autoCCS requires the mzMine values. DEIMos has received some modifications to allow it to work, however some small differences exist. DEIMos is best suited for single field usage at this time.   
+  
+DEIMos is a very efficient and accurate tool that also outperforms mzMine in terms of speed. However, the current version is not entirely compatible with usage in a docker container and as such, it runs slower than expected and may run into memory issues. We hope this can be resolved in future versions of this application. We also hope to incorporate additional DEIMos functions in the future.  
+    
+  
 ## Available Tools
 
 Currently we have enabled the use of the following tools. 
