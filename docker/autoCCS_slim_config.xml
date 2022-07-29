@@ -7,7 +7,7 @@
 		<adduct mass="38.963706861" name="K" charges="+1"/>
 	</parameter>
 	<parameter name="mz_tolerance" desc="m/z tolerance ppm">50</parameter>
-	<parameter name="suffix_raw" desc="Suffix string preprocessed raw">_csum-Min2_DC3.mzML_c_dc_de</parameter>
+	<parameter name="suffix_raw" desc="Suffix string preprocessed raw">.mzML_c_dc_de</parameter>
 	<parameter name="suffix_meta" desc="Suffix string frame metadata">_FrameMetadata</parameter>
 	<parameter name="frame_offset" desc="Selected frame for each field by offset to get metadata (e.g., field, pressure, temperature)">1</parameter>
 	<parameter name="num_fields" desc="Number of fields">7</parameter>
