@@ -29,11 +29,11 @@ SLIM uses the same principal as single field DTIMS without the limitation of dri
 Two applications are required to run workflows: Docker Desktop, and Ion_Mob_PC.exe (or UI_V2). 
   
 **Mac Installation**:  
-1. Download the github repository, in terminal, navigate to the repository. Then run "pip install -r requirememnts.txt".  
-2. Next, navigate to UserInterfaceV2, then run "python3.9 pyinstaller_script.py" inside it. UI_V2 will be located inside new "dist" folder.  
-3. Download [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/)  
-4. Restart computer if prompted  
-5. Open Docker Desktop and then UI_V2. 
+1. Download [Ion_Mob_MacOS.zip](https://zenodo.org/record/6941767#.YuRxcuzMIXA). Ensure this is version 1.1, or "DOI 10.5281/zenodo.6941767".
+2. Download [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/)  
+3. Restart computer if prompted  
+4. Open Docker Desktop and then Ion_Mob_MacOS  
+**Note** Docker Desktop must be open before Ion_Mob_MacOS is started.
   
 **Windows Installation**:  
 1. Download [Ion_Mob_PC.exe](https://github.com/PNNL-CompBio/ion-mob-ms/blob/main/Ion_Mob_PC.exe)  
