@@ -69,7 +69,7 @@ def copy_some_files_PC(client, src_list,dst):
 
 
 
-def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files):
+def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
@@ -127,7 +127,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
 #such as ('/tmp/FF/*.csv'). If you use double quotes, this will fail. Why? who knows...
     if version == "standard":
         if exp == "single":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/tmp/FF/*.csv', 
             "--sample_meta", "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
             "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
             # command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--feature_files", '/tmp/FF/*.csv', 
@@ -135,17 +135,17 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
             # "--colname_for_filename", "RawFileName", "--single_mode", "batch"]
 
         elif exp == "slim":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_slim_config.xml", "--feature_files", '/tmp/FF/*.csv', 
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/tmp/FF/*.csv', 
             "--output_dir", "/tmp/IV_Results", "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)),"--mode", "single", "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)),
             "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "Calibrant", "--colname_for_sample_type", "SampleType", "--colname_for_ionization", "IonPolarity", "--single_mode", "batch", "--degree", "2", "--calib_method", "power"]
     
     if version == "enhanced": 
         if exp == "single":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_single_config.xml", "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
             "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
             "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
         elif exp == "step":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", "/tmp/CF/autoCCS_step_config.xml", "--framemeta_files",
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--framemeta_files",
             '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
        
 
@@ -186,9 +186,9 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     time.sleep(5)
     print("AutoCCS IV_data filesystem created")
     #choose which config file will be used
-    command_single = ["mv", "/tmp_autoccs/autoCCS_single_config.xml", "/tmp/CF"]
-    command_step = ["mv", "/tmp_autoccs/autoCCS_step_config.xml", "/tmp/CF"]
-    command_slim = ["mv", "/tmp_autoccs/autoCCS_slim_config.xml", "/tmp/CF"]
+    # command_single = ["mv", "/tmp_autoccs/autoCCS_single_config.xml", "/tmp/CF"]
+    # command_step = ["mv", "/tmp_autoccs/autoCCS_step_config.xml", "/tmp/CF"]
+    # command_slim = ["mv", "/tmp_autoccs/autoCCS_slim_config.xml", "/tmp/CF"]
 
     #start container
     #mount local mem (path/IV_data) to /tmp in the container
@@ -199,21 +199,21 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     client.containers.run(image,name="AC_container",volumes={local_mem: {'bind': '/tmp', 'mode': 'rw'}}, detach=True, tty=True)
     AC_Container = client.containers.get('AC_container')
     if platform.system().upper() == "DARWIN":
+        print("AC container running on Mac")
+        copy_a_file_mac(client, autoccs_config, 'AC_container:/tmp/CF/autoccs_config')
+        copy_some_files_mac(client, F_files, 'AC_container:/tmp/FF/feature_files')
         if exp == "single":
-            AC_Container.exec_run(cmd=command_single)
+            # AC_Container.exec_run(cmd=command_single)
             copy_some_files_mac(client, PP_files, 'AC_container:/tmp/PP/files')
             copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
         if exp == "slim":
-            AC_Container.exec_run(cmd=command_slim)
+            # AC_Container.exec_run(cmd=command_slim)
             copy_a_file_mac(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
             copy_a_file_mac(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
         if version == "enhanced":
             copy_some_files_mac(client, new_framefiles, 'AC_container:/tmp/FMF/framemeta_files')
-
-        copy_some_files_mac(client, F_files, 'AC_container:/tmp/FF/feature_files')
-
         if exp == "step":
-            AC_Container.exec_run(cmd=command_step)
+            # AC_Container.exec_run(cmd=command_step)
             copy_a_file_mac(client, target_list_file, 'AC_container:/tmp/TLF/target_list_file')
         time.sleep(5)
         if annotate == True:
@@ -244,26 +244,23 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
         
     if platform.system().upper() == "WINDOWS":
         print("AC container running on PC")
+        copy_some_files_PC(client, F_files, 'AC_container:/tmp/FF/feature_files')
+        copy_a_file_PC(client, autoccs_config, 'AC_container:/tmp/CF/autoccs_config')
         if exp == "single":
-            AC_Container.exec_run(cmd=command_single)
+            # AC_Container.exec_run(cmd=command_single)
             copy_some_files_PC(client, PP_files, 'AC_container:/tmp/PP/files')
             copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
         if exp == "slim":
-            AC_Container.exec_run(cmd=command_slim)
+            # AC_Container.exec_run(cmd=command_slim)
             copy_a_file_PC(client, raw_file_metadata, 'AC_container:/tmp/MD/meta_data')
             copy_a_file_PC(client, calibrant_file, 'AC_container:/tmp/CBF/calibrant_file')
         if version == "enhanced":
             copy_some_files_PC(client, new_framefiles, 'AC_container:/tmp/FMF/framemeta_files')
-
-        copy_some_files_PC(client, F_files, 'AC_container:/tmp/FF/feature_files')
-
         if exp == "step":
-            AC_Container.exec_run(cmd=command_step)
+            # AC_Container.exec_run(cmd=command_step)
             copy_a_file_PC(client, target_list_file, 'AC_container:/tmp/TLF/target_list_file')
         if annotate == True:
             copy_a_file_PC(client,target_list_file, 'AC_container:/tmp/TLF/target_list_file')
-
-
         if exp == "single":
             AC_Container.exec_run(cmd=command_0)
             print("Metadata extracted")
@@ -280,5 +277,3 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
         AC_Container.stop()
         AC_Container.remove()
         return local_mem
-
-
