@@ -3,6 +3,11 @@ This is a workflow for analyzing Ion Mobility Mass-Spectrometry data. The primar
 
 The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed [here](https://pnnl-compbio.github.io/ion-mob-ms).
 
+NOTE:  
+PC executable up to date.   
+Mac executable on Zenodo not up to date. Zenodo upload issues responsible.   
+
+
 ## Architecture
 The system is designed to enable users to run individual parts via the command line, using a graphical user interface, or using Nextflow. Currently only the GUI portions are implemented, however we believe that in subsequent versions we will be able to automate the analysis as shown below.
 
