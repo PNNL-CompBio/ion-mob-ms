@@ -3,9 +3,10 @@ This is a workflow for analyzing Ion Mobility Mass-Spectrometry data. The primar
 
 The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed [here](https://pnnl-compbio.github.io/ion-mob-ms).
 
-NOTE:  
+Current reports:  
 PC executable up to date.   
-Mac executable on Zenodo not up to date. Zenodo upload issues responsible.   
+Mac executable on Zenodo not up to date. Zenodo upload issues responsible.  
+Docker Version 4.12x has known issues (exec_run fails). Please use an earlier distribution. 
 
 
 ## Architecture
