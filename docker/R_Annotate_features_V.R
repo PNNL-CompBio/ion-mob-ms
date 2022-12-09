@@ -77,4 +77,4 @@ AnnotateCalibratedFeatures = function(pathToCalibratedFeatures,
 #Added as an optional step to end of autoCCS_step
 #works for single field and SLIM
 
-AnnotateCalibratedFeatures("/tmp/IV_Results","/tmp/MD","/tmp/TLF","/tmp/IV_Results",50)                            
+AnnotateCalibratedFeatures("/tmp/IV_Results","/tmp/MD","/tmp/TLF","/tmp/IV_Results",20)                            
