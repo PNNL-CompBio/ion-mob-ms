@@ -1,0 +1,30 @@
+.footer {
+    background: linear-gradient(90deg, rgb(1, 1, 1) 0%, rgb(6, 6, 6) 100%);
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    font-size: 1.4rem;
+    position: absolute;
+    width: 100%;
+    bottom: 100;
+    z-index: 999;
+
+  }
+
+.foot-item {
+    height: 15px;
+    margin-left: 5rem;
+    color: azure;
+  }
+
+/* 
+.foot-links {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    height: 100%;
+  } */

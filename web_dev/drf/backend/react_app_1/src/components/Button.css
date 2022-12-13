@@ -1,0 +1,165 @@
+:root {
+    --primary: #fff;
+    --exppage: black;
+}
+
+.btn {
+    padding: 8px 20px;
+    border-radius: 2px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:disabled  {
+    background-color: var(--primary);
+    color: #e90404;
+    border: 1px solid var(--primary);
+}
+
+.btn--primary {
+    background-color: var(--primary);
+    color: #242424;
+    border: 1px solid var(--primary);
+}
+
+.btn--new{
+    background-color: black;
+    color: #ffffff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+.btn--disabled--grey{
+    background-color: rgb(64, 64, 64);
+    color: #ffffff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+.btn--disabled--orange{
+    background-color: rgb(182, 97, 0);
+    color: #ffffff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+
+.btn--active{
+    background-color: rgb(150, 45, 0);
+    color: #ffffff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+
+.btn--selected{
+    background-color: rgb(150, 45, 0);
+    color: #ffffff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+.btn--not--selected{
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+.btn--new_2{
+    background-color: rgb(0, 147, 44);
+    color: #000000;
+    width: 13rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    border-color: rgb(0, 0, 0);
+    margin-top: 60%;
+    font-size: 1.3rem;
+    margin-left: 2rem;
+}
+
+
+.btn--new:disabled  {
+    background-color: rgb(100, 100, 100);
+    color: #ffffff;
+        width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    border-color: #fff;
+}
+
+.btn--outline {
+    background-color: transparent;
+    color: #fff;
+    padding: 8px 20px;
+    border: 1px solid var(--primary);
+    transition: all 0.3s ease-out;
+}
+
+.btn--exppage {
+    background-color: black;
+    color: #fff;
+    width: 16rem;
+    height:6rem;
+    border: 1px solid var(--exppage);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+}
+
+.btn--medium {
+    padding: 8px 20px;
+    font-size: 20px;
+}
+
+.btn--large {
+    padding: 12px 26px;
+    font-size: 20px;
+}
+
+.btn--medium:hover,
+.btn--large:hover {
+    background: #fff;
+    color: #242424;
+    transition: all 0.3s ease-out;
+}
+
+
+.btn--upload {
+    background-color: rgb(219, 216, 216);
+    color: rgb(0, 0, 0);
+    width: 14rem;
+    height:3rem;
+    border: 2px solid var(--exppage);
+    border-color: rgb(255, 255, 255);
+    transition: all 0.3s ease-out;
+    vertical-align:top;
+    display: inline-block;
+}

@@ -1,0 +1,34 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+
+
+#one
+const [bananas, setBananas] = useStateWithCallback(0);
+
+    const eatMore = () => {
+        setBananas(bananas + 1, (prevValue, newValue) => {
+            console.log(newValue);
+        });
+    };
+
+    const shitSome = () => {
+        setBananas(bananas - 1, (prevValue, newValue) => {
+            console.log(newValue);
+        });
+    };
+
+
+#Two
+    return (
+        <div
+            style={{
+                paddingLeft: "15px",
+            }}
+        >
+            <p>I have eaten {bananas} bananas</p>
+            <button onClick={eatMore}>Eat more</button>
+            <button onClick={shitSome}>Shit some</button>
+        </div>
+    );
+};
