@@ -1,0 +1,61 @@
+version: "3"
+instances:
+  api:
+    build:
+      context: .
+      recipe: ./imd_django.def
+    ports:
+        - "8000:8000"
+    # exec:
+    #   command: python3 /Work/backend/manage.py runserver 0.0.0.0:8000
+  web:
+      build:
+          context: .
+          recipe: imd_react.def
+      ports:
+        - "3000:3000"
+        
+
+
+  storage:
+    build:
+      context: .
+      recipe: ./imd_minio.def
+    volumes:
+      - "~/minio/data:/data"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    # environment:
+    #   MINIO_ROOT_USER: minio
+    #   MINIO_ROOT_PASSWORD: minio123
+    # exec:
+    #   # command: ["bash", "-c", "export MINIO_ROOT_USER=minio"]
+    #   # # command: export MINIO_ROOT_PASSWORD=minio123
+    #   # # command: minio server --console-address :9090 /data
+    #   command: ["bash", "-c", "export MINIO_ROOT_USER=minio && export MINIO_ROOT_PASSWORD=minio123 && minio server --console-address :9090 /data"]
+
+
+
+
+
+
+  # storage:
+  #   image: docker://minio/minio
+  #   volumes:
+  #     - "~/minio/data:/data"
+  #   ports:
+  #     - "8000:8000"
+  #     - "9000:9000"
+  #     - "9090:9090"
+  #   environment:
+  #     MINIO_ROOT_USER: minio
+  #     MINIO_ROOT_PASSWORD: minio123
+  #   exec:
+  #     # command: ["bash", "-c", "export MINIO_ROOT_USER=minio"]
+  #     # # command: export MINIO_ROOT_PASSWORD=minio123
+  #     # # command: minio server --console-address :9090 /data
+  #     command: ["bash", "-c", "export MINIO_ROOT_USER=minio && export MINIO_ROOT_PASSWORD=minio123 && minio server --console-address :9090 /data"]
+
+volumes:
+  minio_storage: {}

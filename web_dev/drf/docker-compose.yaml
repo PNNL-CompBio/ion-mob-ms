@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+        context: .
+        dockerfile: imd_django_dockerfile
+    ports:
+      - "8000:8000"
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+
+  web:
+    build:
+        context: .
+        dockerfile: imd_react_dockerfile
+    ports:
+      - "3000:3000"
+ 
+  storage:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - "~/dev/minio/data:/data"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: server --console-address ":9090" /data
+
+volumes:
+  minio_storage: {}

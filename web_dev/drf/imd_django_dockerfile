@@ -1,0 +1,19 @@
+FROM  python:3.8.13-bullseye
+
+ENV PYTHONUNBUFFERED=1
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+#RUN pip install minio
+
+#RUN pip install djangorestframework
+
+#RUN pip install django django-cors-headers
+
+COPY ./backend .
+
+EXPOSE 8000
+EXPOSE 9000
+EXPOSE 9090

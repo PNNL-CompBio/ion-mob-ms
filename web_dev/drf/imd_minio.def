@@ -1,0 +1,24 @@
+Bootstrap: docker
+From: minio/minio
+Includecmd: yes
+
+
+%post
+    microdnf install netcat
+
+%environment
+    NODE_ENV=development
+    PORT=9000
+    PORT=9090
+    ALLOW_HTTP=true
+    URL=localhost
+    MINIO_ROOT_USER=minio
+    MINIO_ROOT_PASSWORD=minio123
+    LISTEN_PORT=8000
+    export NODE_ENV PORT ALLOW_HTTP URL MINIO_ROOT_USER MINIO_ROOT_PASSWORD LISTEN_PORT
+
+
+%startscript
+    echo $LISTEN_PORT
+    nc -lp $LISTEN_PORT
+    minio server --console-address ":9090" /data
