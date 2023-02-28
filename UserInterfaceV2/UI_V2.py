@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import Pipeline_V2
 from matplotlib.lines import Line2D
-from tkPDFViewer import tkPDFViewer as pdf
+from tkPDFViewer2 import tkPDFViewer as pdf
 import multiprocessing
 
 
