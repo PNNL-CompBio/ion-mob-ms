@@ -163,6 +163,23 @@ def run_container(raw_file_folder,exptype):
                 print("File not included due to ms level indicated by naming suffix (..._2-#).d,: ", item)
         file_list = filtered_files
 
+    # TODO conditionally execute based on config?
+    # Build a dict of all files in unprocessed-directory of
+    #   KEY: <filename no suffix>
+    #   VALUE: a tuple of (<filepath>, <filename suffix>)
+    raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
+    # Get list of already processed file
+    file_list_processed = list(pathlib.Path("./III_mzML").glob('*'))
+    # Build a dict of all files in already-processed-directory of
+    #   KEY: <filename without suffix>
+    #   VALUE: a tuple of (filepath, suffix)
+    processed_files_no_ext_map = {Path(file).absolute().with_suffix('').name: (file, Path(file).suffix) for file in file_list_processed}
+    # find the difference in processed and unprocessed sets built from the keys of both dicts
+    unprocessed_names_map = list(set(raw_files_no_ext_map.keys()).difference(set(processed_files_no_ext_map.keys())))
+    # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
+    file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
+    print(f'found unprocessed files count: {len(file_list)}')
+
     #This limits containers to 10 at a time. This is important for running locally.
     #If this ever hits the cloud, "the limit does not exist!"
     #This generates subprocesses - each subprocess runs a container which runs one file.
