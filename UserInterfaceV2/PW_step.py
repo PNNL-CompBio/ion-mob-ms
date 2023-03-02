@@ -16,6 +16,7 @@ import io
 import re
 from pathlib import Path
 import shutil
+import glob
 
 #Set initial variables,
 #Determine local mem
@@ -28,40 +29,6 @@ save_mem = os.getcwd() + "/III_mzML"
 #This is the command that will be run in the container
 #Wine is used because Proteowizard/msconvert is a windows tool.
 command_list = ["wine", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
-
-
-#Copy Functions: Copy from local Path to Path destination in a container.
-#These require files to be in .tar format (so these are converted here, then transfered).
-
-#Copy File functions
-def copy_a_file(client, src,dst):
-    name, dst = dst.split(':')
-    container = client.containers.get(name)
-    os.chdir(os.path.dirname(src))
-    srcname = os.path.basename(src) 
-    tar = tarfile.open(src + '.tar', mode='w')
-    try:
-        tar.add(srcname)
-        print(os.path.dirname(src)," debug_line 1")
-        time.sleep(1)
-    finally:
-        tar.close()
-        print(os.path.dirname(src)," debug_line 2")
-    time.sleep(1)
-    data = open(src + '.tar', 'rb').read()
-    time.sleep(1)
-    print(os.path.dirname(src), " debug_line 3")
-    container.put_archive(os.path.dirname(dst), data)
-    print(os.path.dirname(src), " debug_line 4")
-    time.sleep(1)
-    os.remove((src + '.tar'))
-    print(os.path.dirname(src), " debug_line 5")
-
-def copy_some_files(client, src_list,dst):
-    for src in src_list:
-        srcname = os.path.basename(src)
-        dst = dst + srcname
-        copy_a_file(client, src,dst)
 
 
 def onerror(func, path, exc_info):
@@ -92,23 +59,30 @@ def process(filepath):
     print("Container started: ", cont_name)
     PW_container = client.containers.get(cont_name)
     copy_dst = cont_name + ":/III_mzML/"
-    copy_a_file(client, file_path,copy_dst)
+    # copy_a_file(client, file_path,copy_dst)
+    print("SOURCE:" , file_path)
+    print("DEST:" , os.path.join(local_mem,os.path.basename(file_path)))
+    print("glob1",glob.glob("/Users/jaco059/Desktop/Ion_Split_test/ion-mob-ms/UserInterfaceV2/III*/*"))
+    shutil.copytree(file_path,os.path.join(local_mem,os.path.basename(file_path)))
+    print("glob2",glob.glob("/Users/jaco059/Desktop/Ion_Split_test/ion-mob-ms/UserInterfaceV2/III*/*"))
+    
+    
     print("Files copied to container: ", cont_name)
     command_list.pop()
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
     print("Proteowizard msconvert started in container: ",cont_name)
     time.sleep(1)
+    print("Command:",command_list)
     PW_container.exec_run(cmd=command_list)
     print("Proteowizard completed in container: ", cont_name)
+
     time.sleep(1)
     ##
-    current_loc = (local_mem +"\\" + os.path.basename(file_path))
+    current_loc = (os.path.join(local_mem,os.path.basename(file_path)))
     shutil.rmtree(current_loc, onerror=onerror)
-    # shutil.rmtree(current_loc)
-    #remove .d, add .mzml
     print(os.path.basename(file_path), ": shutil")
     current_loc = current_loc[:-2] + ".mzML"
-    mv_loc = (save_mem +"\\" + os.path.basename(file_path))
+    mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
     mv_loc = mv_loc[:-2] + ".mzML"
     Path(current_loc).rename(mv_loc)
     print(os.path.basename(file_path), ": rename")
@@ -126,23 +100,13 @@ def run_container(raw_file_folder,exptype):
     global client,image,local_mem,command_list,save_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
-    local_mem = os.getcwd() + "/III_mzML_tmp"
-    save_mem = os.getcwd() + "/III_mzML"
+    local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
+    save_mem = os.path.join(os.getcwd(),"III_mzML")
     print("ProteoWizard Working Directory: ", local_mem)
-    # print("directory is:", os.getcwd())
-    # print("local mem is: ", local_mem)
     os.makedirs("./III_mzML", exist_ok = True)
     os.makedirs("./III_mzML_tmp", exist_ok = True)
 
-    # file_list = list(pathlib.Path(raw_file_folder).glob('*'))
-    # print("TYPE:  ", type(file_list))
-
-    #test for mac
-
     file_list = list(pathlib.Path(raw_file_folder).glob('*'))
-
-    # if singlefield...
-    # if exptype == "Single":
 
     #If Single field data is not Singlefield (determined by suffix), this will do something.
     if exptype == "Single":
