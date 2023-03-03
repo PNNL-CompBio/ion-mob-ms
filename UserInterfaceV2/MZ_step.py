@@ -78,7 +78,7 @@ def process(filepath):
     current_loc = current_loc + "_c_dc_de.csv"
     mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
     mv_loc = mv_loc + "_c_dc_de.csv"
-    os.chmod(current_loc,stat.S_IRWXG)
+    # os.chmod(current_loc,stat.S_IRWXG)
     Path(current_loc).rename(mv_loc)
 
     MZ_container.stop()
@@ -93,6 +93,7 @@ def run_container(mzML_data_folder):
     os.chdir(cur_dir)
     local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
     save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
+    os.makedirs("./IV_Features_csv_tmp", exist_ok=True)
     os.makedirs("./IV_Features_csv", exist_ok=True)
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
