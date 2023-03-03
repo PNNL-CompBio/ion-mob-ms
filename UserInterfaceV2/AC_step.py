@@ -116,8 +116,10 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     time.sleep(3)
     print("Running AutoCCS")
     AC_Container.exec_run(cmd=command_list)
+    print("AutoCCS Complete")
     time.sleep(3)
     if annotate == True:
+        print("Annotation Script Running")
         AC_Container.exec_run(cmd=command_annotate)
         print("Annotations complete")
         time.sleep(3)

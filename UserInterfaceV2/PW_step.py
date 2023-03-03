@@ -17,18 +17,19 @@ import re
 from pathlib import Path
 import shutil
 import glob
+import tqdm
 
 #Set initial variables,
 #Determine local mem
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
-local_mem = os.getcwd() + "/III_mzML_tmp"
-save_mem = os.getcwd() + "/III_mzML"
+local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
+save_mem = os.path.join(os.getcwd(),"III_mzML")
 # command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
 #This is the command that will be run in the container
 #Wine is used because Proteowizard/msconvert is a windows tool.
-command_list = ["wine", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
+command_list = ["wine64_anyuser", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
 
 
 def onerror(func, path, exc_info):
@@ -60,19 +61,16 @@ def process(filepath):
     PW_container = client.containers.get(cont_name)
     copy_dst = cont_name + ":/III_mzML/"
     # copy_a_file(client, file_path,copy_dst)
-    print("SOURCE:" , file_path)
-    print("DEST:" , os.path.join(local_mem,os.path.basename(file_path)))
-    print("glob1",glob.glob("/Users/jaco059/Desktop/Ion_Split_test/ion-mob-ms/UserInterfaceV2/III*/*"))
+    # print("SOURCE:" , file_path)
+    # print("DEST:" , os.path.join(local_mem,os.path.basename(file_path)))
     shutil.copytree(file_path,os.path.join(local_mem,os.path.basename(file_path)))
-    print("glob2",glob.glob("/Users/jaco059/Desktop/Ion_Split_test/ion-mob-ms/UserInterfaceV2/III*/*"))
-    
     
     print("Files copied to container: ", cont_name)
     command_list.pop()
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
     print("Proteowizard msconvert started in container: ",cont_name)
     time.sleep(1)
-    print("Command:",command_list)
+    # print("Command:",command_list)
     PW_container.exec_run(cmd=command_list)
     print("Proteowizard completed in container: ", cont_name)
 
@@ -95,7 +93,6 @@ def process(filepath):
     
     
     
-
 def run_container(raw_file_folder,exptype):
     global client,image,local_mem,command_list,save_mem
     cur_dir = os.path.dirname(__file__)
@@ -143,16 +140,32 @@ def run_container(raw_file_folder,exptype):
     # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
-
     #This limits containers to 10 at a time. This is important for running locally.
     #If this ever hits the cloud, "the limit does not exist!"
     #This generates subprocesses - each subprocess runs a container which runs one file.
     process_num = len(file_list)
-    if process_num > 1:
-        process_num = 1
+    if process_num > 4:
+        process_num = 4
 
+    if process_num == 0:
+        return save_mem
     pool = Pool(processes=process_num)
-    pool.map(process, file_list)
+    # pool.map(process, file_list)
+    # for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list), leave=None):
+    #     pass
+
+    # with Pool(processes=process_num) as pool:
+    #     progress_bar = tqdm.tqdm(total=len(file_list))
+    #     results = tqdm.tqdm(pool.imap(process, file_list), total=len(file_list))
+    #     tuple(results)
+
+    # progress_bar.close()
+    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
+        pass
+    # print(_)
+    # _.close()
+
+
 
     pool.close()
     pool.join()

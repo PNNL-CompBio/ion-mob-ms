@@ -1,0 +1,19 @@
+[
+    {
+        "ExpName": "TestX",
+        "ExpType": "Stepped",
+        "ToolType": [
+            "PW",
+            "MZ",
+            "AC"
+        ]
+    },
+    {
+        "PreProcessed Data Folder": "../test-data/SteppedField/II_Preprocessed",
+        "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata/*.txt",
+        "AutoCCS Config File": "../test-data/SteppedField/autoCCS_config.xml",
+        "Target List File": "../test-data/SteppedField/TargetList_NeutralMass.csv",
+        "mzML Data Folder": "/Users/jaco059/Desktop/IMD_CLI/ion-mob-ms/UserInterfaceV2/III_mzML",
+        "Feature Data Folder": "/Users/jaco059/Desktop/IMD_CLI/ion-mob-ms/UserInterfaceV2/IV_Features_csv/*.csv"
+    }
+]
