@@ -14,6 +14,7 @@ import threading
 from multiprocessing import Pool
 import io
 from pathlib import Path
+import stat
 import shutil
 import tqdm
 
@@ -77,6 +78,7 @@ def process(filepath):
     current_loc = current_loc + "_c_dc_de.csv"
     mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
     mv_loc = mv_loc + "_c_dc_de.csv"
+    os.chmod(current_loc,stat.S_IRWXG)
     Path(current_loc).rename(mv_loc)
 
     MZ_container.stop()
