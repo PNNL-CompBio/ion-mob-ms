@@ -17,6 +17,13 @@ import MZ_step
 import PP_step
 import DM_step
 import AC_step
+from datetime import datetime
+
+#add timestamps to print
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print(datetime.now(), *args, **kwargs)
+print = timestamped_print
 
 #This manages the individual steps.
 #It receives a json file, which includes the desired tools, and experiment type.
