@@ -17,6 +17,13 @@ from pathlib import Path
 import stat
 import shutil
 import tqdm
+from datetime import datetime
+
+#add timestamps to print
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print(datetime.now(), *args, **kwargs)
+print = timestamped_print
 
 client = docker.from_env()
 image = "anubhav0fnu/mzmine:latest"
