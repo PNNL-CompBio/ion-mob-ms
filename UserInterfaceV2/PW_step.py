@@ -18,6 +18,13 @@ from pathlib import Path
 import shutil
 import glob
 import tqdm
+from datetime import datetime
+
+#add timestamps to print
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print(datetime.now(), *args, **kwargs)
+print = timestamped_print
 
 #Set initial variables,
 #Determine local mem
