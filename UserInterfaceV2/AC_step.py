@@ -11,6 +11,13 @@ import time
 import platform
 import shutil
 import glob
+from datetime import datetime
+
+#add timestamps to print
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print(datetime.now(), *args, **kwargs)
+print = timestamped_print
 
 #This step defines the run method of autoCCS.
 
