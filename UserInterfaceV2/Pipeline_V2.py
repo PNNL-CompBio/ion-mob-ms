@@ -66,7 +66,7 @@ def execute_workflow(json_file):
             AC_results= AC_step.run_container("single","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], False, False, data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
         
         if "AC" in data[0]["ToolType"] and "IMS Metadata Folder" not in data[1] and "Target List File" in data[1]:
-            AC_results= AC_step.run_container("single","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], data[1]["Target List File"], False, data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
+            AC_results= AC_step.run_container("single","standard",True, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], data[1]["Target List File"], False, data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
             print("AutoCCS finds features through the standard method. \nTarget list specified, annotations will proceed after AutoCCS.")
 
         if "AC" in data[0]["ToolType"] and "IMS Metadata Folder" in data[1] and "Target List File" not in data[1]:
