@@ -1,0 +1,13 @@
+django>=4.0.0,<4.1.0
+djangorestframework
+pyyaml
+requests
+django-cors-headers
+minio
+django-storages
+django-minio-storage
+celery
+Redis
+django_celery_results
+django_celery_beat
+python-decouple

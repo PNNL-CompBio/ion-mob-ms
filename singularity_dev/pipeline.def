@@ -1,0 +1,47 @@
+Bootstrap: docker
+From: python:3.10
+Includecmd: no
+
+%files
+    pipeline.py /Work/pipeline.py
+    PW_web.py /Work/PW_web.py
+    # MZ_step.py /Work/MZ_step.py
+    # DM_step.py /Work/DM_step.py
+    # AC_step.py /Work/AC_step.py
+
+%post
+    pip install minio
+    pip install urllib3
+    pip install spython
+    pip install singularity
+    
+    apt-get update && apt-get install -y     build-essential     uuid-dev     libgpgme-dev     squashfs-tools     libseccomp-dev     wget     pkg-config     git     cryptsetup-bin
+    export VERSION=1.19.5 OS=linux ARCH=amd64 && 
+    wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz &&     
+    tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz &&     
+    rm go$VERSION.$OS-$ARCH.tar.gz
+
+    echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
+    echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc && \
+    source ~/.bashrc
+
+    go get -u github.com/golang/dep/cmd/dep
+
+    go get -d github.com/sylabs/singularity
+
+    export VERSION=v3.8.0 # or another tag or branch if you like && \
+    cd $GOPATH/src/github.com/sylabs/singularity && \
+    git fetch && \
+    git checkout $VERSION # omit this command to install the latest bleeding edge code from master
+
+
+    ./mconfig --without-suid --prefix=/home/dave/singularity && \
+    make -C ./builddir && \
+    make -C ./builddir install
+    
+%environment
+    NODE_ENV=development
+    ALLOW_HTTP=true
+    URL=localhost
+
+

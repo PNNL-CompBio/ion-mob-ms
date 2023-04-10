@@ -1,0 +1,10 @@
+Bootstrap: docker
+From: chambm/pwiz-skyline-i-agree-to-the-vendor-licenses
+Includecmd: yes
+
+%environment
+    NODE_ENV=development
+    ALLOW_HTTP=true
+    URL=localhost
+    export NODE_ENV PORT ALLOW_HTTP URL
+

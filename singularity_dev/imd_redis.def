@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: node:18
+Includecmd: no
+
+%post
+    apt-get update && apt-get --assume-yes install redis
+    apt-get install redis-server -y
+    sed -i 's/protected-mode yes/protected-mode no/' /etc/redis/redis.conf
+%startscript
+    redis-server --protected-mode no
+    
+%environment
+    NODE_ENV=development
+    PORT=6369
+    ALLOW_HTTP=true
+    URL=localhost
+    export NODE_ENV PORT ALLOW_HTTP URL 
+
+
+
+

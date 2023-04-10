@@ -1,0 +1,32 @@
+version: "3"
+instances:
+  api:
+    build:
+      context: .
+      recipe: ./imd_django.def
+    ports:
+        - "8000:8000"
+  web:
+      build:
+          context: .
+          recipe: imd_react.def
+      ports:
+        - "3000:3000"
+  storage:
+    build:
+      context: .
+      recipe: ./imd_minio.def
+    volumes:
+      - "~/minio/data:/data"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+  redis:
+    build:
+      context: .
+      recipe: ./imd_redis.def
+    ports:
+        - "6379:6379"
+
+volumes:
+  minio_storage: {}
