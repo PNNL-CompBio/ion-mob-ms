@@ -28,12 +28,20 @@ from datetime import datetime
 # sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml
 # bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml
 
+#add timestamps to print
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print(datetime.now(), *args, **kwargs)
+print = timestamped_print
+
+local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
+save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
 
 def process(filepath):
     global image,local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
-    options = ["--bind", local_mem +":/III_mzML"]
+    options = ["--bind", local_mem +":/tmp/IV_Features_csv"]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
     myinstance = Client.instance('./mzmine.sif', options=options)
     MZ_container = myinstance.name
@@ -44,11 +52,13 @@ def process(filepath):
     # Client.execute(myinstance,["cp","/Work/MZmine_FeatureFinder-batch.xml", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
     print("filepath is ", filepath)
     
-    tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
+    # tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/Work\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
+    command_list_0 = """Rscript /tmp/R_PARSE_II.R"""
+    command_list_1 = """sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml"""
     print("B")
-    Client.execute(myinstance,["Rscript","/Work/R_PARSE_II.R"])
+    Client.execute(myinstance,command_list_0)
     print("C")
-    Client.execute(myinstance,["sed","-i",tmp, "/Work/MZmine_FeatureFinder-batch.xml"])
+    Client.execute(myinstance,command_list_1)
     
     # copy_dst = cont_name + ":/tmp/III_mzML/"
     shutil.copy(file_path, os.path.join(local_mem))
@@ -70,7 +80,7 @@ def process(filepath):
 
 def run_container(mzML_data_folder):
     #main container
-    global local_mem
+    global local_mem, save_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
@@ -94,10 +104,12 @@ def run_container(mzML_data_folder):
     # find the difference in processed and unprocessed sets built from the keys of both dicts
     unprocessed_names_map = list(set(raw_files_no_ext_map.keys()).difference(set(processed_files_no_ext_map.keys())))
     # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
+    print("unprocessed_names_map: ",unprocessed_names_map)
+    print("raw_files_no_ext_map: ",raw_files_no_ext_map)
+    
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
     
-
     process_num = len(file_list)
     if process_num > 4:
         process_num = 4
