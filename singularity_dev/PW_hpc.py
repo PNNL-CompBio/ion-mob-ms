@@ -24,45 +24,6 @@ from datetime import datetime
 #Set initial variables,
 #Determine local mem
 
-
-# def process(file):
-    
-#     options = ["--bind", "/vagrant/dev_dockerized/drf/backend/PreProccessed_Data:/home/vagrant"]
-#     myinstance = Client.instance('../pwiz_sandbox', options=options)
-#     print("Instance name: ",myinstance,"   ",file)
-#     Client.execute(myinstance,["wine","msconvert", "/home/vagrant/" + file, "--outdir","/home/vagrant"])
-#     print("Instance complete: ",myinstance,"   ",file)
-
-# def run():
-#     list_of_files = [os.path.basename(x) for x in glob.glob('/vagrant/dev_dockerized/drf/backend/PreProccessed_Data/*')]
-#     print("list_of_files: ", list_of_files)
-#     #individual containers (no cap?)
-#     process_num = len(list_of_files)
-#     if process_num > 10:
-#         process_num = 10
-#     pool = Pool(processes=process_num)
-#     pool.map(process, list_of_files)
-
-#     pool.close()
-#     pool.join()
-#     print("All Proteowizard instances complete")
-#     # mzML_files = [os.path.basename(x) for x in glob.glob('//vagrant/dev_dockerized/drf/backend/TEST_pipeline/PreProccessed_Data/*.mzML')]
-#     print("Cleaning residual files")
-#     print("Returning mzML files to minio")
-#     os.system("mkdir /vagrant/dev_dockerized/drf/backend/mzML_Files")
-#     os.system("mv /vagrant/dev_dockerized/drf/backend/PreProccessed_Data/*.mzML /vagrant/dev_dockerized/drf/backend/mzML_Files")
-
-#     with tarfile.open("mzML_Zipfile", "w:gz") as tar:
-#         for fn in os.listdir("/vagrant/dev_dockerized/drf/backend/mzML_Files"):
-#             p = os.path.join("/vagrant/dev_dockerized/drf/backend/mzML_Files", fn)
-#             tar.add(p, arcname=fn)
-
-#     os.system("rm -r /vagrant/dev_dockerized/drf/backend/mzML_* /vagrant/dev_dockerized/drf/backend/PrePro*")
-#     ("\n_________________\nProteoWizard Complete.\n_________________\n")
-
-
-####### Step Version
-
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
@@ -71,24 +32,12 @@ print = timestamped_print
 #Set initial variables,
 #Determine local mem
 
-#docker version
-# client = docker.from_env()
-# image = "anubhav0fnu/proteowizard"    
-
-#sing version
-
-
 local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
 save_mem = os.path.join(os.getcwd(),"III_mzML")
-# command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
 #This is the command that will be run in the container
 #Wine is used because Proteowizard/msconvert is a windows tool.
 
-#docker version
-#command_list = ["wine64_anyuser", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
-
-#singularity vesion
 command_list = ["wine64", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
 
 
@@ -114,12 +63,7 @@ def onerror(func, path, exc_info):
 def process(filepath):
     global image,local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
-    
-    #docker version
-    #cont_name = ("PW_container_" + os.path.basename(file_path))
-    #client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/III_mzML', 'mode': 'rw'}}, detach=True, tty=True)
-    
-    #singularity version
+
     options = ["--bind", local_mem +":/III_mzML"]
     myinstance = Client.instance('./proteowizard.sandbox', options=options)
     PW_container = myinstance.name
@@ -127,16 +71,9 @@ def process(filepath):
     time.sleep(1)
     print("Container started: ", PW_container)
     
-#docker version
-    # PW_container = client.containers.get(cont_name)
-    
-#singularity version
     PW_container = myinstance.name
     
-    # copy_dst = cont_name + ":/III_mzML/"
-    # copy_a_file(client, file_path,copy_dst)
-    # print("SOURCE:" , file_path)
-    # print("DEST:" , os.path.join(local_mem,os.path.basename(file_path)))
+
     shutil.copytree(file_path,os.path.join(local_mem,os.path.basename(file_path)))
     
     print("Files copied to container: ", PW_container)
@@ -144,13 +81,7 @@ def process(filepath):
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
     print("Proteowizard msconvert starting in container: ",PW_container)
     time.sleep(1)
-    # print("Command:",command_list)
-#docker version
-    # PW_container.exec_run(cmd=command_list)
-    
-#singularity version
-    print("command list:")
-    print(command_list)
+
     Client.execute(myinstance,command_list)
 
     print("Proteowizard completed in container: ", PW_container)
@@ -165,14 +96,8 @@ def process(filepath):
     mv_loc = mv_loc[:-2] + ".mzML"
     Path(current_loc).rename(mv_loc)
     print(os.path.basename(file_path), ": rename")
-    ##
     time.sleep(1)
-    #this stops it. commented for testing.
-    #myinstance.stop()
-    time.sleep(2)
-    
-    #doesnt exit
-    #PW_container.remove()
+    myinstance.stop()
     time.sleep(1)
     
     

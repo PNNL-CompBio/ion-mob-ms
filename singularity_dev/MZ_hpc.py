@@ -4,8 +4,6 @@
 # Email: jeremy.jacobson@pnnl.gov
 
 import sys
-from minio import Minio
-#from minio.error import S3Error
 import os
 import tarfile
 import time
@@ -17,6 +15,11 @@ import io
 import re
 from spython.main import Client
 import glob
+from pathlib import Path
+import shutil
+import glob
+import tqdm
+from datetime import datetime
 
 
 #Set initial variables,
@@ -26,64 +29,92 @@ import glob
 # bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml
 
 
-def process(file):
-    options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
-    myinstance = Client.instance('../mzmine.sif', options=options)
-    print("Instance name: ",myinstance,"   ",file)
+def process(filepath):
+    global image,local_mem,command_list,save_mem
+    file_path = str(filepath.absolute())
+    file_name = os.path.basename(file_path)
+    options = ["--bind", local_mem +":/III_mzML"]
+    # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
+    myinstance = Client.instance('./mzmine.sif', options=options)
+    MZ_container = myinstance.name
+    
+    
     print("A")
-    Client.execute(myinstance,["mkdir","/home/vagrant/tmp"])
+    # Client.execute(myinstance,["mkdir","/home/vagrant/tmp"])
+    # Client.execute(myinstance,["cp","/Work/MZmine_FeatureFinder-batch.xml", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    print("filepath is ", filepath)
+    
+    tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
     print("B")
-    Client.execute(myinstance,["cp","/Work/MZmine_FeatureFinder-batch.xml", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    Client.execute(myinstance,["Rscript","/Work/R_PARSE_II.R"])
     print("C")
-    tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/home\/vagrant\/""" + file + """<\/file><\/parameter>""" + "/"
-    Client.execute(myinstance,["sed","-i",tmp, "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    Client.execute(myinstance,["sed","-i",tmp, "/Work/MZmine_FeatureFinder-batch.xml"])
+    
+    # copy_dst = cont_name + ":/tmp/III_mzML/"
+    shutil.copy(file_path, os.path.join(local_mem))
+
     print("D")
-    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/Work/MZmine_FeatureFinder-batch.xml"])
     print("E")
     # # #Client.execute(myinstance,["mv","/Work/IV_Features_csv/*.csv", "/home/vagrant"])
-    print("Instance complete: ",myinstance,"   ",file)
-    # Client.execute(myinstance,["ls /home/vagrant > /home/vagrant/LSOUT"])
+    print("Instance complete: ",myinstance,"   ",filepath)
+    current_loc = (os.path.join(local_mem,os.path.basename(file_path)))
+    current_loc = current_loc + "_c_dc_de.csv"
+    mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
+    mv_loc = mv_loc + "_c_dc_de.csv"
+    # os.chmod(current_loc,stat.S_IRWXG)
+    Path(current_loc).rename(mv_loc)
 
-def run():
-    minio_client = Minio("localhost:9000", access_key="minio", secret_key="minio123", secure=False)
-    minio_client.fget_object("ion-mob-upload", "mzMLData_ZipFile", "mzMLData_ZipFile")
+    MZ_container.stop()
+    time.sleep(2)
+
+def run_container(mzML_data_folder):
     #main container
-    my_tar = tarfile.open('/vagrant/dev_dockerized/drf/backend/mzMLData_ZipFile')
-    my_tar.extractall('/vagrant/dev_dockerized/drf/backend/mzMLData')
-    list_of_files = [os.path.basename(x) for x in glob.glob('/vagrant/dev_dockerized/drf/backend/mzMLData/*.mzML')]
+    global local_mem
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)
+    local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
+    save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
+    os.makedirs("./IV_Features_csv_tmp", exist_ok=True)
+    os.makedirs("./IV_Features_csv", exist_ok=True)
+    file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
-    print("list_of_files: ", list_of_files)
-    #individual containers (no cap?)
-    process_num = len(list_of_files)
-    if process_num > 1:
-        process_num = 1
+
+# TODO conditionally execute based on config?
+    # Build a dict of all files in unprocessed-directory of
+    #   KEY: <filename no suffix>
+    #   VALUE: a tuple of (<filepath>, <filename suffix>)
+    raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
+    # Get list of already processed file
+    file_list_processed = list(pathlib.Path("./IV_Features_csv").glob('*'))
+    # Build a dict of all files in already-processed-directory of
+    #   KEY: <filename without suffix>
+    #   VALUE: a tuple of (filepath, suffix)
+    processed_files_no_ext_map = {os.path.basename(os.path.splitext(os.path.splitext(Path(file).absolute())[0])[0]): (file, "".join(Path(file).suffixes)) for file in file_list_processed}
+    # find the difference in processed and unprocessed sets built from the keys of both dicts
+    unprocessed_names_map = list(set(raw_files_no_ext_map.keys()).difference(set(processed_files_no_ext_map.keys())))
+    # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
+    file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
+    print(f'found unprocessed files count: {len(file_list)}')
+    
+
+    process_num = len(file_list)
+    if process_num > 4:
+        process_num = 4
+
+    if process_num == 0:
+        return local_mem
+    
     pool = Pool(processes=process_num)
-    pool.map(process, list_of_files)
+    # pool.map(process, file_list)
+
+    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list), leave=None):
+            pass
 
     pool.close()
     pool.join()
-    print("All MZmine instances complete")
-    # mzML_files = [os.path.basename(x) for x in glob.glob('//vagrant/dev_dockerized/drf/backend/TEST_pipeline/PreProccessed_Data/*.mzML')]
-    print("Cleaning residual files")
-    print("Returning mzML files to minio")
-    os.system("mkdir /vagrant/dev_dockerized/drf/backend/IV_Features_csv")
-    # os.system("ls /vagrant/dev_dockerized/drf/backend/")
-    os.system("ls /vagrant/dev_dockerized/drf/backend/mzMLData")
-    os.system("ls /vagrant/dev_dockerized/drf/backend/IV_Features_csv")
+    return local_mem
 
-    os.system("mv /vagrant/dev_dockerized/drf/backend/mzMLData/*.csv /vagrant/dev_dockerized/drf/backend/IV_Features_csv")
-
-    with tarfile.open("Feature_Zipfile", "w:gz") as tar:
-        for fn in os.listdir("/vagrant/dev_dockerized/drf/backend/IV_Features_csv"):
-            p = os.path.join("/vagrant/dev_dockerized/drf/backend/IV_Features_csv", fn)
-            tar.add(p, arcname=fn)
-
-    minio_client.fput_object(
-        "ion-mob-upload", "Feature_Zipfile", "/vagrant/dev_dockerized/drf/backend/Feature_Zipfile",
-    )
-    print("aaa")
-    
-    os.system("rm -r /vagrant/dev_dockerized/drf/backend/mzMLData* /vagrant/dev_dockerized/drf/backend/IV_Features_csv* /vagrant/dev_dockerized/drf/backend/Feature_Zipfile")
     print("\n_________________\MZmine Complete.\n_________________\n")
     # OUTPUT= tarfile.open("mzML_Zipfile","w")
     # OUTPUT.add('//vagrant/dev_dockerized/drf/backend/TEST_pipeline/mzML_Files')
