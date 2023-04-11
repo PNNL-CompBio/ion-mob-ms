@@ -54,7 +54,7 @@ def process(filepath):
     
     # tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/Work\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
     command_list_0 = """Rscript /tmp/R_PARSE_II.R"""
-    command_list_1 = """sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml"""
+    command_list_1 = """sed 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml > /MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
     print("B")
     Client.execute(myinstance,command_list_0)
@@ -65,7 +65,7 @@ def process(filepath):
     shutil.copy(file_path, os.path.join(local_mem))
 
     print("D")
-    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/Work/MZmine_FeatureFinder-batch.xml"])
+    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/MZmine_FeatureFinder-batch.xml"])
     print("E")
     # # #Client.execute(myinstance,["mv","/Work/IV_Features_csv/*.csv", "/home/vagrant"])
     print("Instance complete: ",myinstance,"   ",filepath)
