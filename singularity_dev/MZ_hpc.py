@@ -41,7 +41,7 @@ def process(filepath):
     global image,local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
-    options = ["--bind", local_mem +":/tmp/IV_Features_csv"]
+    options = ["--bind", local_mem +":/Work/III_mzML"]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
     myinstance = Client.instance('./mzmine.sif', options=options)
     MZ_container = myinstance.name
@@ -55,6 +55,7 @@ def process(filepath):
     # tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/Work\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
     command_list_0 = """Rscript /tmp/R_PARSE_II.R"""
     command_list_1 = """sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml"""
+    print("command_list_1:", command_list_1)
     print("B")
     Client.execute(myinstance,command_list_0)
     print("C")
@@ -104,8 +105,6 @@ def run_container(mzML_data_folder):
     # find the difference in processed and unprocessed sets built from the keys of both dicts
     unprocessed_names_map = list(set(raw_files_no_ext_map.keys()).difference(set(processed_files_no_ext_map.keys())))
     # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
-    print("unprocessed_names_map: ",unprocessed_names_map)
-    print("raw_files_no_ext_map: ",raw_files_no_ext_map)
     
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
