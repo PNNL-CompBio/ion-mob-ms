@@ -1,0 +1,13 @@
+[
+    {
+        "ExpName": "TestX",
+        "ExpType": "Stepped",
+        "ToolType": [
+            "PW"
+        ]
+    },
+    {
+        "PreProcessed Data Folder": "../test-data/SteppedField/II_Preprocessed",
+        "mzML Data Folder": "/people/jaco059/ion-mob-ms/UserInterfaceV2/III_mzML"
+    }
+]

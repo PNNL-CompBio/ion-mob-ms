@@ -89,7 +89,7 @@ save_mem = os.path.join(os.getcwd(),"III_mzML")
 #command_list = ["wine64_anyuser", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
 
 #singularity vesion
-command_list = ["wine64_anyuser", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
+command_list = ["wine64", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
 
 
 def onerror(func, path, exc_info):
@@ -112,20 +112,20 @@ def onerror(func, path, exc_info):
         raise
 
 def process(filepath):
-    global client,image,local_mem,command_list,save_mem
+    global image,local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
     
     #docker version
-    cont_name = ("PW_container_" + os.path.basename(file_path))
-    client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/III_mzML', 'mode': 'rw'}}, detach=True, tty=True)
+    #cont_name = ("PW_container_" + os.path.basename(file_path))
+    #client.containers.run(image,name=cont_name,volumes={local_mem: {'bind': '/III_mzML', 'mode': 'rw'}}, detach=True, tty=True)
     
     #singularity version
     options = ["--bind", local_mem +":/III_mzML"]
-    myinstance = Client.instance('./proteowizard.sif', options=options)
+    myinstance = Client.instance('./proteowizard.sandbox', options=options)
     PW_container = myinstance.name
 
     time.sleep(1)
-    print("Container started: ", cont_name)
+    print("Container started: ", PW_container)
     
 #docker version
     # PW_container = client.containers.get(cont_name)
@@ -139,10 +139,10 @@ def process(filepath):
     # print("DEST:" , os.path.join(local_mem,os.path.basename(file_path)))
     shutil.copytree(file_path,os.path.join(local_mem,os.path.basename(file_path)))
     
-    print("Files copied to container: ", cont_name)
+    print("Files copied to container: ", PW_container)
     command_list.pop()
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
-    print("Proteowizard msconvert started in container: ",cont_name)
+    print("Proteowizard msconvert starting in container: ",PW_container)
     time.sleep(1)
     # print("Command:",command_list)
 #docker version
@@ -153,7 +153,7 @@ def process(filepath):
     print(command_list)
     Client.execute(myinstance,command_list)
 
-    print("Proteowizard completed in container: ", cont_name)
+    print("Proteowizard completed in container: ", PW_container)
 
     time.sleep(1)
     ##
@@ -168,7 +168,7 @@ def process(filepath):
     ##
     time.sleep(1)
     #this stops it. commented for testing.
-    #PW_container.stop()
+    #myinstance.stop()
     time.sleep(2)
     
     #doesnt exit
@@ -178,7 +178,7 @@ def process(filepath):
     
     
 def run_container(raw_file_folder,exptype):
-    global client,image,local_mem,command_list,save_mem
+    global image,local_mem,command_list,save_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
