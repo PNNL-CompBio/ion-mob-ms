@@ -3,11 +3,13 @@
         "ExpName": "TestX",
         "ExpType": "Stepped",
         "ToolType": [
-            "PW"
+            "PW",
+            "MZ"
         ]
     },
     {
         "PreProcessed Data Folder": "../test-data/SteppedField/II_Preprocessed",
-        "mzML Data Folder": "/people/jaco059/ion-mob-ms/UserInterfaceV2/III_mzML"
+        "mzML Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/III_mzML",
+        "Feature Folder": "/people/jaco059/ion-mob-ms/singularity_dev/IV_Features"
     }
 ]
