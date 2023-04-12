@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3.7
 
 # Author: Jeremy Jacobson 
 # Email: jeremy.jacobson@pnnl.gov
@@ -53,23 +53,35 @@ def process(filepath):
     print("filepath is ", filepath)
     
     # tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/Work\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
-    command_list_0 = """Rscript /Work/R_PARSE_II.R"""
-    command_list_1 = """sed 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml > /MZmine_FeatureFinder-batch.xml"""
+#    command_list_0 = """Rscript /Work/R_PARSE_II.R"""
+
+
+    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
+   
+
+#    command_list_1 = """sed -i \'s/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/\' /Work/MZmine_FeatureFinder-batch.xml"""
+    command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name
+    command_list_2 = """bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
     print("B")
-    command_list_TEST = """touch /poooooo"""
-    command_list_TEST_TWO = ["touch", "/moooooo"]
-    Client.execute(myinstance,command_list_TEST, options=['--writable-tmpfs'])
-    Client.execute(myinstance,command_list_TEST_TWO, options=['--writable-tmpfs'])
-    Client.execute(myinstance,command_list_0, options=['--writable-tmpfs'])
-    print("C")
-    Client.execute(myinstance,command_list_1, options=['--writable-tmpfs'])
+#    command_list_TEST = """touch /yolo"""
+#    command_list_TEST_TWO = """sh -c \'ls > /OUT.txt\'"""
+#    command_list_TEST_THREE = """head /Work/MZmine_FeatureFinder-batch.xml > /top"""
+#    Client.execute(myinstance,command_list_TEST, options=['--writable-tmpfs'],quiet=False)
+#    Client.execute(myinstance,command_list_TEST_TWO, options=['--writable-tmpfs'],quiet=False)
+#    Client.execute(myinstance,command_list_TEST_THREE, options=['--writable-tmpfs'],quiet=False)
     
-    # copy_dst = cont_name + ":/tmp/III_mzML/"
     shutil.copy(file_path, os.path.join(local_mem))
 
+    Client.execute(myinstance,command_list_0, options=['--writable-tmpfs'],quiet=False)
+    print("C")
+    Client.execute(myinstance,command_list_1, options=['--writable-tmpfs'],quiet=False)
+    
+    # copy_dst = cont_name + ":/tmp/III_mzML/"
+#    shutil.copy(file_path, os.path.join(local_mem))
+
     print("D")
-    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/MZmine_FeatureFinder-batch.xml"], options=['--writable-tmpfs'])
+    Client.execute(myinstance,command_list_2, options=['--writable-tmpfs'],quiet=False)
     print("E")
     # # #Client.execute(myinstance,["mv","/Work/IV_Features_csv/*.csv", "/home/vagrant"])
     print("Instance complete: ",myinstance,"   ",filepath)
@@ -80,7 +92,7 @@ def process(filepath):
     # os.chmod(current_loc,stat.S_IRWXG)
     Path(current_loc).rename(mv_loc)
 
-    MZ_container.stop()
+    myinstance.stop()
     time.sleep(2)
 
 def run_container(mzML_data_folder):
@@ -114,8 +126,8 @@ def run_container(mzML_data_folder):
     print(f'found unprocessed files count: {len(file_list)}')
     
     process_num = len(file_list)
-    if process_num > 4:
-        process_num = 4
+    if process_num > 2:
+        process_num = 2
 
     if process_num == 0:
         return local_mem
