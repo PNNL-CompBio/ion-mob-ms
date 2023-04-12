@@ -138,7 +138,7 @@ REPLACE_THIS_LINE
 
         <parameter name="Feature lists" type="BATCH_LAST_PEAKLISTS"/>
 
-        <parameter name="Filename"><current_file>/home/vagrant/{}.csv</current_file></parameter>
+        <parameter name="Filename"><current_file>/Work/III_mzML/{}.csv</current_file></parameter>
 
         <parameter name="Field separator">,</parameter>
 

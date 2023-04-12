@@ -41,9 +41,9 @@ def process(filepath):
     global image,local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
-    options = ["--bind", local_mem +":/Work/III_mzML"]
+    options = ["--writable-tmpfs","--bind", local_mem +":/Work/III_mzML"]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
-    myinstance = Client.instance('./mzmine.sif', options=options)
+    myinstance = Client.instance('./mzmine_updated.sif', options=options)
     MZ_container = myinstance.name
     
     
@@ -53,19 +53,23 @@ def process(filepath):
     print("filepath is ", filepath)
     
     # tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/Work\/III_mzML/""" + file_name + """<\/file><\/parameter>""" + "/"
-    command_list_0 = """Rscript /tmp/R_PARSE_II.R"""
+    command_list_0 = """Rscript /Work/R_PARSE_II.R"""
     command_list_1 = """sed 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/""" +file_name + """<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml > /MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
     print("B")
-    Client.execute(myinstance,command_list_0)
+    command_list_TEST = """touch /poooooo"""
+    command_list_TEST_TWO = ["touch", "/moooooo"]
+    Client.execute(myinstance,command_list_TEST, options=['--writable-tmpfs'])
+    Client.execute(myinstance,command_list_TEST_TWO, options=['--writable-tmpfs'])
+    Client.execute(myinstance,command_list_0, options=['--writable-tmpfs'])
     print("C")
-    Client.execute(myinstance,command_list_1)
+    Client.execute(myinstance,command_list_1, options=['--writable-tmpfs'])
     
     # copy_dst = cont_name + ":/tmp/III_mzML/"
     shutil.copy(file_path, os.path.join(local_mem))
 
     print("D")
-    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/MZmine_FeatureFinder-batch.xml"])
+    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/MZmine_FeatureFinder-batch.xml"], options=['--writable-tmpfs'])
     print("E")
     # # #Client.execute(myinstance,["mv","/Work/IV_Features_csv/*.csv", "/home/vagrant"])
     print("Instance complete: ",myinstance,"   ",filepath)

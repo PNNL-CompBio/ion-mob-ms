@@ -1,0 +1,34 @@
+Bootstrap: docker
+From: openjdk:buster
+Includecmd: no
+
+
+%files
+    MZmine_FeatureFinder-batch.xml /Work/MZmine_FeatureFinder-batch.xml
+    R_PARSE_II.R /Work/R_PARSE_II.R
+    # Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML /Work/Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML
+
+
+%post
+    apt-get -y update
+    apt-get -y install wget unzip
+    apt-get -y install git
+
+    wget https://github.com/mzmine/mzmine2/releases/download/v2.41.2/MZmine-2.41.2.zip
+    unzip MZmine-2.41.2.zip
+    rm MZmine-2.41.2.zip
+    
+    apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y r-base
+    apt install -y r-cran-doparallel
+    # mkdir /Work/IV_Features_csv
+    # mkdir -p /home/vagrant/tmp
+    #sed -i 's/TMP_FILE_DIRECTORY=\/tmp/TMP_FILE_DIRECTORY=\/tmp/' /MZmine-2.41.2/startMZmine_Linux.sh
+
+    
+%environment
+    NODE_ENV=development
+    ALLOW_HTTP=true
+    URL=localhost
+    export NODE_ENV PORT ALLOW_HTTP URL
