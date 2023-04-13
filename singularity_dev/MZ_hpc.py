@@ -43,18 +43,19 @@ def process(filepath):
     myinstance = Client.instance('./mzmine_updated.sif', options=options)
     MZ_container = myinstance.name
         
-#    command_list_0 = """Rscript /Work/R_PARSE_II.R"""
-    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
+    command_list_0 = """Rscript /Work/R_PARSE_II.R"""
+# doesnt work    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
+#    command_list_0 = """Rscript -e 'source("R_PARSE_II.R"); ParseDTasRTmzML(1,"/Work/III_mzML/""" + file_name + """")'"""    
     command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name
     command_list_2 = """bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
 
     shutil.copy(file_path, os.path.join(local_mem))
 
-    Client.execute(myinstance,command_list_0, options=['--writable-tmpfs'],quiet=False)
     Client.execute(myinstance,command_list_1, options=['--writable-tmpfs'],quiet=False)
+    Client.execute(myinstance,command_list_0, options=['--writable-tmpfs'],quiet=False)
     
-#    shutil.copy(file_path, os.path.join(local_mem))
+##    shutil.copy(file_path, os.path.join(local_mem))
 
     Client.execute(myinstance,command_list_2, options=['--writable-tmpfs'],quiet=False)
 
@@ -98,8 +99,8 @@ def run_container(mzML_data_folder):
     print(f'found unprocessed files count: {len(file_list)}')
     
     process_num = len(file_list)
-    if process_num > 2:
-        process_num = 2
+    if process_num > 4:
+        process_num = 4
 
     if process_num == 0:
         return local_mem

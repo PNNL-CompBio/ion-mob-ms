@@ -11,7 +11,12 @@ ParseDTasRTmzML = function(nCores,
 {
   # Load all files in directory
   myPattern = ".+\\.mzML$"
-  allRawFiles = list.files(path = pathTomzML, full.names = FALSE, recursive = TRUE)
+# zzz allRawFiles = list.files(path = pathTomzML, full.names = FALSE, recursive = FALSE)
+  allRawFiles = c(pathTomzML)
+  print("pathTomzML:")
+  print(pathTomzML)
+  print("All raw Files:")
+  print(allRawFiles)
   allRawFiles = allRawFiles[grepl(myPattern, allRawFiles)]
 
   if(length(allRawFiles) == 0)
@@ -26,7 +31,7 @@ ParseDTasRTmzML = function(nCores,
   foreach(f=allRawFiles, .options.snow=list(preschedule=TRUE)) %dopar%
   {
     # Change DT to RT in mzML:
-    inputFile = file.path(pathTomzML, f)
+    inputFile = file.path(f)
     newFile = paste(inputFile, 'new', sep='')
 
     conn  <- file(inputFile, open = "r")
@@ -63,4 +68,7 @@ ParseDTasRTmzML = function(nCores,
 }
 
 #Added to connect to MZ_Step
-ParseDTasRTmzML(1,"/Work/III_mzML")
+#ParseDTasRTmzML(1,"/Work/III_mzML")
+RUN_FUNCTION
+
+
