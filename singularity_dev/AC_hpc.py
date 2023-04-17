@@ -142,7 +142,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     Client.execute(myinstance,command_list, options=['--writable-tmpfs'],quiet=False)
     print("AutoCCS Complete")
     time.sleep(3)
-    if annotate == True:
+    if annotate == True and exp != "step":
         print("Annotation Script Running")
         # AC_Container.exec_run(cmd=command_annotate)
         Client.execute(myinstance,command_annotate, options=['--writable-tmpfs'],quiet=False)
