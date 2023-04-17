@@ -4,12 +4,16 @@
         "ExpType": "Stepped",
         "ToolType": [
             "PW",
-            "MZ"
+            "MZ",
+            "AC"
         ]
     },
     {
         "PreProcessed Data Folder": "../test-data/SteppedField/II_Preprocessed",
+        "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata/*.txt",
+        "AutoCCS Config File": "../test-data/SteppedField/autoCCS_config.xml",
+        "Target List File": "../test-data/SteppedField/TargetList_NeutralMass.csv",
         "mzML Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/III_mzML",
-        "Feature Folder": "/people/jaco059/ion-mob-ms/singularity_dev/IV_Features"
+        "Feature Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/IV_Features_csv/*.csv"
     }
 ]
