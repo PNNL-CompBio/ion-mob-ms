@@ -42,25 +42,25 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
 #Determine which command line options will be used.
 #This was kept in this longer format because it is easier to modify. 
 #Note: If modifying these... any that use a wildcard, MUST use single quotes
-#such as ('/Work/IV_data/FF/*.csv'). If you use double quotes, this will fail. Why? who knows...
+#such as ('/tmp/FF/*.csv'). If you use double quotes, this will fail. Why? who knows...
     if version == "standard":
         if exp == "single":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/Work/IV_data/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/Work/IV_data/FF/*.csv', 
-            "--sample_meta", "/Work/IV_data/MD/RawFiles_Metadata.csv", "--calibrant_file", ("/Work/IV_data/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/Work/IV_data/IV_Results", "--mode", "single",
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/tmp/FF/*.csv', 
+            "--sample_meta", "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--output_dir", "/tmp/IV_Results", "--mode", "single",
             "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
 
         elif exp == "slim":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/Work/IV_data/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/Work/IV_data/FF/*.csv', 
-            "--output_dir", "/Work/IV_data/IV_Results", "--sample_meta", ("/Work/IV_data/MD/" + os.path.basename(raw_file_metadata)),"--mode", "single", "--calibrant_file", ("/Work/IV_data/CBF/" + os.path.basename(calibrant_file)),
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/tmp/FF/*.csv', 
+            "--output_dir", "/tmp/IV_Results", "--sample_meta", ("/tmp/MD/" + os.path.basename(raw_file_metadata)),"--mode", "single", "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)),
             "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "Calibrant", "--colname_for_sample_type", "SampleType", "--colname_for_ionization", "IonPolarity", "--single_mode", "batch", "--degree", "2", "--calib_method", "power"]
     
     if version == "enhanced": 
         if exp == "single":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/Work/IV_data/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/Work/IV_data/FMF/*.txt', "--sample_meta", 
-            "/Work/IV_data/MD/RawFiles_Metadata.csv", "--calibrant_file", ("/Work/IV_data/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/Work/IV_data/FF/*.csv', "--output_dir", "/Work/IV_data/IV_Results", "--mode", 
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/tmp/FMF/*.txt', "--sample_meta", 
+            "/tmp/MD/RawFiles_Metadata.csv", "--calibrant_file", ("/tmp/CBF/" + os.path.basename(calibrant_file)), "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--mode", 
             "single", "--colname_for_filename", "RawFileName", "--tunemix_sample_type", "AgTune", "--colname_for_sample_type", "SampleType", "--single_mode", "batch"]
         elif exp == "step":
-            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/Work/IV_data/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/Work/IV_data/FMF/*.txt', "--feature_files", '/Work/IV_data/FF/*.csv', "--output_dir", "/Work/IV_data/IV_Results", "--target_list_file", ("/Work/IV_data/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
+            command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
        
     #This prints where the local files are being saved to. (With pyinstaller, this is a temporary folder)
     print("Local memory is: ", local_mem)
@@ -84,7 +84,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     # client = docker.from_env()
     # print("AutoCCS Container Started")
     
-    options = ["--writable-tmpfs","--bind", local_mem +":/Work/IV_data"]
+    options = ["--writable-tmpfs","--bind", local_mem +":/tmp"]
     myinstance = Client.instance('./autoccs.sif', options=options)
     AC_container = myinstance.name
     
