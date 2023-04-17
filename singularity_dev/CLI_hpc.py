@@ -163,5 +163,5 @@ if __name__ == '__main__':
         with open("sample.json", "w") as outfile:
             outfile.write(json_object)
 
-        Pipeline_V2.execute_workflow("sample.json")
+        Pipeline_V2_hpc.execute_workflow("sample.json")
 
