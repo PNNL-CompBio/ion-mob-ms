@@ -43,13 +43,13 @@ jobs:
           file: docker/autoccs
           push: true
           tags: anubhav0fnu/autoccs:latest
-      - name: Build and push deimos
-        uses: docker/build-push-action@v2
-        with:
-          context: docker
-          push: true
-          file: docker/deimos
-          tags: anubhav0fnu/ccs_comparison:latest
+#       - name: Build and push deimos
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: docker
+#           push: true
+#           file: docker/deimos
+#           tags: anubhav0fnu/ccs_comparison:latest
 #       - name: Build and push ccs-comparison
 #         uses: docker/build-push-action@v2
 #         with:
