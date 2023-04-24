@@ -19,6 +19,7 @@ RUN apt-get install -y r-base
 # install autoccs
 RUN git clone https://github.com/PNNL-Comp-Mass-Spec/AutoCCS.git
 RUN pip install -r /AutoCCS/requirements.txt
+RUN pip install pandas==1.5.3
 
 # add config files
 RUN mkdir /tmp_autoccs
