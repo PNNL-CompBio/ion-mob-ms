@@ -24,7 +24,7 @@ Includecmd: no
     wget https://github.com/mzmine/mzmine2/releases/download/v2.41.2/MZmine-2.41.2.zip
     unzip MZmine-2.41.2.zip
     rm MZmine-2.41.2.zip
-    sed -i 's/TMP_FILE_DIRECTORY=\/tmp/TMP_FILE_DIRECTORY=\/Work/' /MZmine-2.41.2/startMZmine_Linux.sh    
+    sed -i 's/TMP_FILE_DIRECTORY=\/tmp/TMP_FILE_DIRECTORY=\/Work\/tmp/' /MZmine-2.41.2/startMZmine_Linux.sh    
 
     #install R    
     apt-get update && \

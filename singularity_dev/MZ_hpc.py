@@ -37,12 +37,15 @@ local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
 
 save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
 
-def process(filepath,tmp_mount):
+def process(input_args):
     global image,local_mem,command_list,save_mem
+    filepath = input_args[0]
+    tmp_mount =  input_args[1]
     tmp_mount_mem = os.path.join(os.getcwd(),"IV_Features_tmp_mount",tmp_mount)
+    os.makedirs(tmp_mount_mem, exist_ok=True)
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
-    options = ["--writable-tmpfs","--bind", local_mem + ":/Work/III_mzML", "--bind", tmp_mount_mem+":/Work/tmp/"+tmp_mount]
+    options = ["--writable-tmpfs","--bind", local_mem + ":/Work/III_mzML", "--bind", tmp_mount_mem+":/Work/tmp"]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
     myinstance = Client.instance('./mzmine_updated.sif', options=options)
     MZ_container = myinstance.name
@@ -50,7 +53,7 @@ def process(filepath,tmp_mount):
     command_list_0 = """Rscript /Work/R_PARSE_II.R"""
 # doesnt work    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
 #    command_list_0 = """Rscript -e 'source("R_PARSE_II.R"); ParseDTasRTmzML(1,"/Work/III_mzML/""" + file_name + """")'"""    
-    command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name + """ -t """ + tmp_mount
+    command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name
     command_list_2 = """bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
 
@@ -115,7 +118,7 @@ def run_container(mzML_data_folder):
         # Check if it's already in the list
         if new_string not in random_strings:
             random_strings.append(new_string)
-    
+    process_args = zip(file_list, random_strings)    
     
     process_num = len(file_list)
     if process_num > 4:
@@ -127,7 +130,7 @@ def run_container(mzML_data_folder):
     pool = Pool(processes=process_num)
     # pool.map(process, file_list)
 
-    for _ in tqdm.tqdm(pool.imap(process, file_list,random_strings), total=len(file_list), leave=None):
+    for _ in tqdm.tqdm(pool.imap(process, process_args), total=len(file_list), leave=None):
             pass
 
     pool.close()
