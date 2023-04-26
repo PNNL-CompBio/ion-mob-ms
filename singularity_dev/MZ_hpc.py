@@ -57,7 +57,7 @@ def process(filepath):
     
 ##    shutil.copy(file_path, os.path.join(local_mem))
 
-    Client.execute(myinstance,command_list_2, options=['--writable-tmpfs'],quiet=False)
+    Client.execute(myinstance,command_list_2, options=['--writable-tmpfs', "--overlay","my_overlay/"],quiet=False)
 
     print("Instance complete: ",myinstance,"   ",filepath)
     current_loc = (os.path.join(local_mem,os.path.basename(file_path)))

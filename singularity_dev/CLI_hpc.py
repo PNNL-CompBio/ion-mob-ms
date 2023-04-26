@@ -21,7 +21,7 @@ import json
 
 
 if __name__ == '__main__':
-    
+    print("Ion Mobility Dashboard Command Line Interface Starting.")    
     file_dict = dict()
     param_dict = dict()
 
@@ -45,10 +45,12 @@ if __name__ == '__main__':
 
 
     #check if json file available. if so use it.
-
+    
     if args["json"] != '':
+        print("json Found. Starting Workflow")
         Pipeline_V2_hpc.execute_workflow(args["json"])
-
+        print("Workflow Complete.")
+   
     #write json file using parparse inputs
     #individual tools
     else:
@@ -165,3 +167,5 @@ if __name__ == '__main__':
 
         Pipeline_V2_hpc.execute_workflow("sample.json")
 
+
+        print("Command Line Interface Has Completed")
