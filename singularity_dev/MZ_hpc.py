@@ -20,6 +20,8 @@ import shutil
 import glob
 import tqdm
 from datetime import datetime
+import random
+import string
 
 
 #Set initial variables,
@@ -32,13 +34,15 @@ def timestamped_print(*args, **kwargs):
 print = timestamped_print
 
 local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
+
 save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
 
-def process(filepath):
+def process(filepath,tmp_mount):
     global image,local_mem,command_list,save_mem
+    tmp_mount_mem = os.path.join(os.getcwd(),"IV_Features_tmp_mount",tmp_mount)
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
-    options = ["--writable-tmpfs","--bind", local_mem +":/Work/III_mzML"]
+    options = ["--writable-tmpfs","--bind", local_mem + ":/Work/III_mzML", "--bind", tmp_mount_mem+":/Work/tmp/"+tmp_mount]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
     myinstance = Client.instance('./mzmine_updated.sif', options=options)
     MZ_container = myinstance.name
@@ -46,7 +50,7 @@ def process(filepath):
     command_list_0 = """Rscript /Work/R_PARSE_II.R"""
 # doesnt work    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
 #    command_list_0 = """Rscript -e 'source("R_PARSE_II.R"); ParseDTasRTmzML(1,"/Work/III_mzML/""" + file_name + """")'"""    
-    command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name
+    command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name + """ -t """ + tmp_mount
     command_list_2 = """bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
 
@@ -57,7 +61,7 @@ def process(filepath):
     
 ##    shutil.copy(file_path, os.path.join(local_mem))
 
-    Client.execute(myinstance,command_list_2, options=['--writable-tmpfs', "--overlay","my_overlay/"],quiet=False)
+    Client.execute(myinstance,command_list_2, options=['--writable-tmpfs'],quiet=False)
 
     print("Instance complete: ",myinstance,"   ",filepath)
     current_loc = (os.path.join(local_mem,os.path.basename(file_path)))
@@ -98,6 +102,21 @@ def run_container(mzML_data_folder):
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
     
+    
+    
+    
+    # Generate a list of unique strings
+    N = len(file_list)
+    string_length = 5
+    random_strings = []
+    while len(random_strings) < N:
+        # Generate a random string
+        new_string = ''.join(random.choice(string.ascii_lowercase) for _ in range(string_length))
+        # Check if it's already in the list
+        if new_string not in random_strings:
+            random_strings.append(new_string)
+    
+    
     process_num = len(file_list)
     if process_num > 4:
         process_num = 4
@@ -108,7 +127,7 @@ def run_container(mzML_data_folder):
     pool = Pool(processes=process_num)
     # pool.map(process, file_list)
 
-    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list), leave=None):
+    for _ in tqdm.tqdm(pool.imap(process, file_list,random_strings), total=len(file_list), leave=None):
             pass
 
     pool.close()
