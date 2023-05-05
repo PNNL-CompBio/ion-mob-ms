@@ -149,7 +149,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
         print("Annotations complete")
         time.sleep(3)
     #You can comment out .stop and .remove to use interactive mode with the AC_Container.
-    # myinstance.stop()
+    myinstance.stop()
     # AC_Container.remove()
     return local_mem
    

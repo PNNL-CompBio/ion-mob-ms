@@ -1,51 +1,32 @@
 Bootstrap: docker
-From: openjdk:buster
+From: python:3.7.16-bullseye
 Includecmd: no
 
 
 %files
     MZmine_FeatureFinder-batch.xml /Work/MZmine_FeatureFinder-batch.xml
     R_PARSE_II.R /Work/R_PARSE_II.R
-    # Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML /Work/Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML
-
+    MZmine_FeatureFinder_Modifier.py /Work/MZmine_FeatureFinder_Modifier.py
 
 %post
+    #install java
+    apt-get update && \
+    apt-get install -y openjdk-11-jdk
+
+    #install git
     apt-get -y update
     apt-get -y install wget unzip
     apt-get -y install git
 
+    #install mzmine
     wget https://github.com/mzmine/mzmine2/releases/download/v2.41.2/MZmine-2.41.2.zip
     unzip MZmine-2.41.2.zip
     rm MZmine-2.41.2.zip
-    
+    sed -i 's/TMP_FILE_DIRECTORY=\/tmp/TMP_FILE_DIRECTORY=\/Work\/tmp/' /MZmine-2.41.2/startMZmine_Linux.sh    
+
+    #install R    
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y r-base
     apt install -y r-cran-doparallel
-    # mkdir /Work/IV_Features_csv
-    # mkdir -p /home/vagrant/tmp
-    sed -i 's/TMP_FILE_DIRECTORY=\/tmp/TMP_FILE_DIRECTORY=\/home\/vagrant\/tmp/' /MZmine-2.41.2/startMZmine_Linux.sh
 
-    wget https://dl.min.io/server/minio/release/linux-amd64/minio
-    chmod +x minio
-    mv minio /usr/local/bin
-
-    wget https://dl.min.io/client/mc/release/linux-amd64/mc
-    chmod +x mc
-    mv mc /usr/local/bin
-
-%environment
-    NODE_ENV=development
-    ALLOW_HTTP=true
-    URL=localhost
-    export NODE_ENV PORT ALLOW_HTTP URL
-
-%startscript
-    mc alias set myminio http://localhost:9000 minio minio123
-
-    # this shouldn't be the full zipfile, just one of them
-    mc cp myminio/ion-mob-upload/mzMLData_ZipFile .
-    tar -xvf mzMLData_ZipFile
-
-    # Create mzML bucket in Pipeline_
-    mc cp ./*.mzML myminio/mzML_bucket/

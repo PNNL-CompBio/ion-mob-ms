@@ -43,6 +43,9 @@ if __name__ == '__main__':
     parser.add_argument('-c','--Calibrant', help='Calibrant File', nargs='?', const='',default='')
     args = vars(parser.parse_args())
 
+    print("Running Singularity Build Script")
+    subprocess.call("./singularity_builder.sh")
+
 
     #check if json file available. if so use it.
     

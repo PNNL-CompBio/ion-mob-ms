@@ -2,15 +2,12 @@ Bootstrap: docker
 From: python:3.8-buster
 Includecmd: no
 
-
 %files
     fix_metadata.py /Work/fix_metadata.py
     R_Metadata_I.R /Work/R_Metadata_I.R
     R_Annotate_features_V.R /Work/R_Annotate_features_V.R
 
-
 %post
-
     #update pip
     pip install --upgrade pip
 
@@ -22,16 +19,9 @@ Includecmd: no
     #install mzmine
     git clone https://github.com/PNNL-Comp-Mass-Spec/AutoCCS.git    
     pip install -r /AutoCCS/requirements.txt
-
+    pip install pandas==1.5.3
     #install R    
     apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y r-base
     apt install -y r-cran-doparallel
-
-       
-%environment
-    NODE_ENV=development
-    ALLOW_HTTP=true
-    URL=localhost
-    export NODE_ENV PORT ALLOW_HTTP URL
