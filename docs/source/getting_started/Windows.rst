@@ -17,8 +17,8 @@ As consolation, we've built in a caching system so the pipeline will
 continue where it was left off and no data will be lost.
 
 
-Windows Installation
-==============
+Installation
+---------------
 
 Two applications are required to run workflows: Docker Desktop, and 
 Ion_Mob_PC.exe (note to dev: this needs to be rebuilt).
