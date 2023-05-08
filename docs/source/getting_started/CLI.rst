@@ -64,7 +64,6 @@ Verbose Command Line Options
 
 
 .. list-table:: General Commands
-   :widths: 20 30 50
    
    * - Command Description
      - Path to Json
@@ -86,7 +85,6 @@ Verbose Command Line Options
 
 
 .. list-table:: Required Commands And Files for Each Experimental Pipeline Type
-   :widths: 20 30 50
    
    * - Experiment
      - Raw Data Folder
