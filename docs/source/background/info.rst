@@ -13,7 +13,7 @@ to an open-source format), detection of unique features, and calculation
 of collision-cross section (CCS). Numerous intermediate shell scripts are also integrated into this pipeline.
 
 IMS-MS Background
-=================
+-----------------
 
 Mass Spectrometry (MS) is used to identify and differentiate unknown
 molecules by comparing intensities and mass-to-charge-ratio (m/z). This
