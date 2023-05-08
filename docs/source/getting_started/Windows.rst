@@ -23,18 +23,16 @@ Installation
 Two applications are required to run workflows: Docker Desktop, and 
 Ion_Mob_PC.exe (note to dev: this needs to be rebuilt).
 
-| 1. Download
-  `Ion_Mob_PC.exe <https://github.com/PNNL-CompBio/ion-mob-ms/blob/main/Ion_Mob_PC.exe>`__
-| 2. Download `Docker Desktop for
-  Windows <https://docs.docker.com/desktop/windows/install/>`__
-| 3. Install WSL2 via PowerShell. Open “Powershell” as an 
-**Administrator**, then type the command: 
+| 1. Download `Ion_Mob_PC.exe <https://github.com/PNNL-CompBio/ion-mob-ms/blob/main/Ion_Mob_PC.exe>`__.
+| 2. Download `Docker Desktop for Windows <https://docs.docker.com/desktop/windows/install/>`__.
+| 3. Install WSL2 via PowerShell. Open “Powershell” as an  **Administrator**, then type the command: 
+  
+  
 .. code-block::
    
    wsl –install -d ubuntu
 
 
-| Note: If this doesn't work, follow instructions at 
-https://learn.microsoft.com/en-us/windows/wsl/install
-| 4. Restart computer
+| Note: If this doesn't work, follow instructions `here <https://learn.microsoft.com/en-us/windows/wsl/install/>`__. 
+| 4. Restart computer (for Docker setup).
 | 5. **First** open Docker Desktop, and then Ion_Mob_PC.exe.
