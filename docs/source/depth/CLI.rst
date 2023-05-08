@@ -3,11 +3,11 @@ General Command Line Usage
 
 This page is meant as a guide for running your own data using either AWS or an HPC. Follow setup commands on the respective pages.
 
-Command options for running this pipeline.  
 
-Two Command Line Options Exist for runing this pipeline.   
-1) Json File Input   
-2) Verbose Command  
+| Two Command Line Options Exist for runing this pipeline:   
+
+- Json File Input
+- Verbose Command
    
 **Example Commands**   
   
