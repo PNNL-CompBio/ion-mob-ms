@@ -1,6 +1,4 @@
 
-
-
 Mac Graphical User Interface
 ============================
 The Ion Mobility Dashboard was originally tested and developed on an 
@@ -21,8 +19,7 @@ Ion_Mob_MacOS (note to dev: this needs to be rebuilt).
 | 1. Download
   `Ion_Mob_MacOS.zip <https://zenodo.org/record/6941767#.YuRxcuzMIXA>`__.
   Ensure this is version 1.1, or “DOI 10.5281/zenodo.6941767”. 
-| 2. Download `Docker Desktop for Mac 
-<https://docs.docker.com/desktop/mac/install/>`__.
+| 2. Download `Docker Desktop for Mac <https://docs.docker.com/desktop/mac/install/>`__.
 | 3. Restart computer if prompted with Docker Desktop.
 | 4. Open Docker Desktop then Ion_Mob_MacOS.
 | **Note** Docker Desktop must be open before Ion_Mob_MacOS is started.
