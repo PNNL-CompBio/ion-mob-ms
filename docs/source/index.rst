@@ -351,7 +351,12 @@ Citation
 
 
 
+.. toctree::
+   :caption: Background
+   :maxdepth: 1
+   :hidden:
 
+   background/info
 
 
 .. toctree::
@@ -365,13 +370,6 @@ Citation
    getting_started/HPC
    getting_started/CLI
 
-
-.. toctree::
-   :caption: Background
-   :maxdepth: 1
-   :hidden:
-
-   background/info
 
 .. toctree::
    :caption: Troubleshooting
