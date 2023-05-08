@@ -353,15 +353,15 @@ Citation
 
 .. toctree::
    :caption: Background
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
 
    background/info
 
 
 .. toctree::
-   :caption: Getting Started
-   :maxdepth: 1
+   :caption: Installation and Setup
+   :maxdepth: 2
    :hidden:
    
    getting_started/Mac
@@ -372,8 +372,8 @@ Citation
 
 
 .. toctree::
-   :caption: Getting Started
-   :maxdepth: 1
+   :caption: Usage Directions
+   :maxdepth: 2
    :hidden:
    
    depth/CLI
@@ -381,7 +381,7 @@ Citation
 
 .. toctree::
    :caption: Troubleshooting
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
 
    troubleshooting/common_issues
