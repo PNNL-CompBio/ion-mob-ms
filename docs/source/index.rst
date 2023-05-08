@@ -372,6 +372,14 @@ Citation
 
 
 .. toctree::
+   :caption: Getting Started
+   :maxdepth: 1
+   :hidden:
+   
+   depth/CLI
+   depth/GUI
+
+.. toctree::
    :caption: Troubleshooting
    :maxdepth: 1
    :hidden:
