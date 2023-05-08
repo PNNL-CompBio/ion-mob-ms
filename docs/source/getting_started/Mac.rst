@@ -2,7 +2,7 @@
 
 
 Mac Graphical User Interface
-==============
+============================
 The Ion Mobility Dashboard was originally tested and developed on an 
 intel-based (x86 architecture) Mac. 
 Limited development has been performed on an M1 Mac due to an unsupported 
@@ -12,7 +12,7 @@ architecture on M1 but this has not been seen yet.
 
 
 Installation
-==============
+------------
 
 Two applications are required to run workflows: Docker Desktop, and 
 Ion_Mob_MacOS (note to dev: this needs to be rebuilt).
