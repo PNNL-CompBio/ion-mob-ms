@@ -333,6 +333,7 @@ Program <http://mzmine.github.io/>`__.
 AutoCCS Tool
 ------------
 
+
 Docker image and script to run `AutoCCS Python
 script <https://github.com/PNNL-Comp-Mass-Spec/AutoCCS>`__.
 
@@ -343,3 +344,40 @@ This is the GUI for the dashboard.
 
 Citation
 ========
+
+
+
+
+
+
+
+
+
+
+.. toctree::
+   :caption: Getting Started
+   :maxdepth: 1
+   :hidden:
+   
+   getting_started/Mac
+   getting_started/Windows
+   getting_started/AWS
+   getting_started/HPC
+
+
+.. toctree::
+   :caption: Background
+   :maxdepth: 1
+   :hidden:
+
+   background/index
+
+.. toctree::
+   :caption: Troubleshooting
+   :maxdepth: 1
+   :hidden:
+
+   troubleshooting/common_issues
+
+
+
