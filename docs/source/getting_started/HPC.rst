@@ -28,13 +28,15 @@ HPC Setup Commands
    
    python3 CLI_hpc.py --json sample.json
    
-**Run Test Data usuing SLURM Queue** 
+**Run Test Data using SLURM Queue** 
 
 .. code-block::  
    
    bash IMD_hpc_in_background.sh
    
-
+   
+SLURM options in IMD_hpc_in_background.sh will have to be modified to allow it to run on your own account. 
+For running large datasets, it is recommended to increase the number of available CPUS.
 
 To run your own data view General Command Line Usage <https://ionmobility.readthedocs.io/en/latest/getting_started/AWS.html/>`__.
 
