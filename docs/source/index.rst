@@ -370,7 +370,7 @@ Citation
    :maxdepth: 1
    :hidden:
 
-   background/index
+   background/info
 
 .. toctree::
    :caption: Troubleshooting
