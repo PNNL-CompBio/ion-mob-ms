@@ -65,7 +65,7 @@ Verbose Command Line Options
 
 
 .. list-table:: General Commands   
-   :class: longtable
+   :class: scrolltable
    
    * - Command Description
      - Path to Json
@@ -87,7 +87,7 @@ Verbose Command Line Options
 
 
 .. list-table:: Required Commands And Files for Each Experimental Pipeline Type  
-   :class: longtable
+   :class: scrolltable
    
    * - Experiment
      - Raw Data Folder
