@@ -5,11 +5,12 @@ This page is meant as a guide for running your own data using either AWS or an H
 
 Command options for running this pipeline.  
 
-Two Command Line Options Exist for runing this pipeline.
-1) Json File Input
-2) Verbose Command
+Two Command Line Options Exist for runing this pipeline.   
+1) Json File Input   
+2) Verbose Command  
+   
+**Example Commands**   
   
-**Example Commands**
 .. code-block::  
 
    python3 CLI_hpc.py --json sample.json
@@ -64,7 +65,7 @@ Verbose Command Line Options
 
 
 .. list-table:: General Commands   
-   
+   :class: longtable
    
    * - Command Description
      - Path to Json
@@ -86,7 +87,7 @@ Verbose Command Line Options
 
 
 .. list-table:: Required Commands And Files for Each Experimental Pipeline Type  
-   
+   :class: longtable
    
    * - Experiment
      - Raw Data Folder
