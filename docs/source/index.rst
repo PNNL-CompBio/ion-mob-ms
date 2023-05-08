@@ -363,6 +363,7 @@ Citation
    getting_started/Windows
    getting_started/AWS
    getting_started/HPC
+   getting_started/CLI
 
 
 .. toctree::
