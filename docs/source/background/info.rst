@@ -1,16 +1,16 @@
-Ion Mobility Mass Spec Dashboard
+Ion Mobility Dashboard
 ================================
 
-The Ion Mobility Mass Spec Dashboard is designed to allow scientists to
-generate results from raw Ion Mobility-Mass Spectrometry data without
+The Ion Mobility Dashboard is designed to allow scientists to
+generate results from PreProcessed Ion Mobility-Mass Spectrometry data without
 requiring assistance from an engineer or bioinformatician. This
-dashboard links four sequential command line tools into a single
+dashboard links several sequential command line tools into a single
 user-friendly application which communicates with Docker Desktop to
 dynamically spin up docker containers and manage the filesystem. Each
 tool has been dockerized and together they perform the following steps:
 quality control data processing, file type conversion (from proprietary
 to an open-source format), detection of unique features, and calculation
-of collision-cross section (CCS).
+of collision-cross section (CCS). Numerous intermediate shell scripts are also integrated into this pipeline.
 
 IMS-MS Background
 =================
