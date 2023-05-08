@@ -32,8 +32,7 @@ CCS, which is used to further differentiate between unknown molecules.
   DTIMS)
 | 3) Structures for Lossless Ion Manipulations (SLIM)  
    
-|
-
+   
 **Drift Tube Ion Mobility Spectrometry**  
   
 | DTIMS seperates ions by collision cross section. This works by
