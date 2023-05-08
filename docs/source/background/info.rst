@@ -32,10 +32,10 @@ CCS, which is used to further differentiate between unknown molecules.
   DTIMS)
 | 3) Structures for Lossless Ion Manipulations (SLIM)  
    
-   
+|      
 **Drift Tube Ion Mobility Spectrometry**  
   
-| DTIMS seperates ions by collision cross section. This works by
+DTIMS seperates ions by collision cross section. This works by
 accelerating ions through a straight tube filled with an inert buffer
 gas, as the ions pass through the tube, they bump into buffer gas
 molecules and are slowed down. Drift (retention) time is used as a
