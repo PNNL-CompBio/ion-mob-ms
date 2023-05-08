@@ -5,14 +5,12 @@ pipeline do work, there is an
 unidentified issue that will randomly cause Docker Desktop to freeze and 
 leave containers in an unrecoverable state. 
 This is due to the constant spinning up and down of containers and only 
-occurs during the Proteowizard or MZmine steps.
-
-| If Windows is your only option, this can still used. However, each time 
-Docker freezes, you will have to restart Docker and remove hanging 
-containers. 
+occurs during the Proteowizard or MZmine steps.   
+  
+If Windows is your only option, this can still used. However, each time Docker freezes, you will have to restart Docker and remove hanging containers. 
 It may be the case that you will have to restart your computer to get 
 Docker to unfreeze. The Ion Mobility Dashboard will also have to be 
-restarted.
+restarted.   
 As consolation, we've built in a caching system so the pipeline will 
 continue where it was left off and no data will be lost.
 
