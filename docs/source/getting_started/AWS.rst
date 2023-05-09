@@ -36,12 +36,19 @@ AWS Commands
    sudo usermod -a -G docker ec2-user
    cd ion-mob-ms
    pip3 install -r requirements_py3.7_CLI.txt
+    
+**Note:** for docker engine to finish configuration, you must refresh the page. To check that docker is running correctly use the following command.
+
+.. code-block::  
+   
+   docker info
+   
    
 **Run Test Data** 
 
 .. code-block::  
    
-   cd User_InterfaceV2
+   cd UserInterfaceV2
    python3 CLI.py --json sample.json
    
    
