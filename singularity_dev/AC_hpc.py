@@ -95,7 +95,8 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
 
     print("AC container running")
     shutil.copy(autoccs_config, os.path.join(save_mem,"CF"))
-    for file in glob.glob(feature_files):
+    
+    for file in list(pathlib.Path(feature_files).glob('*.csv')):
         shutil.copy(file, os.path.join(save_mem,"FF"))
     if exp == "single":
         for file in os.listdir(preP_files):
