@@ -32,8 +32,8 @@ print = timestamped_print
 #Set initial variables,
 #Determine local mem
 
-local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
-save_mem = os.path.join(os.getcwd(),"III_mzML")
+# local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
+# save_mem = os.path.join(os.getcwd(),"III_mzML")
 
 #This is the command that will be run in the container
 #Wine is used because Proteowizard/msconvert is a windows tool.
@@ -61,7 +61,7 @@ def onerror(func, path, exc_info):
         raise
 
 def process(filepath):
-    global image,local_mem,command_list,save_mem
+    global local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
 
     options = ["--bind", local_mem +":/III_mzML"]
@@ -102,15 +102,19 @@ def process(filepath):
     
     
     
-def run_container(raw_file_folder,exptype):
-    global image,local_mem,command_list,save_mem
+def run_container(raw_file_folder,III_mzML_loc,exptype):
+    global local_mem,command_list,save_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
-    local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
-    save_mem = os.path.join(os.getcwd(),"III_mzML")
+    # local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
+    # save_mem = os.path.join(os.getcwd(),"III_mzML")
+    save_mem = III_mzML_loc
+    local_mem = III_mzML_loc + "_tmp"
     print("ProteoWizard Working Directory: ", local_mem)
-    os.makedirs("./III_mzML", exist_ok = True)
-    os.makedirs("./III_mzML_tmp", exist_ok = True)
+    os.makedirs(save_mem, exist_ok = True)
+    if os.path.exists(local_mem):
+        shutil.rmtree(local_mem)
+    os.makedirs(local_mem, exist_ok = True)
 
     file_list = list(pathlib.Path(raw_file_folder).glob('*'))
 
@@ -139,7 +143,7 @@ def run_container(raw_file_folder,exptype):
     #   VALUE: a tuple of (<filepath>, <filename suffix>)
     raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
     # Get list of already processed file
-    file_list_processed = list(pathlib.Path("./III_mzML").glob('*'))
+    file_list_processed = list(pathlib.Path(save_mem).glob('*'))
     # Build a dict of all files in already-processed-directory of
     #   KEY: <filename without suffix>
     #   VALUE: a tuple of (filepath, suffix)

@@ -76,14 +76,22 @@ def process(input_args):
     myinstance.stop()
     time.sleep(2)
 
-def run_container(mzML_data_folder):
+def run_container(mzML_data_folder,Feature_data_loc):
     global local_mem, save_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
     save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
-    os.makedirs("./IV_Features_csv_tmp", exist_ok=True)
-    os.makedirs("./IV_Features_csv", exist_ok=True)
+    
+    save_mem = Feature_data_loc
+    local_mem = Feature_data_loc + "_tmp"
+    # os.makedirs("./IV_Features_csv_tmp", exist_ok=True)
+    # os.makedirs("./IV_Features_csv", exist_ok=True)
+    os.makedirs(save_mem, exist_ok = True)
+    if os.path.exists(local_mem):
+        shutil.rmtree(local_mem)
+    os.makedirs(local_mem, exist_ok = True)
+    
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
 
@@ -93,7 +101,7 @@ def run_container(mzML_data_folder):
     #   VALUE: a tuple of (<filepath>, <filename suffix>)
     raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
     # Get list of already processed file
-    file_list_processed = list(pathlib.Path("./IV_Features_csv").glob('*'))
+    file_list_processed = list(pathlib.Path(save_mem).glob('*'))
     # Build a dict of all files in already-processed-directory of
     #   KEY: <filename without suffix>
     #   VALUE: a tuple of (filepath, suffix)
