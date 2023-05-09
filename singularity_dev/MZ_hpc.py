@@ -40,8 +40,8 @@ save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
 def process(input_args):
     global image,local_mem,command_list,save_mem
     filepath = input_args[0]
-    tmp_mount =  input_args[1]
-    tmp_mount_mem = os.path.join(os.getcwd(),"IV_Features_tmp_mount",tmp_mount)
+    tmp_mount =  input_args[1]    
+    tmp_mount_mem = os.path.join(local_mem + "_mount",tmp_mount)
     os.makedirs(tmp_mount_mem, exist_ok=True)
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
