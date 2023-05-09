@@ -149,12 +149,11 @@ def run_container(raw_file_folder,exptype):
     # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
-    #This limits containers to 10 at a time. This is important for running locally.
-    #If this ever hits the cloud, "the limit does not exist!"
+
     #This generates subprocesses - each subprocess runs a container which runs one file.
     process_num = len(file_list)
-    if process_num > 48:
-        process_num = 48
+    if process_num > os.cpu_count():
+        process_num = os.cpu_count()
 
     if process_num == 0:
         return save_mem

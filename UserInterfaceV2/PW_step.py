@@ -151,8 +151,13 @@ def run_container(raw_file_folder,exptype):
     #If this ever hits the cloud, "the limit does not exist!"
     #This generates subprocesses - each subprocess runs a container which runs one file.
     process_num = len(file_list)
-    if process_num > 4:
-        process_num = 4
+    
+    cpu_count = os.cpu_count()
+    if cpu_count > 6:
+        cpu_count -= 2
+
+    if process_num > cpu_count:
+        process_num = cpu_count
 
     if process_num == 0:
         return save_mem

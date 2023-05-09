@@ -121,8 +121,9 @@ def run_container(mzML_data_folder):
     process_args = zip(file_list, random_strings)    
     
     process_num = len(file_list)
-    if process_num > 48:
-        process_num = 48
+    
+    if process_num > os.cpu_count():
+        process_num = os.cpu_count()
 
     if process_num == 0:
         return local_mem
