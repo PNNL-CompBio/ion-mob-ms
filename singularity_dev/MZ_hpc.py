@@ -38,7 +38,7 @@ local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
 save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
 
 def process(input_args):
-    global local_mem,save_mem,tmp_mount_mem
+    global local_mem,save_mem
     filepath = input_args[0]
     tmp_mount =  input_args[1]    
     tmp_mount_mem = os.path.join(local_mem + "_mount",tmp_mount)
@@ -77,7 +77,7 @@ def process(input_args):
     time.sleep(2)
 
 def run_container(mzML_data_folder,Feature_data_loc):
-    global local_mem, save_mem,tmp_mount_mem
+    global local_mem, save_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
@@ -146,7 +146,7 @@ def run_container(mzML_data_folder,Feature_data_loc):
     pool.join()
     
     shutil.rmtree(local_mem)
-    shutil.rmtree(tmp_mount_mem)
+    shutil.rmtree(local_mem + "_mount")
     return local_mem
 
 
