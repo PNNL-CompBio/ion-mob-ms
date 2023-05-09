@@ -117,7 +117,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
         shutil.copy(raw_file_metadata, os.path.join(save_mem,"MD"))
         shutil.copy(calibrant_file, os.path.join(save_mem,"CBF"))
     if version == "enhanced":
-        for file in glob.glob(framemeta_files):
+        for file in list(pathlib.Path(framemeta_files).glob('*.txt')):
             shutil.copy(file, os.path.join(save_mem,"FMF"))
     if exp == "step":
         shutil.copy(target_list_file, os.path.join(save_mem,"TLF"))
