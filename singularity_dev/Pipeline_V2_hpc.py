@@ -29,6 +29,8 @@ print = timestamped_print
 #It receives a json file, which includes the desired tools, and experiment type.
 #It runs through each step until completion or failure.
 
+print("CPUs detected: ",os.cpu_count()) 
+
 def execute_workflow(json_file):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
