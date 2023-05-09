@@ -32,9 +32,6 @@ print = timestamped_print
 #Set initial variables,
 #Determine local mem
 
-# local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
-# save_mem = os.path.join(os.getcwd(),"III_mzML")
-
 #This is the command that will be run in the container
 #Wine is used because Proteowizard/msconvert is a windows tool.
 
@@ -70,12 +67,8 @@ def process(filepath):
 
     time.sleep(1)
     print("Container started: ", PW_container)
-    
     PW_container = myinstance.name
-    
-
     shutil.copytree(file_path,os.path.join(local_mem,os.path.basename(file_path)))
-    
     print("Files copied to container: ", PW_container)
     command_list.pop()
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
@@ -104,10 +97,7 @@ def process(filepath):
     
 def run_container(raw_file_folder,III_mzML_loc,exptype):
     global local_mem,command_list,save_mem
-    cur_dir = os.path.dirname(__file__)
-    os.chdir(cur_dir)
-    # local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
-    # save_mem = os.path.join(os.getcwd(),"III_mzML")
+    
     save_mem = III_mzML_loc
     local_mem = III_mzML_loc + "_tmp"
     print("ProteoWizard Working Directory: ", local_mem)

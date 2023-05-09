@@ -30,8 +30,7 @@ print = timestamped_print
 #Determine local mem
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
-local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
-save_mem = os.path.join(os.getcwd(),"III_mzML")
+
 # command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
 #This is the command that will be run in the container
@@ -66,10 +65,6 @@ def process(filepath):
     time.sleep(1)
     print("Container started: ", cont_name)
     PW_container = client.containers.get(cont_name)
-    copy_dst = cont_name + ":/III_mzML/"
-    # copy_a_file(client, file_path,copy_dst)
-    # print("SOURCE:" , file_path)
-    # print("DEST:" , os.path.join(local_mem,os.path.basename(file_path)))
     shutil.copytree(file_path,os.path.join(local_mem,os.path.basename(file_path)))
     
     print("Files copied to container: ", cont_name)
@@ -77,7 +72,6 @@ def process(filepath):
     command_list.append(("/III_mzML/" + os.path.basename(file_path)))
     print("Proteowizard msconvert started in container: ",cont_name)
     time.sleep(1)
-    # print("Command:",command_list)
     PW_container.exec_run(cmd=command_list)
     print("Proteowizard completed in container: ", cont_name)
 
@@ -100,15 +94,16 @@ def process(filepath):
     
     
     
-def run_container(raw_file_folder,exptype):
+def run_container(raw_file_folder,III_mzML_loc,exptype):
     global client,image,local_mem,command_list,save_mem
-    cur_dir = os.path.dirname(__file__)
-    os.chdir(cur_dir)
-    local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
-    save_mem = os.path.join(os.getcwd(),"III_mzML")
+
+    save_mem = III_mzML_loc
+    local_mem = III_mzML_loc + "_tmp"
     print("ProteoWizard Working Directory: ", local_mem)
-    os.makedirs("./III_mzML", exist_ok = True)
-    os.makedirs("./III_mzML_tmp", exist_ok = True)
+    os.makedirs(save_mem, exist_ok = True)
+    if os.path.exists(local_mem):
+        shutil.rmtree(local_mem)
+    os.makedirs(local_mem, exist_ok = True)
 
     file_list = list(pathlib.Path(raw_file_folder).glob('*'))
 
@@ -137,7 +132,7 @@ def run_container(raw_file_folder,exptype):
     #   VALUE: a tuple of (<filepath>, <filename suffix>)
     raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
     # Get list of already processed file
-    file_list_processed = list(pathlib.Path("./III_mzML").glob('*'))
+    file_list_processed = list(pathlib.Path(save_mem).glob('*'))
     # Build a dict of all files in already-processed-directory of
     #   KEY: <filename without suffix>
     #   VALUE: a tuple of (filepath, suffix)
@@ -162,22 +157,9 @@ def run_container(raw_file_folder,exptype):
     if process_num == 0:
         return save_mem
     pool = Pool(processes=process_num)
-    # pool.map(process, file_list)
-    # for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list), leave=None):
-    #     pass
 
-    # with Pool(processes=process_num) as pool:
-    #     progress_bar = tqdm.tqdm(total=len(file_list))
-    #     results = tqdm.tqdm(pool.imap(process, file_list), total=len(file_list))
-    #     tuple(results)
-
-    # progress_bar.close()
     for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
         pass
-    # print(_)
-    # _.close()
-
-
 
     pool.close()
     pool.join()
