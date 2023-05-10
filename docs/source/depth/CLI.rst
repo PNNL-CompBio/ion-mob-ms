@@ -31,7 +31,8 @@ JSON Input Requirements
 
 Some potential bugs currently exist with file pathing. Note to dev - fix this.  
 
-Both relative and absolute paths are planned to be configured to work with this.  
+The use of absolute paths is **required** for any docker mounts, this consists of the three files in the example that use absolue paths.  
+Either relative or absolute paths can be used to specify data locations.
 
 **Example JSON File** 
   
@@ -49,11 +50,12 @@ Both relative and absolute paths are planned to be configured to work with this.
        },
        {
            "PreProcessed Data Folder": "../test-data/SteppedField/II_Preprocessed",
-           "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata/*.txt",
+           "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata",
            "AutoCCS Config File": "../test-data/SteppedField/autoCCS_config.xml",
            "Target List File": "../test-data/SteppedField/TargetList_NeutralMass.csv",
            "mzML Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/III_mzML",
-           "Feature Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/IV_Features_csv/*.csv"
+           "Feature Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/IV_Features_csv",
+           "AutoCCS Results": "/people/jaco059/ion-mob-ms/singularity_dev/IV_data"
        }
    ]
 
@@ -86,66 +88,126 @@ Verbose Command Line Options
 
 
 
-.. list-table:: Required Commands And Files for Each Experimental Pipeline Type  
+
+.. list-table:: Required Commands And Files for **SingleField** Data
    :class: scrolltable
    
    * - Experiment
-     - Raw Data Folder
      - PreProcessed Data Folder
      - mzML Data Folder
      - Feature Data Folder
      - IMS Metadata Folder
      - AutoCCS Config File
      - Target List File
-     - Metadata File
      - Calibrant File
+     - AutoCCS Results
    * - Command 
-     - ``--Raw``
      - ``--PP``
      - ``--mzML``
      - ``--FF``
      - ``--IMSMeta``
      - ``--ACConfig``
      - ``--TLF``
-     - ``--MetadataFile``
      - ``--Calibrant``
+     - ``--AutoCCS``
    * - Command Shorthand
-     - ``-r``
      - ``-p``
      - ``-m``
      - ``-f``
      - ``-i``
      - ``-a``
      - ``-s``
+     - ``-c``
+     - ``-o``
+   * - Required 
+     - Yes
+     - Optional
+     - Optional
+     - Recommended
+     - Yes
+     - Recommended
+     - Yes
+     - Optional
+
+
+
+
+.. list-table:: Required Commands And Files for **SteppedField** Data
+   :class: scrolltable
+   
+   * - Experiment
+     - PreProcessed Data Folder
+     - mzML Data Folder
+     - Feature Data Folder
+     - IMS Metadata Folder
+     - AutoCCS Config File
+     - Target List File
+     - AutoCCS Results
+   * - Command 
+     - ``--PP``
+     - ``--mzML``
+     - ``--FF``
+     - ``--IMSMeta``
+     - ``--ACConfig``
+     - ``--TLF``
+     - ``--AutoCCS``
+   * - Command Shorthand
+     - ``-p``
+     - ``-m``
+     - ``-f``
+     - ``-i``
+     - ``-a``
+     - ``-s``
+     - ``-o``
+   * - Required 
+     - Yes
+     - Optional
+     - Optional
+     - Yes
+     - Yes
+     - Yes
+     - Optional
+
+
+
+
+
+.. list-table:: Required Commands And Files for **SLIM** Data
+   :class: scrolltable
+   
+   * - Experiment
+     - PreProcessed Data Folder
+     - mzML Data Folder
+     - Feature Data Folder
+     - AutoCCS Config File
+     - Target List File
+     - Metadata File
+     - Calibrant File
+     - AutoCCS Results
+   * - Command 
+     - ``--PP``
+     - ``--mzML``
+     - ``--FF``
+     - ``--ACConfig``
+     - ``--TLF``
+     - ``--MetadataFile``
+     - ``--Calibrant``
+     - ``--AutoCCS``
+   * - Command Shorthand
+     - ``-p``
+     - ``-m``
+     - ``-f``
+     - ``-a``
+     - ``-s``
      - ``-z``
      - ``-c``
-   * - SingleField 
-     - NA
+     - ``-o``
+   * - Required
      - Yes
-     - No
-     - No
-     - Recommended
-     - Yes
-     - Recommended
-     - No
-     - Yes
-   * - SteppedField 
-     - NA
-     - Yes
-     - No
-     - No
-     - Yes
-     - Yes
-     - Yes
-     - No
-     - No
-   * - SLIM
-     - NA
-     - Yes
-     - No
-     - No
-     - No
+     - Optional
+     - Optional
      - Yes
      - Optional
      - Yes
      - Yes
+     - Optional
