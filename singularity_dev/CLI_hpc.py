@@ -80,21 +80,21 @@ if __name__ == '__main__':
             if args["ExpType"] == "Single":
                 if args["PP"] != '' and args["FF"] != '' and args["Calibrant"] != '' and args["ACConfig"] != '' and args["AutoCCS"] != '':
                     file_dict["PreProcessed Data Folder"] = args["PP"]
-                    file_dict["IMS Metadata Folder (optional)"] = os.path.join(args["IMSMeta"], "*.txt")
-                    file_dict["Feature Data Folder"] = os.path.join(args["FF"], "*.csv")
+                    file_dict["IMS Metadata Folder (optional)"] = os.path.join(args["IMSMeta"])
+                    file_dict["Feature Data Folder"] = os.path.join(args["FF"])
                     file_dict["Calibrant File"] = args["Calibrant"]
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
                     if args["TLF"] != '':
                         file_dict["Target List File (optional)"] = args["TLF"]
                     if args["IMSMeta"] != '':
-                        file_dict["IMS Metadata Folder (optional)"] = os.path.join(args["IMSMeta"], "*.txt")
+                        file_dict["IMS Metadata Folder (optional)"] = os.path.join(args["IMSMeta"])
                 else: 
                     sys.exit("Missing required file(s)")
                     
             if args["ExpType"] == "SLIM":
                 if args["FF"] != '' and args["MetadataFile"] != '' and args["Calibrant"] != '' and args["ACConfig"] != '' and args["AutoCCS"] != '':
-                    file_dict["Feature Data Folder"] = os.path.join(args["FF"], "*.csv")
+                    file_dict["Feature Data Folder"] = os.path.join(args["FF"])
                     file_dict["Metadata File"] = args["MetadataFile"]
                     file_dict["Calibrant File"] = args["Calibrant"]
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
@@ -106,8 +106,8 @@ if __name__ == '__main__':
                 
             if args["ExpType"] == "Stepped":
                 if args["FF"] != '' and args["IMSMeta"] != '' and args["ACConfig"] != '' and args["TLF"] != '' and args["AutoCCS"] != '':
-                    file_dict["Feature Data Folder"] = os.path.join(args["FF"], "*.csv")
-                    file_dict["IMS Metadata Folder"] = os.path.join(args["IMSMeta"], "*.txt")
+                    file_dict["Feature Data Folder"] = os.path.join(args["FF"])
+                    file_dict["IMS Metadata Folder"] = os.path.join(args["IMSMeta"])
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
                     file_dict["Target List File"] = args["TLF"]
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
@@ -125,11 +125,11 @@ if __name__ == '__main__':
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
                     #tmp folders
                     file_dict["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
-                    file_dict["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv","*.csv")
+                    file_dict["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
                     if args["TLF"] != '':
                         file_dict["Target List File (optional)"] = args["TLF"]
                     if args["IMSMeta"] != '':
-                        file_dict["IMS Metadata Folder (optional)"] = os.path.join(args["IMSMeta"], "*.txt")
+                        file_dict["IMS Metadata Folder (optional)"] = os.path.join(args["IMSMeta"])
                 else: 
                     sys.exit("Missing required file(s)")
 
@@ -142,7 +142,7 @@ if __name__ == '__main__':
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
                     #tmp folders
                     file_dict["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
-                    file_dict["Feature Data Folder"] =os.path.join(os.path.dirname(__file__),"IV_Features_csv","*.csv")
+                    file_dict["Feature Data Folder"] =os.path.join(os.path.dirname(__file__),"IV_Features_csv")
                     if args["TLF"] != '':
                         file_dict["Target List File (optional)"] = args["TLF"]
                   
@@ -152,13 +152,13 @@ if __name__ == '__main__':
             if args["ExpType"] == "Stepped":
                 if args["PP"] != '' and args["IMSMeta"] != '' and args["ACConfig"] != '' and args["TLF"] != '' and args["AutoCCS"] != '':
                     file_dict["PreProcessed Data Folder"] = args["PP"]
-                    file_dict["IMS Metadata Folder"] =  os.path.join(args["IMSMeta"], "*.txt")
+                    file_dict["IMS Metadata Folder"] =  os.path.join(args["IMSMeta"])
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
                     file_dict["Target List File"] = args["TLF"]
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
                     #tmp folders
                     file_dict["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
-                    file_dict["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv","*.csv")
+                    file_dict["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
                 else: 
                     sys.exit("Missing required file(s)")
 

@@ -33,10 +33,6 @@ def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
 
-local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
-
-save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
-
 def process(input_args):
     global local_mem,save_mem
     filepath = input_args[0]
@@ -47,9 +43,7 @@ def process(input_args):
     file_name = os.path.basename(file_path)
     options = ["--writable-tmpfs","--bind", local_mem + ":/Work/III_mzML", "--bind", tmp_mount_mem+":/Work/tmp"]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
-    myinstance = Client.instance('./mzmine_updated.sif', options=options)
-    MZ_container = myinstance.name
-        
+    myinstance = Client.instance('./mzmine_updated.sif', options=options)        
     command_list_0 = """Rscript /Work/R_PARSE_II.R"""
 # doesnt work    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
 #    command_list_0 = """Rscript -e 'source("R_PARSE_II.R"); ParseDTasRTmzML(1,"/Work/III_mzML/""" + file_name + """")'"""    
@@ -80,11 +74,6 @@ def process(input_args):
 
 def run_container(mzML_data_folder,Feature_data_loc):
     global local_mem, save_mem
-    cur_dir = os.path.dirname(__file__)
-    os.chdir(cur_dir)
-    local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
-    save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
-    
     save_mem = Feature_data_loc
     local_mem = Feature_data_loc + "_tmp"
     # os.makedirs("./IV_Features_csv_tmp", exist_ok=True)

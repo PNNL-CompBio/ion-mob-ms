@@ -11,6 +11,7 @@ import time
 import platform
 import shutil
 import glob
+import pathlib
 from datetime import datetime
 
 #add timestamps to print
@@ -24,10 +25,10 @@ print = timestamped_print
 command_0 = """Rscript /R_Metadata_I.R"""
 command_tmp_fix_for_0 = """python3.8 /fix_metadata.py"""
 command_annotate = """Rscript /R_Annotate_features_V.R"""
-local_mem = os.path.join(os.getcwd(), "IV_data")
+save_mem = os.path.join(os.getcwd(), "IV_data")
 
 
-def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config):
+def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config,autoccs_loc):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
@@ -55,18 +56,21 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
        
     #This prints where the local files are being saved to. (With pyinstaller, this is a temporary folder)
-    print("Local memory is: ", local_mem)
-    #Image name
-    image = "anubhav0fnu/autoccs"    
+    print("Local memory is: ", save_mem)
+    
+    print("Save memory is: ", autoccs_loc)
+    
     #Make file system
-    os.makedirs("./IV_data/PP", exist_ok=True)
-    os.makedirs("./IV_data/CF", exist_ok=True)
-    os.makedirs("./IV_data/TLF", exist_ok=True)
-    os.makedirs("./IV_data/FF", exist_ok=True)
-    os.makedirs("./IV_data/IV_Results", exist_ok=True)
-    os.makedirs("./IV_data/FMF", exist_ok=True)
-    os.makedirs("./IV_data/MD", exist_ok=True)
-    os.makedirs("./IV_data/CBF", exist_ok=True)
+    os.makedirs(autoccs_loc + "/PP", exist_ok=True)
+    os.makedirs(autoccs_loc +"/CF", exist_ok=True)
+    os.makedirs(autoccs_loc +"/TLF", exist_ok=True)
+    os.makedirs(autoccs_loc +"/FF", exist_ok=True)
+    os.makedirs(autoccs_loc +"/IV_Results", exist_ok=True)
+    os.makedirs(autoccs_loc +"/FMF", exist_ok=True)
+    os.makedirs(autoccs_loc +"/MD", exist_ok=True)
+    os.makedirs(autoccs_loc +"/CBF", exist_ok=True)
+    #Image name
+    image = "anubhav0fnu/autoccs"   
     time.sleep(3)
     print("AutoCCS IV_data filesystem created")
     #start container
@@ -75,40 +79,39 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     #Container is interactive. You can open a terminal (recc: then use bash) and see data & manually run autoCCS.
     client = docker.from_env()
     print("AutoCCS Container Started")
-    client.containers.run(image,name="AC_container",volumes={local_mem: {'bind': '/tmp', 'mode': 'rw'}}, detach=True, tty=True)
+    client.containers.run(image,name="AC_container",volumes={save_mem: {'bind': '/tmp', 'mode': 'rw'}}, detach=True, tty=True)
     AC_Container = client.containers.get('AC_container')
 
     print("AC container running")
-    shutil.copy(autoccs_config, os.path.join(local_mem,"CF"))
-    for file in glob.glob(feature_files):
-        shutil.copy(file, os.path.join(local_mem,"FF"))
+    shutil.copy(autoccs_config, os.path.join(save_mem,"CF"))
+    for file in list(pathlib.Path(feature_files).glob('*.csv')):
+        shutil.copy(file, os.path.join(save_mem,"FF"))
     if exp == "single":
         for file in os.listdir(preP_files):
             d = os.path.join(preP_files, file)
-            print(d)
             if os.path.isdir(d):
                 if platform.system().upper() == "WINDOWS":
-                    shutil.copytree("\\\\?\\" + d, os.path.join("\\\\?\\" + local_mem,"PP",file))
+                    shutil.copytree("\\\\?\\" + d, os.path.join("\\\\?\\" + save_mem,"PP",file))
                 else:
-                    shutil.copytree(d, os.path.join(local_mem,"PP",file))
+                    shutil.copytree(d, os.path.join(save_mem,"PP",file))
             else:
                 if platform.system().upper() == "WINDOWS":
-                    shutil.copy("\\\\?\\" + d, os.path.join("\\\\?\\" + local_mem,"PP",file))
+                    shutil.copy("\\\\?\\" + d, os.path.join("\\\\?\\" + save_mem,"PP",file))
                 else:
-                    shutil.copy(d, os.path.join(local_mem,"PP",file))
+                    shutil.copy(d, os.path.join(save_mem,"PP",file))
         
-        shutil.copy(calibrant_file, os.path.join(local_mem,"CBF"))
+        shutil.copy(calibrant_file, os.path.join(save_mem,"CBF"))
     if exp == "slim":
-        shutil.copy(raw_file_metadata, os.path.join(local_mem,"MD"))
-        shutil.copy(calibrant_file, os.path.join(local_mem,"CBF"))
+        shutil.copy(raw_file_metadata, os.path.join(save_mem,"MD"))
+        shutil.copy(calibrant_file, os.path.join(save_mem,"CBF"))
     if version == "enhanced":
-        for file in glob.glob(framemeta_files):
-            shutil.copy(file, os.path.join(local_mem,"FMF"))
+        for file in list(pathlib.Path(framemeta_files).glob('*.txt')):
+            shutil.copy(file, os.path.join(save_mem,"FMF"))
     if exp == "step":
-        shutil.copy(target_list_file, os.path.join(local_mem,"TLF"))
+        shutil.copy(target_list_file, os.path.join(save_mem,"TLF"))
     time.sleep(5)
     if annotate == True:
-        shutil.copy(target_list_file, os.path.join(local_mem,"TLF"))
+        shutil.copy(target_list_file, os.path.join(save_mem,"TLF"))
 
     #single field performs automated metadata extraction.
     #If this is ever not working, code can be modified to include this. See Notes in UI_V2.py.
@@ -133,5 +136,5 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     #You can comment out .stop and .remove to use interactive mode with the AC_Container.
     AC_Container.stop()
     AC_Container.remove()
-    return local_mem
+    return save_mem
    

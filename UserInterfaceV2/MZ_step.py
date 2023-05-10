@@ -27,9 +27,6 @@ print = timestamped_print
 
 client = docker.from_env()
 image = "anubhav0fnu/mzmine:latest"
-local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
-save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
-
 
 #This is the command line usage. Nice and simple. Must be run from the MZmine folder. This is in linux!!
 #It first requires modification of a xml batch file (below with sed).
@@ -59,7 +56,7 @@ def copy_some_files(client, src_list,dst):
 
 
 def process(filepath):
-    global client,image,local_mem,command_list_2
+    global client,image,local_mem,save_mem,command_list_2
     time.sleep(2)
     file_path = str(filepath.absolute())
     cont_name = ("MZ_container_" + os.path.basename(file_path))
@@ -94,14 +91,17 @@ def process(filepath):
 
 
 
-def run_container(mzML_data_folder):
-    global client,image,local_mem,command_list_2
-    cur_dir = os.path.dirname(__file__)
-    os.chdir(cur_dir)
-    local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
-    save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
-    os.makedirs("./IV_Features_csv_tmp", exist_ok=True)
-    os.makedirs("./IV_Features_csv", exist_ok=True)
+def run_container(mzML_data_folder,Feature_data_loc):
+    global client,image,local_mem,save_mem,command_list_2
+    
+    save_mem = Feature_data_loc
+    local_mem = Feature_data_loc + "_tmp"
+    
+    os.makedirs(save_mem, exist_ok = True)
+    if os.path.exists(local_mem):
+        shutil.rmtree(local_mem)
+    os.makedirs(local_mem, exist_ok = True)
+    
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
 
@@ -111,7 +111,7 @@ def run_container(mzML_data_folder):
     #   VALUE: a tuple of (<filepath>, <filename suffix>)
     raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
     # Get list of already processed file
-    file_list_processed = list(pathlib.Path("./IV_Features_csv").glob('*'))
+    file_list_processed = list(pathlib.Path(save_mem).glob('*'))
     # Build a dict of all files in already-processed-directory of
     #   KEY: <filename without suffix>
     #   VALUE: a tuple of (filepath, suffix)
@@ -122,7 +122,8 @@ def run_container(mzML_data_folder):
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
     
-
+    
+    process_num = len(file_list)    
     cpu_count = os.cpu_count()
     if cpu_count > 6:
         cpu_count -= 2
@@ -141,4 +142,6 @@ def run_container(mzML_data_folder):
 
     pool.close()
     pool.join()
+    
+    shutil.rmtree(local_mem)
     return local_mem
