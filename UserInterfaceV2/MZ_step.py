@@ -123,7 +123,7 @@ def run_container(mzML_data_folder,Feature_data_loc):
     print(f'found unprocessed files count: {len(file_list)}')
     
     
-    
+    process_num = len(file_list)    
     cpu_count = os.cpu_count()
     if cpu_count > 6:
         cpu_count -= 2
