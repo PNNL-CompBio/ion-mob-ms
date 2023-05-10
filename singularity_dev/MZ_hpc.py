@@ -68,13 +68,15 @@ def process(input_args):
 
     print("Instance complete: ",myinstance,"   ",filepath)
     current_loc = (os.path.join(local_mem,os.path.basename(file_path)))
+    os.remove(current_loc)
     current_loc = current_loc + "_c_dc_de.csv"
     mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
     mv_loc = mv_loc + "_c_dc_de.csv"
-    Path(current_loc).rename(mv_loc)
-
-    myinstance.stop()
     time.sleep(2)
+    Path(current_loc).rename(mv_loc)
+    time.sleep(1)
+    myinstance.stop()
+    time.sleep(1)
 
 def run_container(mzML_data_folder,Feature_data_loc):
     global local_mem, save_mem
@@ -91,6 +93,12 @@ def run_container(mzML_data_folder,Feature_data_loc):
     if os.path.exists(local_mem):
         shutil.rmtree(local_mem)
     os.makedirs(local_mem, exist_ok = True)
+    if os.path.exists(local_mem +"_mount"):
+        shutil.rmtree(local_mem +"_mount")
+    os.makedirs((local_mem + "_mount"), exist_ok = True)
+
+
+
     
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
@@ -130,8 +138,8 @@ def run_container(mzML_data_folder,Feature_data_loc):
     
     process_num = len(file_list)
     
-    if process_num > os.cpu_count():
-        process_num = os.cpu_count()
+    if process_num > (round(os.cpu_count() * .6) -1):
+        process_num = (round(os.cpu_count() * .6) -1)
 
     if process_num == 0:
         return local_mem

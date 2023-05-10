@@ -156,8 +156,8 @@ def run_container(raw_file_folder,III_mzML_loc,exptype):
 
     #This generates subprocesses - each subprocess runs a container which runs one file.
     process_num = len(file_list)
-    if process_num > os.cpu_count():
-        process_num = os.cpu_count()
+    if process_num > (os.cpu_count() -2):
+        process_num = (os.cpu_count() -2)
 
     if process_num == 0:
         return save_mem
