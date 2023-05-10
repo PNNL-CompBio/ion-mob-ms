@@ -3,7 +3,6 @@ This is a workflow for analyzing Ion Mobility - Mass Spectrometry data. The prim
 
 The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed at our [Documentation](https://ionmobility.readthedocs.io/en/latest/background/info.html) site.
 
-Current reports: 
 
 ## Availability
 **Windows** GUI executable **NOT** up to date.   
