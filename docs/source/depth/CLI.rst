@@ -87,7 +87,7 @@ Verbose Command Line Options
 
      
      
-.. list-table:: Required Commands And Files for **SLIM** Data
+.. list-table:: Required Commands And Files For Each **Pipeline**
    :class: scrolltable
    
    * - Experiment
