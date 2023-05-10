@@ -113,14 +113,13 @@ if __name__ == '__main__':
         #workflows
         if len(args["ToolType"]) > 1:
             if args["ExpType"] == "Single":
-                if args["PP"] != '' and args["Calibrant"] != '' and args["ACConfig"] != '' and args["AutoCCS"] != '':
+                if args["PP"] != '' and args["Calibrant"] != '' and args["ACConfig"] != '' and args["AutoCCS"] != '' and args["mzML"] != '' and args["FF"] != '':
                     file_dict["PreProcessed Data Folder"] = args["PP"]
                     file_dict["Calibrant File"] = args["Calibrant"]
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
-                    #tmp folders
-                    file_dict["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
-                    file_dict["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
+                    file_dict["mzML Data Folder"] = args["mzML"]
+                    file_dict["Feature Data Folder"] =args["FF"]
                     if args["TLF"] != '':
                         file_dict["Target List File (optional)"] = args["TLF"]
                     if args["IMSMeta"] != '':
@@ -129,15 +128,14 @@ if __name__ == '__main__':
                     sys.exit("Missing required file(s)")
 
             if args["ExpType"] == "SLIM":
-                if args["PP"] != '' and args["MetadataFile"] != '' and args["Calibrant"] != '' and args["ACConfig"] != '' and args["AutoCCS"] != '':
+                if args["PP"] != '' and args["MetadataFile"] != '' and args["Calibrant"] != '' and args["ACConfig"] != '' and args["AutoCCS"] != '' and args["mzML"] != '' and args["FF"] != '':
                     file_dict["PreProcessed Data Folder"] = args["PP"]
                     file_dict["Metadata File"] = args["MetadataFile"]
                     file_dict["Calibrant File"] = args["Calibrant"]
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
-                    #tmp folders
-                    file_dict["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
-                    file_dict["Feature Data Folder"] =os.path.join(os.path.dirname(__file__),"IV_Features_csv")
+                    file_dict["mzML Data Folder"] = args["mzML"]
+                    file_dict["Feature Data Folder"] =args["FF"]
                     if args["TLF"] != '':
                         file_dict["Target List File (optional)"] = args["TLF"]
                   
@@ -145,15 +143,14 @@ if __name__ == '__main__':
                     sys.exit("Missing required file(s)")
                     
             if args["ExpType"] == "Stepped":
-                if args["PP"] != '' and args["IMSMeta"] != '' and args["ACConfig"] != '' and args["TLF"] != '' and args["AutoCCS"] != '':
+                if args["PP"] != '' and args["IMSMeta"] != '' and args["ACConfig"] != '' and args["TLF"] != '' and args["AutoCCS"] != '' and args["mzML"] != '' and args["FF"] != '':
                     file_dict["PreProcessed Data Folder"] = args["PP"]
                     file_dict["IMS Metadata Folder"] =  os.path.join(args["IMSMeta"])
                     file_dict["AutoCCS Config File"] = args["ACConfig"]
                     file_dict["Target List File"] = args["TLF"]
                     file_dict["AutoCCS Results"] = args["AutoCCS"]
-                    #tmp folders
-                    file_dict["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
-                    file_dict["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
+                    file_dict["mzML Data Folder"] = args["mzML"]
+                    file_dict["Feature Data Folder"] =args["FF"]
                 else: 
                     sys.exit("Missing required file(s)")
 
