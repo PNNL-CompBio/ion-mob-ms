@@ -30,8 +30,8 @@ print = timestamped_print
 #Determine local mem
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
-local_mem = os.join(os.getcwd,"III_mzML_tmp")
-save_mem = os.join(os.getcwd,"III_mzML") 
+local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
+save_mem = os.path.join(os.getcwd(),"III_mzML") 
 
 # command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 

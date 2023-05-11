@@ -768,7 +768,7 @@ if __name__=="__main__":
             print("pipeline in progress. this is printed in function \"run_workflow\"")
             cur_dir = os.path.dirname(__file__)
             os.chdir(cur_dir)
-            all_results = Pipeline_V2.execute_workflow("sample.json")
+            all_results = Pipeline_gui.execute_workflow("sample.json")
             if all_results[4] != "":
                 Run_button.config(text="Run Complete \nView Results", font=("default",14), command=lambda:open_results(JE),state=NORMAL)
             else:

@@ -47,7 +47,7 @@ if __name__ == '__main__':
     
     if args["json"] != '':
         print("json Found. Starting Workflow")
-        Pipeline_V2.execute_workflow(args["json"])
+        Pipeline_cli.execute_workflow(args["json"])
         print("Workflow Complete.")
    
     #write json file using parparse inputs
@@ -167,7 +167,7 @@ if __name__ == '__main__':
         with open("sample.json", "w") as outfile:
             outfile.write(json_object)
 
-        Pipeline_V2.execute_workflow("sample.json")
+        Pipeline_cli.execute_workflow("sample.json")
 
 
         print("Command Line Interface Has Completed")

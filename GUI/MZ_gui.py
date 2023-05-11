@@ -24,7 +24,8 @@ old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
-
+local_mem = os.path.join(os.getcwd(),"IV_Features_tmp")
+save_mem = os.path.join(os.getcwd(),"IV_Features") 
 client = docker.from_env()
 image = "anubhav0fnu/mzmine:latest"
 
