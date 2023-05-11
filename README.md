@@ -1,13 +1,15 @@
-# ion-mob-ms
-This is a workflow for analyzing Ion Mobility Mass-Spectrometry data. The primary goal is to facilitate the numerous steps required to analyze and interpret this type of data, as it requires numerous steps and file management can be a burden.
+# Ion Mobility Dashboard
+This is a workflow for analyzing Ion Mobility - Mass Spectrometry data. The primary goal is to facilitate the numerous steps required to analyze and interpret this type of data, as it requires numerous steps and file management can be a burden.
 
-The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed [here](https://pnnl-compbio.github.io/ion-mob-ms).
+The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed at our [Documentation](https://ionmobility.readthedocs.io/en/latest/background/info.html) site.
 
-Current reports:  
-PC executable up to date.   
-Mac executable on Zenodo not up to date. Zenodo upload issues responsible.  
-Docker Version 4.12x has known issues (exec_run fails). Please use an earlier distribution. 
 
+## Availability
+**Windows** GUI executable **NOT** up to date.   
+**Mac** GUI executable on Zenodo **NOT** up to date.  
+**Cloud (AWS)** version available.   
+**High Performance Computing (HPC)** version available.   
+Docker Version 4.12x has known issues (exec_run fails). Please use an earlier distribution.   
 
 ## Architecture
 The system is designed to enable users to run individual parts via the command line, using a graphical user interface, or using Nextflow. Currently only the GUI portions are implemented, however we believe that in subsequent versions we will be able to automate the analysis as shown below.
@@ -16,8 +18,8 @@ The system is designed to enable users to run individual parts via the command l
 
 Each mode has separate needs for input files, but runs a combination of the modules depicted below.
 
-### Dockerized framework
-The guiding design principle behind the IMMS Dashboard is to enable the use of existing tools for reproducible analysis of Ion Mobility MS data. The use of Docker enables this abstraction to be flexible as we want to run a series of tools in an arbitrary order.
+### Containerized framework
+The guiding design principle behind the Ion Mobility Dashboard is to enable the use of existing tools for reproducible analysis of Ion Mobility Mass Spectrometry data. The use of Docker (GUI and Cloud) and Singularity (HPC) enables this abstraction to be flexible as we want to run a series of tools in a scalable manner.
 
 ### Task framework
 
@@ -31,7 +33,7 @@ The orchestration layer enables the linking of individual tasks together. For ex
 The user interface module enables users to upload files directly to the system.
 
 ## Installation
-To download and use this tool, please check out our [documentation site](https://pnnl-compbio.github.io/ion-mob-ms) for more details.
+To download and use this tool, please check out our [Documentation](https://ionmobility.readthedocs.io/en/latest/background/info.html) site for more details.
 
 ## Contribution
 

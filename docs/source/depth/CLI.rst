@@ -1,4 +1,4 @@
-General Command Line Usage
+Command Line Usage
 ==============
 
 This page is meant as a guide for running your own data using either AWS or an HPC. Follow setup commands on the respective pages.
@@ -15,8 +15,8 @@ This page is meant as a guide for running your own data using either AWS or an H
 
    python3 CLI_hpc.py --json sample.json
    python3 CLI.py --json sample.json
-   bash IMD_hpc_in_background.sh
-   python3 CLI.py --ExpName Test_One --ExpType Stepped --ToolType PW MZ AC --PP ../test-data/SteppedField/II_Preprocessed --IMSMeta ../test-data/SteppedField/IV_ImsMetadata --ACConfig ../test-data/SteppedField/autoCCS_config.xml --TLF ../test-data/SteppedField/TargetList_NeutralMass.csv
+   sbatch IMD_hpc_in_background.sh
+   python3 CLI.py --ExpName Test_One --ExpType Stepped --ToolType PW MZ AC --PP ../test-data/SteppedField/II_Preprocessed --IMSMeta ../test-data/SteppedField/IV_ImsMetadata --ACConfig ../test-data/SteppedField/autoCCS_config.xml --TLF ../test-data/SteppedField/TargetList_NeutralMass.csv --mzML /absolute/path/to/III_mzML --FF /absolute/path/to/IV_Features --AutoCCS /absolute/path/to/IV_data
  
 
 **Note:** Running the verbose command option will generate a json file called sample.json. This will **overwrite** any existing sample.json file in the directory.
@@ -85,129 +85,72 @@ Verbose Command Line Options
      - ``-e``
      - ``-t``
 
-
-
-
-
-.. list-table:: Required Commands And Files for **SingleField** Data
+     
+     
+.. list-table:: Required Commands And Files For Each **Pipeline**
    :class: scrolltable
    
    * - Experiment
-     - PreProcessed Data Folder
-     - mzML Data Folder
-     - Feature Data Folder
-     - IMS Metadata Folder
-     - AutoCCS Config File
-     - Target List File
-     - Calibrant File
-     - AutoCCS Results
-   * - Command 
+     - Command
+     - Command Shorthand
+     - SingleField
+     - SteppedField
+     - SLIM
+   * - PreProcessed Data Folder
      - ``--PP``
+     - ``-p``
+     - Yes
+     - Yes
+     - Yes
+   * - mzML Data Folder
      - ``--mzML``
+     - ``-m``
+     - Yes
+     - Yes
+     - Yes
+   * - Feature Data Folder
      - ``--FF``
-     - ``--IMSMeta``
+     - ``-f``
+     - Yes
+     - Yes
+     - Yes
+   * - AutoCCS Results
+     - ``--AutoCCS``
+     - ``-o``
+     - Yes
+     - Yes
+     - Yes
+   * - AutoCCS Config File
      - ``--ACConfig``
+     - ``-a``
+     - Yes
+     - Yes
+     - Yes
+   * - Target List File
      - ``--TLF``
+     - ``-s``
+     - Optional
+     - Yes
+     - Optional
+   * - IMS Metadata Folder
+     - ``--IMSMeta``
+     - ``-i``
+     - Recommended
+     - Yes
+     - No
+   * - Calibrant File
      - ``--Calibrant``
-     - ``--AutoCCS``
-   * - Command Shorthand
-     - ``-p``
-     - ``-m``
-     - ``-f``
-     - ``-i``
-     - ``-a``
-     - ``-s``
      - ``-c``
-     - ``-o``
-   * - Required 
      - Yes
-     - Optional
-     - Optional
-     - Recommended
+     - No
      - Yes
-     - Recommended
-     - Yes
-     - Optional
-
-
-
-
-.. list-table:: Required Commands And Files for **SteppedField** Data
-   :class: scrolltable
-   
-   * - Experiment
-     - PreProcessed Data Folder
-     - mzML Data Folder
-     - Feature Data Folder
-     - IMS Metadata Folder
-     - AutoCCS Config File
-     - Target List File
-     - AutoCCS Results
-   * - Command 
-     - ``--PP``
-     - ``--mzML``
-     - ``--FF``
-     - ``--IMSMeta``
-     - ``--ACConfig``
-     - ``--TLF``
-     - ``--AutoCCS``
-   * - Command Shorthand
-     - ``-p``
-     - ``-m``
-     - ``-f``
-     - ``-i``
-     - ``-a``
-     - ``-s``
-     - ``-o``
-   * - Required 
-     - Yes
-     - Optional
-     - Optional
-     - Yes
-     - Yes
-     - Yes
-     - Optional
-
-
-
-
-
-.. list-table:: Required Commands And Files for **SLIM** Data
-   :class: scrolltable
-   
-   * - Experiment
-     - PreProcessed Data Folder
-     - mzML Data Folder
-     - Feature Data Folder
-     - AutoCCS Config File
-     - Target List File
-     - Metadata File
-     - Calibrant File
-     - AutoCCS Results
-   * - Command 
-     - ``--PP``
-     - ``--mzML``
-     - ``--FF``
-     - ``--ACConfig``
-     - ``--TLF``
+   * - Metadata File
      - ``--MetadataFile``
-     - ``--Calibrant``
-     - ``--AutoCCS``
-   * - Command Shorthand
-     - ``-p``
-     - ``-m``
-     - ``-f``
-     - ``-a``
-     - ``-s``
      - ``-z``
-     - ``-c``
-     - ``-o``
-   * - Required
+     - No
+     - No
      - Yes
-     - Optional
-     - Optional
-     - Yes
-     - Optional
-     - Yes
-     - Yes
-     - Optional
+     
+     
+     
+     
