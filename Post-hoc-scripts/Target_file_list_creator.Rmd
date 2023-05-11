@@ -1,0 +1,46 @@
+---
+title: "Target File List Creator"
+author: "Jeremy Jacobson"
+date: "2023-04-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+
+```
+
+
+```{r}
+
+ccs_stepped <- 
+read.csv("/Path/to/steppedfield/IV_data/IV_Results/ccs_table.tsv",sep='\t')
+
+
+TLF <- NULL
+TLF$CompoundID <-  ccs_stepped["Compound_id"]
+
+TLF$CompoundID <- paste(ccs_stepped$Compound_id, ccs_stepped$adduct,sep='')
+TLF$CompoundName <- paste(ccs_stepped$name,ccs_stepped$adduct,sep='')
+TLF$Ionization <- ccs_stepped$Ionization
+TLF$Adduct_mz <- ccs_stepped$adduct_mz
+TLF$UniqueID4RawFileNames <- sub("/tmp/FF/", "", ccs_stepped$`replicate`)
+TLF$ExactMass <- ''
+TLF$ExpectedCCS <- ''
+
+TLF <- data.frame(TLF)
+
+
+
+TLF <- TLF[!duplicated(TLF$CompoundName),]
+
+
+TLF$UniqueID4RawFileNames[grepl("AgTune",TLF$UniqueID4RawFileNames)] <- "AgTune"
+
+TLF$UniqueID4RawFileNames[!grepl("AgTune",TLF$UniqueID4RawFileNames)] <- sapply(strsplit(TLF$UniqueID4RawFileNames[!grepl("AgTune",TLF$UniqueID4RawFileNames)], "_"), function(x) x[4])
+
+
+write_csv(TLF,"SingleField_TargetListFile.csv")
+
+```

@@ -1,0 +1,348 @@
+---
+title: "Stepped_vs_Single_compare"
+author: "Jeremy Jacobson"
+date: "2023-04-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+```
+
+#smallest difference pair aglorithm. Complexity: O(n log n) time, O(1) space. Where n is the longer of the two lists.
+```{r}
+smallest_diff_pair <- function(list1, list2) {
+  list1 <- sort(list1)
+  list2 <- sort(list2)
+  smallest_diff <- Inf
+  pair <- c(NA, NA)
+  i <- 1
+  j <- 1
+  while (i <= length(list1) & j <= length(list2)) {
+    diff <- abs(list1[i] - list2[j])
+    if (diff < smallest_diff) {
+      smallest_diff <- diff
+      pair <- c(list1[i], list2[j])
+      index <- c(i, j)
+    }
+    if (list1[i] < list2[j]) {
+      i <- i + 1
+    } else {
+      j <- j + 1
+    }
+  }
+  return(list(smallest_diff = smallest_diff, pair = pair,index= index))
+}
+
+```
+
+```{r}
+
+#1 replicate
+single_enhanced <- 
+read.csv("/Path/to/SingleField/IV_data/IV_Results/ccs-table_Features-Annotated.csv")
+
+#Stepped run as singlefield for 3 additional singlefield replicates
+stepped_as_single <- 
+read.csv("/Path/to/Stepped_run_as_single/IV_data/IV_Results/ccs-table_Features-Annotated_dorrestein_step_as_single.csv")
+
+# 3 replicates
+stepped_normal <- 
+read.csv("/Path/to/SteppedField/IV_data/IV_Results/ccs_table.tsv",sep='\t')
+
+
+stepped_normal_orig <- stepped_normal
+single_compare_orig <- rbind(single_enhanced,stepped_as_single)
+
+stepped_normal[1] <- NULL
+colnames(stepped_normal)[1] <- "CompoundID"
+colnames(stepped_normal)[2] <- "CompoundName"
+
+
+stepped_normal <- stepped_normal %>% mutate(adduct = str_extract(adduct, "(?<=\\[)[^]]+"))
+stepped_normal <- stepped_normal %>% relocate(adduct, .after = CompoundName)
+stepped_normal <- stepped_normal %>% relocate(Ionization, .after = adduct)
+stepped_normal <- stepped_normal %>% relocate(ccs, .after = Ionization)
+stepped_normal$joint_name <- paste(stepped_normal$CompoundID,stepped_normal$adduct,stepped_normal$Ionization)
+stepped_normal <- stepped_normal %>% relocate(joint_name, .after = Ionization)
+stepped_normal <- stepped_normal[grepl("^NA", rownames(stepped_normal))==F,]
+
+#step_as_single
+stepped_as_single <- stepped_as_single %>% mutate(adduct = str_extract(CompoundID, "(?<=\\[)[^]]+"))
+stepped_as_single <- stepped_as_single %>% relocate(adduct, .after = CompoundName)
+stepped_as_single <- stepped_as_single %>% relocate(Ionization, .after = adduct)
+stepped_as_single <- stepped_as_single %>% relocate(calibrated_ccs, .after = Ionization)
+stepped_as_single$Ionization <- tolower(stepped_as_single$Ionization)
+stepped_as_single$CompoundName <- gsub("\\[.*?\\]", "", stepped_as_single$CompoundName)
+stepped_as_single$CompoundID<- gsub("\\[.*?\\]", "", stepped_as_single$CompoundID)
+stepped_as_single$joint_name <- paste(stepped_as_single$CompoundID,stepped_as_single$adduct,stepped_as_single$Ionization)
+stepped_as_single <- stepped_as_single %>% relocate(joint_name, .after = Ionization)
+
+
+#single enhanced
+single_enhanced <- single_enhanced %>% mutate(adduct = str_extract(CompoundID, "(?<=\\[)[^]]+"))
+single_enhanced <- single_enhanced %>% relocate(adduct, .after = CompoundName)
+single_enhanced <- single_enhanced %>% relocate(Ionization, .after = adduct)
+single_enhanced <- single_enhanced %>% relocate(calibrated_ccs, .after = Ionization)
+single_enhanced$Ionization <- tolower(single_enhanced$Ionization)
+single_enhanced$CompoundName <- gsub("\\[.*?\\]", "", single_enhanced$CompoundName)
+single_enhanced$CompoundID<- gsub("\\[.*?\\]", "", single_enhanced$CompoundID)
+single_enhanced$joint_name <- paste(single_enhanced$CompoundID,single_enhanced$adduct,single_enhanced$Ionization)
+single_enhanced <- single_enhanced %>% relocate(joint_name, .after = Ionization)
+
+
+# stepped_normal <- subset(stepped_normal, num_features == 7 & r2 >= 0.999)
+
+
+#filter singlefield
+single_enhanced <- subset(single_enhanced, Peak.FWHM >= 0.2)
+stepped_as_single <- subset(stepped_as_single, Peak.FWHM >= 0.2)
+
+#filter steppedfield
+stepped_normal <- stepped_normal[order(stepped_normal$joint_name, stepped_normal$ccs),]
+stepped_normal <- stepped_normal[stepped_normal$num_features == 7 & stepped_normal$r2 >= .999,]
+stepped_normal <- stepped_normal[grepl("^NA", rownames(stepped_normal))==F,]
+
+
+```
+
+
+#Stepped clustering by 2% ccs value
+```{r}
+
+
+stepped_normal <- stepped_normal[order(stepped_normal$joint_name, stepped_normal$ccs),]
+stepped_normal <- stepped_normal[stepped_normal$num_features == 7 & stepped_normal$r2 >= .999,]
+stepped_normal <- stepped_normal[grepl("^NA", rownames(stepped_normal))==F,]
+
+
+stepped_normal["Cluster_number"] = NA
+prev_name <- stepped_normal[1,]$joint_name
+prev_ccs <- stepped_normal[1,]$ccs
+# collection = data.frame()
+clust = 0
+
+for (row_num in 1:nrow(stepped_normal)) {
+  if (stepped_normal[row_num,]$joint_name == prev_name) {
+    if (abs(stepped_normal[row_num,]$ccs - prev_ccs) / (max(stepped_normal[row_num,]$ccs, prev_ccs)) <= .02) {
+      stepped_normal[row_num,]$Cluster_number = clust
+    }
+    else {
+      clust = (clust + 1)
+      stepped_normal[row_num,]$Cluster_number = clust
+    }
+    prev_name <- stepped_normal[row_num,]$joint_name
+    prev_ccs <- stepped_normal[row_num,]$ccs
+  }
+  else { 
+    clust = 0
+    stepped_normal[row_num,]$Cluster_number = clust
+    prev_name <- stepped_normal[row_num,]$joint_name
+    prev_ccs <- stepped_normal[row_num,]$ccs
+    }
+}
+
+
+stepped_normal$joint_name_2 <- paste(stepped_normal$CompoundID,stepped_normal$adduct,stepped_normal$Ionization,stepped_normal$Cluster_number)
+
+stepped_normal_manip <- stepped_normal[stepped_normal$joint_name_2 %in% names(which(table(stepped_normal$joint_name_2) == 3)), ]
+
+stepped_normal_averaged <- stepped_normal_manip %>% 
+  group_by(joint_name_2) %>% 
+  summarise_each(funs(if(is.numeric(.)) mean(., na.rm = TRUE) else first(.)))
+
+stepped_normal_sd<- stepped_normal_manip %>% 
+  group_by(joint_name_2) %>% 
+  summarise_each(funs(if(is.numeric(.)) sd(., na.rm = TRUE) else first(.)))
+
+stepped_normal_rsd <- stepped_normal_manip %>%
+  group_by(joint_name_2) %>%
+  summarise_each(funs(if(is.numeric(.)) ((sd(., na.rm = TRUE) / mean(., na.rm = TRUE)) * 100) else first(.)))
+
+
+
+```
+
+
+#single clustering by 2% ccs value
+```{r}
+
+single_compare <- rbind(stepped_as_single,single_enhanced)
+
+single_compare <- single_compare[order(single_compare$joint_name, single_compare$calibrated_ccs),]
+
+single_compare["Cluster_number"] = NA
+prev_name <- single_compare[1,]$joint_name
+prev_ccs <- single_compare[1,]$calibrated_ccs
+# collection = data.frame()
+clust = 0
+
+for (row_num in 1:nrow(single_compare)) {
+  if (single_compare[row_num,]$joint_name == prev_name) {
+    if (abs(single_compare[row_num,]$calibrated_ccs - prev_ccs) / (max(single_compare[row_num,]$calibrated_ccs, prev_ccs)) <= .02) {
+      single_compare[row_num,]$Cluster_number = clust
+    }
+    else {
+      clust = (clust + 1)
+      single_compare[row_num,]$Cluster_number = clust
+    }
+    prev_name <- single_compare[row_num,]$joint_name
+    prev_ccs <- single_compare[row_num,]$calibrated_ccs
+  }
+  else { 
+    clust = 0
+    single_compare[row_num,]$Cluster_number = clust
+    prev_name <- single_compare[row_num,]$joint_name
+    prev_ccs <- single_compare[row_num,]$calibrated_ccs
+    }
+}
+
+single_compare$joint_name_2 <- paste(single_compare$CompoundID,single_compare$adduct,single_compare$Ionization,single_compare$Cluster_number)
+
+single_compare_manip <- single_compare[single_compare$joint_name_2 %in% names(which(table(single_compare$joint_name_2) == 4)), ]
+
+single_compare_averaged <- single_compare_manip %>% 
+  group_by(joint_name_2) %>% 
+  summarise_each(funs(if(is.numeric(.)) mean(., na.rm = TRUE) else first(.)))
+
+single_compare_sd<- single_compare_manip %>% 
+  group_by(joint_name_2) %>% 
+  summarise_each(funs(if(is.numeric(.)) sd(., na.rm = TRUE) else first(.)))
+
+single_compare_rsd <- single_compare_manip %>%
+  group_by(joint_name_2) %>%
+  summarise_each(funs(if(is.numeric(.)) ((sd(., na.rm = TRUE) / mean(., na.rm = TRUE)) * 100) else first(.)))
+
+
+```
+
+
+#Find Pairs
+```{r}
+
+overlap_stepped_normal_single_compare <- intersect(unique(single_compare_averaged$joint_name),unique(stepped_normal_averaged$joint_name))
+
+single_compare_averaged$flag = FALSE
+stepped_normal_averaged$flag = FALSE
+
+single_compare_name_list <- list()
+stepped_normal_name_list <- list()
+step_normal_ccs_list <- list()
+single_compare_ccs_list <- list()
+for (item in overlap_stepped_normal_single_compare) {
+  
+  pair = smallest_diff_pair(single_compare_averaged[(single_compare_averaged$joint_name == item & single_compare_averaged$flag == FALSE),]$calibrated_ccs,stepped_normal_averaged[(stepped_normal_averaged$joint_name == item & stepped_normal_averaged$flag == FALSE),]$ccs)$pair
+  
+  index = smallest_diff_pair(single_compare_averaged[(single_compare_averaged$joint_name == item & single_compare_averaged$flag == FALSE),]$calibrated_ccs,stepped_normal_averaged[(stepped_normal_averaged$joint_name == item & stepped_normal_averaged$flag == FALSE),]$ccs)$index
+  
+  if (NA %in% pair) {
+      invisible()
+  } else {
+    single_compare_averaged[single_compare_averaged$joint_name == item,][index[1],]$flag = TRUE
+    stepped_normal_averaged[stepped_normal_averaged$joint_name == item,][index[2],]$flag = TRUE
+  }
+  
+  if (length(pair) !=  2) {
+    print("Uneven Pair")
+  }
+  single_compare_ccs_list <- append(single_compare_ccs_list,pair[1])
+  step_normal_ccs_list <- append(step_normal_ccs_list,pair[2])
+  single_compare_name_list <- append(single_compare_name_list, single_compare_averaged$joint_name)
+  stepped_normal_name_list <- append(stepped_normal_name_list, stepped_normal_averaged$joint_name)
+  
+}
+
+
+stepped_normal_single_compare_closest_pairs <- data.frame(unlist(single_compare_ccs_list),unlist(step_normal_ccs_list))
+colnames(stepped_normal_single_compare_closest_pairs)[1] <- "single_compare_ccs"
+colnames(stepped_normal_single_compare_closest_pairs)[2] <- "stepped_normal_ccs"
+
+
+stepped_normal_single_compare_closest_pairs$difference <-  (stepped_normal_single_compare_closest_pairs$single_compare_ccs - stepped_normal_single_compare_closest_pairs$stepped_normal_ccs)
+
+
+stepped_normal_single_compare_closest_pairs$percentdifference <- (stepped_normal_single_compare_closest_pairs$single_compare_ccs - stepped_normal_single_compare_closest_pairs$stepped_normal_ccs) / (max(stepped_normal_single_compare_closest_pairs$single_compare_ccs,stepped_normal_single_compare_closest_pairs$stepped_normal_ccs))
+
+
+
+
+
+```
+
+
+#plotting
+```{r}
+
+ggplot(stepped_normal_single_compare_closest_pairs, aes(x=single_compare_ccs, y=stepped_normal_ccs)) + geom_point(size = .1) + labs(title="Dorrestein - SingleField vs SteppedField Mean CCS Values with 2% Clustering ") + xlab("SingleField") + ylab("SteppedField")
+
+
+hist(stepped_normal_single_compare_closest_pairs$percentdifference *100,200, main="Dorrestein - Percent difference between SingleField and SteppedField", xlab = "Percent Difference")
+
+
+# hist(single_compare_sd$calibrated_ccs, main = "Standard Deviation of Each CCS by Cluster (Single Field)",50,xlab = "Standard Deviations")
+# 
+# hist(stepped_normal_sd$ccs, main = "Standard Deviation of Each CCS by Cluster (Stepped Field)",50,xlab = "Standard Deviations")
+
+hist(stepped_normal_rsd$ccs, main = "Dorrestein - RSD of Each CCS by Cluster (SteppedField)",50,xlab = "Relative Standard Deviation")
+
+
+hist(single_compare_rsd$calibrated_ccs, main = "Dorrestein - RSD of Each CCS by Cluster (SingleField)",50,xlab = "Relative Standard Deviation")
+
+
+
+```
+#summary
+```{r}
+
+
+
+# Number of unique ions for each Single and Stepped. (Not including tunemix)
+nrow(single_compare[!grepl("TuneMix",single_compare$CompoundID),])
+nrow(stepped_normal[!grepl("TuneMix",stepped_normal$CompoundID),])
+
+
+# Number of unique compounds for each Single and Stepped. (Not including tunemix)
+length(unique(single_compare[!(grepl("TuneMix",single_compare$CompoundName)),]$CompoundName))
+length(unique(stepped_normal[!(grepl("TuneMix",stepped_normal$CompoundName)),]$CompoundName))
+
+
+# Number of unique ions in common. (Not including tunemix)
+sum(stepped_normal[!grepl("TuneMix",stepped_normal$CompoundID),]$CompoundID %in% single_compare[!grepl("TuneMix",single_compare$CompoundID),]$CompoundID)
+
+# Number of unique compounds in common. (Not including tunemix)
+length(intersect(unique(single_compare[!(grepl("TuneMix",single_compare$CompoundName)),]$CompoundName),unique(stepped_normal[!(grepl("TuneMix",stepped_normal$CompoundName)),]$CompoundName)))
+
+
+```
+
+
+
+
+
+#Exploring Large differences and write to csv
+```{r}
+
+stepped_normal_averaged[stepped_normal_averaged$flag == TRUE,]$joint_name == single_compare_averaged[single_compare_averaged$flag == TRUE,]$joint_name
+
+stepped_normal_single_compare_closest_pairs$SingleField_Associated_RawFile <- single_compare_averaged[single_compare_averaged$flag == TRUE,]$RawFileName
+
+
+
+stepped_normal_single_compare_closest_pairs$SteppedField_Associated_replicate <-  stepped_normal_averaged[stepped_normal_averaged$flag == TRUE,]$replicate
+
+# stepped_normal_single_compare_closest_pairs <- relocate(stepped_normal_single_compare_closest_pairs, Name)
+
+
+stepped_normal_single_compare_closest_pairs_large_diffs <- stepped_normal_single_compare_closest_pairs[abs(stepped_normal_single_compare_closest_pairs$percentdifference) > .01,]
+
+
+
+stepped_normal_single_compare_closest_pairs_large_diffs
+
+#write_csv(stepped_normal_single_compare_closest_pairs, "All_CCS_Matches.csv")
+
+#write_csv(stepped_normal_single_compare_closest_pairs_large_diffs,"CCS_Matches_Large_Diffs.csv")
+```
+
