@@ -96,7 +96,7 @@ def process(filepath):
     
     
     
-def run_container(raw_file_folder,exptype):
+def run_container(raw_file_folder,III_mzML_loc, exptype):
     global client,image,local_mem,command_list,save_mem
     
     #save_mem = III_mzML_loc

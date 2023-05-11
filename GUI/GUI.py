@@ -458,12 +458,13 @@ if __name__=="__main__":
         label_list = ["PreProcessed Data Folder","Calibrant File", "AutoCCS Config File", "IMS Metadata Folder (optional)","Target List File (optional)","Experiment Name"]
         
         #Because mzML files and feature files are generated within the workflow, these are not specified by the user
-        if platform.system().upper() == "DARWIN":
-            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
-            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
-        elif platform.system().upper() == "WINDOWS":
-            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
-            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
+        #if platform.system().upper() == "DARWIN":
+        global_file_dictionary["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
+        global_file_dictionary["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
+            
+        # elif platform.system().upper() == "WINDOWS":
+        #     global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
+        #     global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
 
     #Stepped Field Workflow
@@ -480,12 +481,12 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         label_list = ["PreProcessed Data Folder","IMS Metadata Folder","AutoCCS Config File","Target List File","Experiment Name"]
-        if platform.system().upper() == "DARWIN":
-            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
-            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
-        elif platform.system().upper() == "WINDOWS":
-            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
-            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
+        # if platform.system().upper() == "DARWIN":
+        global_file_dictionary["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
+        global_file_dictionary["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
+        # elif platform.system().upper() == "WINDOWS":
+            # global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
+            # global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
 
 
@@ -503,12 +504,12 @@ if __name__=="__main__":
         tool_check = True
         Data_Frame.rowconfigure((1), minsize=int(40))
         label_list = ["PreProcessed Data Folder","Calibrant File","Metadata File","AutoCCS Config File","Target List File (optional)","Experiment Name"]
-        if platform.system().upper() == "DARWIN":
-            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "/III_mzML"
-            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "/IV_Features_csv/*.csv"
-        elif platform.system().upper() == "WINDOWS":
-            global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
-            global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
+        #if platform.system().upper() == "DARWIN":
+        global_file_dictionary["mzML Data Folder"] = os.path.join(os.path.dirname(__file__),"III_mzML")
+        global_file_dictionary["Feature Data Folder"] = os.path.join(os.path.dirname(__file__),"IV_Features_csv")
+        #elif platform.system().upper() == "WINDOWS":
+            # global_file_dictionary["mzML Data Folder"] = os.path.dirname(__file__) + "\\III_mzML"
+            # global_file_dictionary["Feature Data Folder"] = os.path.dirname(__file__) + "\IV_Features_csv\*.csv"
         generate_tool_page(label_list, "")
 
 
@@ -629,15 +630,15 @@ if __name__=="__main__":
                 elif file_variable == "PreProcessed Data Folder":
                     global_files["PreProcessed Data Folder"]=os.path.abspath(file)
                 elif file_variable == "IMS Metadata Folder":
-                    if platform.system().upper() == "DARWIN":
-                        global_files["IMS Metadata Folder"]=(os.path.abspath(file) + "/*.txt")
-                    elif platform.system().upper() == "WINDOWS":
-                        global_files["IMS Metadata Folder"]=(os.path.abspath(file) + "\*.txt")
+                    # if platform.system().upper() == "DARWIN":
+                    global_files["IMS Metadata Folder"]=(os.path.abspath(file))
+                    # elif platform.system().upper() == "WINDOWS":
+                    #     global_files["IMS Metadata Folder"]=(os.path.abspath(file) + "\*.txt")
                 elif file_variable == "Feature Data Folder":
-                    if platform.system().upper() == "DARWIN":
-                        global_files["Feature Data Folder"]= (os.path.abspath(file) + "/*.csv")
-                    elif platform.system().upper() == "WINDOWS":
-                        global_files["Feature Data Folder"]= (os.path.abspath(file) + "\*.csv")
+                    # if platform.system().upper() == "DARWIN":
+                    global_files["Feature Data Folder"]= (os.path.abspath(file))
+                    # elif platform.system().upper() == "WINDOWS":
+                    #     global_files["Feature Data Folder"]= (os.path.abspath(file) + "\*.csv")
                 elif file_variable == "mzML Data Folder":
                     global_files["mzML Data Folder"]=os.path.abspath(file)
                     # if platform.system().upper() == "DARWIN":
@@ -798,26 +799,26 @@ if __name__=="__main__":
             front.geometry("900x600")
             front.title("Results")
             v1 = pdf.ShowPdf()
-            if platform.system().upper() == "DARWIN":
-                if  JE[0]["ExpType"] == "Single":
-                    view_file = view_results_at + "/IV_data/IV_Results/calibration_output.poly.pdf"
-                elif  JE[0]["ExpType"] == "SLIM":
-                    view_file = view_results_at + "/IV_data/IV_Results/calibration_output.power.pdf"
-                v2 = v1.pdf_view(front, pdf_location =view_file, bar=False)
-            elif platform.system().upper() == "WINDOWS":
-                if  JE[0]["ExpType"] == "Single":
-                    view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.poly.pdf"
-                elif  JE[0]["ExpType"] == "SLIM":
-                    view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.power.pdf"
-                v2 = v1.pdf_view(front, pdf_location =view_file, bar=False)
+            # if platform.system().upper() == "DARWIN":
+            if  JE[0]["ExpType"] == "Single":
+                view_file = os.path.join(view_results_at,"IV_data","IV_Results","calibration_output.poly.pdf")
+            elif  JE[0]["ExpType"] == "SLIM":
+                view_file = os.path.join(view_results_at, "IV_data","IV_Results","calibration_output.power.pdf")
+            v2 = v1.pdf_view(front, pdf_location =view_file, bar=False)
+            # elif platform.system().upper() == "WINDOWS":
+            #     if  JE[0]["ExpType"] == "Single":
+            #         view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.poly.pdf"
+            #     elif  JE[0]["ExpType"] == "SLIM":
+            #         view_file = view_results_at + "\\IV_data\\IV_Results\\calibration_output.power.pdf"
+            # v2 = v1.pdf_view(front, pdf_location =view_file, bar=False)
             v2.grid()
         #step
         elif JE[0]["ExpType"] == "Stepped":
             matplotlib.use('TkAgg')
-            if platform.system().upper() == "DARWIN":
-                view_file = view_results_at + "/IV_data/IV_Results/ccs_table.tsv"
-            elif platform.system().upper() == "WINDOWS":
-                view_file = view_results_at + "\\IV_data\\IV_Results\\ccs_table.tsv"
+            # if platform.system().upper() == "DARWIN":
+            view_file = os.path.join(view_results_at,"IV_data","IV_Results","ccs_table.tsv")
+            # elif platform.system().upper() == "WINDOWS":
+                # view_file = os.path.join(view_results_at,"IV_data","IV_Results","ccs_table.tsv")
             df = pd.read_csv(view_file, sep='\\t', engine='python')
 
             #set colors
