@@ -30,6 +30,8 @@ print = timestamped_print
 #Determine local mem
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
+local_mem = os.join(os.getcwd,"III_mzML_tmp")
+save_mem = os.join(os.getcwd,"III_mzML") 
 
 # command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
 
@@ -94,11 +96,12 @@ def process(filepath):
     
     
     
-def run_container(raw_file_folder,III_mzML_loc,exptype):
+def run_container(raw_file_folder,exptype):
     global client,image,local_mem,command_list,save_mem
     
-    save_mem = III_mzML_loc
-    local_mem = III_mzML_loc + "_tmp"
+    #save_mem = III_mzML_loc
+    #local_mem = III_mzML_loc + "_tmp"
+    
     print("ProteoWizard Working Directory: ", local_mem)
     os.makedirs(save_mem, exist_ok = True)
     if os.path.exists(local_mem):

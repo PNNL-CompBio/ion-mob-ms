@@ -22,7 +22,7 @@ import platform
 import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
-import Pipeline_V2
+import Pipeline_gui
 from matplotlib.lines import Line2D
 from tkPDFViewer2 import tkPDFViewer as pdf
 import multiprocessing
