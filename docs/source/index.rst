@@ -372,12 +372,20 @@ Citation
 
 
 .. toctree::
-   :caption: Usage Directions
+   :caption: How To Use
    :maxdepth: 2
    :hidden:
    
    depth/CLI
    depth/GUI
+
+
+.. toctree::
+   :caption: File Specifications
+   :maxdepth: 2
+   :hidden:
+
+   files/input
 
 .. toctree::
    :caption: Troubleshooting

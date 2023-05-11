@@ -1,4 +1,4 @@
-Command Line Usage
+Command Line Interface
 ==============
 
 This page is meant as a guide for running your own data using either AWS or an HPC. Follow setup commands on the respective pages.
