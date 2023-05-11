@@ -145,4 +145,4 @@ def run_container(mzML_data_folder,Feature_data_loc):
     pool.join()
     
     shutil.rmtree(local_mem)
-    return local_mem
+    return save_mem

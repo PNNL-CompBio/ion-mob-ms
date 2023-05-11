@@ -26,6 +26,7 @@ import Pipeline_gui
 from matplotlib.lines import Line2D
 from tkPDFViewer2 import tkPDFViewer as pdf
 import multiprocessing
+import shutil
 
 
 
@@ -856,6 +857,7 @@ if __name__=="__main__":
             if copy_from_here != "" and copy_to_dir != "" and copy_to_dir.isspace() == False and copy_to_dir != ("/" + run_name):
                 copy_to_here = copy_to_dir + "/" + os.path.basename(copy_from_here)
                 if platform.system().upper() == "DARWIN":
+                    #TO DO: clean this up. Use Path().rename() and shutil                    
                     command_mac_mkdir = 'mkdir -p "' + copy_to_dir + '"'
                     os.system(command_mac_mkdir)
                     command_mac = 'mv "'  + copy_from_here + '" "' + copy_to_here + '"'
@@ -885,14 +887,15 @@ if __name__=="__main__":
         os.chdir(cur_dir)
         for file in all_results:
             if file != "":
-                if platform.system().upper() == "DARWIN":
-                    print("File removed: ", file)
-                    command_mac = 'rm -r "'  + file + '"'
-                    os.system(command_mac)
-                if platform.system().upper() == "WINDOWS":
-                    print("File removed: ", file)
-                    command_PC = 'rd /s /q "'  + file + '"'
-                    os.system(command_PC)
+                shutil.rmtree(file)
+                # if platform.system().upper() == "DARWIN":
+                #     print("File removed: ", file)
+                #     command_mac = 'rm -r "'  + file + '"'
+                #     os.system(command_mac)
+                # if platform.system().upper() == "WINDOWS":
+                #     print("File removed: ", file)
+                #     command_PC = 'rd /s /q "'  + file + '"'
+                #     os.system(command_PC)
 
 
         cur_dir = os.path.dirname(__file__)
