@@ -24,8 +24,8 @@ old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
-local_mem = os.path.join(os.getcwd(),"IV_Features_tmp")
-save_mem = os.path.join(os.getcwd(),"IV_Features") 
+local_mem = os.path.join(os.getcwd(),"IV_Features_csv_tmp")
+save_mem = os.path.join(os.getcwd(),"IV_Features_csv") 
 client = docker.from_env()
 image = "anubhav0fnu/mzmine:latest"
 
@@ -92,11 +92,8 @@ def process(filepath):
 
 
 
-def run_container(mzML_data_folder,Feature_data_loc):
+def run_container(mzML_data_folder):
     global client,image,local_mem,save_mem,command_list_2
-    
-    save_mem = Feature_data_loc
-    local_mem = Feature_data_loc + "_tmp"
     
     os.makedirs(save_mem, exist_ok = True)
     if os.path.exists(local_mem):

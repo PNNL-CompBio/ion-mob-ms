@@ -61,7 +61,7 @@ def execute_workflow(json_file):
             print("MZMine searches for Features")
             print(data[1]["mzML Data Folder"])
             print(data[1])
-            MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"],data[1]["Feature Data Folder"])
+            MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"] and "IMS Metadata Folder" not in data[1] and "Target List File" not in data[1]:
             print("AutoCCS finds features through the standard method. \nNo Target list specified, annotations will be skipped.")
             AC_results= AC_gui.run_container("single","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], False, False, data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
@@ -95,7 +95,7 @@ def execute_workflow(json_file):
         #     DM_results=DM_cli.run_container(data[1]["mzML Data Folder"])
         if "MZ" in data[0]["ToolType"]:
             print("MZMine searches for Features")
-            MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"],data[1]["Feature Data Folder"])
+            MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"] and "Target List File" not in data[1]:
             print("AutoCCS finds features through the standard method.\nNo Target list specified, annotations will be skipped. ")
             AC_results= AC_gui.run_container("slim","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], False, data[1]["Metadata File"],False,data[1]["AutoCCS Config File"])
@@ -121,7 +121,7 @@ def execute_workflow(json_file):
             print("MZMine searches for Features")
             print(data[1]["mzML Data Folder"])
             print(data[1])
-            MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"],data[1]["Feature Data Folder"])
+            MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"])
         if "AC" in data[0]["ToolType"]:
             print("AutoCCS finds features through the enhanced method.")
             AC_results= AC_gui.run_container("step","enhanced",True,False, data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], data[1]["Target List File"], False,False,data[1]["AutoCCS Config File"])
