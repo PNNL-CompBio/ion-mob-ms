@@ -28,7 +28,7 @@ command_annotate = """Rscript /R_Annotate_features_V.R"""
 save_mem = os.path.join(os.getcwd(), "IV_data")
 
 
-def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config,autoccs_loc):
+def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config):
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
 
