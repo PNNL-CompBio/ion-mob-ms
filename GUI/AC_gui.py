@@ -56,19 +56,20 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--framemeta_files", '/tmp/FMF/*.txt', "--feature_files", '/tmp/FF/*.csv', "--output_dir", "/tmp/IV_Results", "--target_list_file", ("/tmp/TLF/" + os.path.basename(target_list_file)), "--mode", "multi"]
        
     #This prints where the local files are being saved to. (With pyinstaller, this is a temporary folder)
-    print("Local memory is: ", save_mem)
     
-    print("Save memory is: ", autoccs_loc)
+    print("Save memory is: ", save_mem)
     
     #Make file system
-    os.makedirs(autoccs_loc + "/PP", exist_ok=True)
-    os.makedirs(autoccs_loc +"/CF", exist_ok=True)
-    os.makedirs(autoccs_loc +"/TLF", exist_ok=True)
-    os.makedirs(autoccs_loc +"/FF", exist_ok=True)
-    os.makedirs(autoccs_loc +"/IV_Results", exist_ok=True)
-    os.makedirs(autoccs_loc +"/FMF", exist_ok=True)
-    os.makedirs(autoccs_loc +"/MD", exist_ok=True)
-    os.makedirs(autoccs_loc +"/CBF", exist_ok=True)
+    
+    
+    os.makedirs(os.path.join(save_mem, "PP"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "CF"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "TLF"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "FF"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "IV_Results"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "FMF"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "MD"), exist_ok=True)
+    os.makedirs(os.path.join(save_mem, "CBF"), exist_ok=True)
     #Image name
     image = "anubhav0fnu/autoccs"   
     time.sleep(3)
