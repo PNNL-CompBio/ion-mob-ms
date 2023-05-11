@@ -12,11 +12,11 @@ import os
 import tarfile
 import time
 import platform
-import PW_step
-import MZ_step
-import PP_step
-import DM_step
-import AC_step
+import PW_cli
+import MZ_cli
+import PP_cli
+import DM_cli
+import AC_cli
 from datetime import datetime
 
 

@@ -11,12 +11,12 @@ import os
 import tarfile
 import time
 import platform
-import Pipeline_V2
-import PW_step
-import MZ_step
-import PP_step
-import DM_step
-import AC_step
+import Pipeline_cli
+import PW_cli
+import MZ_cli
+import PP_cli
+import DM_cli
+import AC_cli
 import json
 
 if __name__ == '__main__':
