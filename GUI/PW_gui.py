@@ -17,7 +17,6 @@ import re
 from pathlib import Path
 import shutil
 import glob
-import tqdm
 from datetime import datetime
 
 #add timestamps to print
@@ -161,8 +160,7 @@ def run_container(raw_file_folder,III_mzML_loc, exptype):
         return save_mem
     pool = Pool(processes=process_num)
 
-    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
-        pass
+    pool.imap(process, file_list)
 
     pool.close()
     pool.join()

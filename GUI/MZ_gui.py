@@ -16,7 +16,6 @@ import io
 from pathlib import Path
 import stat
 import shutil
-import tqdm
 from datetime import datetime
 
 #add timestamps to print
@@ -135,8 +134,7 @@ def run_container(mzML_data_folder):
     pool = Pool(processes=process_num)
     # pool.map(process, file_list)
 
-    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list), leave=None):
-            pass
+    pool.imap(process, file_list)
 
     pool.close()
     pool.join()
