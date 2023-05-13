@@ -93,7 +93,8 @@ def process(filepath):
 
 def run_container(mzML_data_folder):
     global client,image,local_mem,save_mem,command_list_2
-    
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)    
     os.makedirs(save_mem, exist_ok = True)
     if os.path.exists(local_mem):
         shutil.rmtree(local_mem)

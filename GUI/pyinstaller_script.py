@@ -9,16 +9,16 @@ def find(name, path):
 print(platform.system())
 if platform.system().upper() == "WINDOWS":
     Pyinstaller_location = find("pyinstaller.exe","/")
-    command = Pyinstaller_location + ' -F UI_V2.py'
+    command = Pyinstaller_location + ' -F GUI.py'
 if platform.system().upper() == "DARWIN":
-    command = 'pyinstaller -F UI_V2.py'
+    command = 'pyinstaller -F GUI.py'
 if platform.system().upper() == "LINUX":
-    command = 'wine pyinstaller -F UI_V2.py'
+    command = 'wine pyinstaller -F GUI.py'
 os.system(command)
 
 if platform.system().upper() == "WINDOWS":
     os.system("rmdir /s /q build")
-    #os.system("del UI_V2.spec")
+    os.system("del GUI.spec")
 if platform.system().upper() == "DARWIN":
     os.system("rm -r build")
     os.system("rm UI_V2.spec")

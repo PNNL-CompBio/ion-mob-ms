@@ -29,6 +29,8 @@ print = timestamped_print
 #Determine local mem
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
+cur_dir = os.path.dirname(__file__)
+os.chdir(cur_dir)
 local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
 save_mem = os.path.join(os.getcwd(),"III_mzML") 
 
@@ -95,9 +97,10 @@ def process(filepath):
     
     
     
-def run_container(raw_file_folder,III_mzML_loc, exptype):
+def run_container(raw_file_folder,exptype):
     global client,image,local_mem,command_list,save_mem
-    
+    cur_dir = os.path.dirname(__file__)
+    os.chdir(cur_dir)    
     #save_mem = III_mzML_loc
     #local_mem = III_mzML_loc + "_tmp"
     
