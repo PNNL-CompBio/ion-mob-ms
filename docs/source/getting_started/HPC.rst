@@ -21,8 +21,14 @@ HPC Setup Commands
    pip3 install -r requirements_py3.7_CLI.txt
    cd singularity_dev
    
+**Run Instructions:**  
    
-**Run Test Data on Current Node** 
+First edit the sample.json file to include absolute paths to your current directory, then choose your run option:   
+
+**Note**: SLURM options in IMD_hpc_in_background.sh will also have to be modified to allow it to run on your own account.   
+
+  
+**Run Test Data on Current Node**   
 
 .. code-block::  
    
@@ -35,8 +41,6 @@ HPC Setup Commands
    bash IMD_hpc_in_background.sh
    
    
-SLURM options in IMD_hpc_in_background.sh will have to be modified to allow it to run on your own account. 
-For running large datasets, it is recommended to increase the number of available CPUS.
 
 To run your own data view General Command Line Usage <https://ionmobility.readthedocs.io/en/latest/getting_started/AWS.html/>`__.
 
