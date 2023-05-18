@@ -89,7 +89,7 @@ def execute_workflow(json_file):
         #     PP_results = PP_cli.run_container(data[1]["Raw Data Folder"],data[0]["DriftKernel"],data[0]["LCKernel"],data[0]["MinIntensity"])
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
-            PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[1]["mzML Data Folder"],data[0]["ExpType"])
+            PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])
         # if "DM" in data[0]["ToolType"]:
         #     print("Deimos searches for Features")
         #     DM_results=DM_cli.run_container(data[1]["mzML Data Folder"])
@@ -113,7 +113,7 @@ def execute_workflow(json_file):
         #     print("PNNL Preprocessor does Filtering and Smoothing")
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
-            PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[1]["mzML Data Folder"],data[0]["ExpType"])
+            PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])
         # if "DM" in data[0]["ToolType"]:
         #     print("Deimos searches for Features")
         #     DM_results=DM_cli.run_container(data[1]["mzML Data Folder"])
