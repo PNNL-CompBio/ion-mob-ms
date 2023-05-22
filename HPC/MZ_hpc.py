@@ -43,7 +43,7 @@ def process(input_args):
     file_name = os.path.basename(file_path)
     options = ["--writable-tmpfs","--bind", local_mem + ":/Work/III_mzML", "--bind", tmp_mount_mem+":/Work/tmp"]
     # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
-    myinstance = Client.instance('./mzmine_updated.sif', options=options)        
+    myinstance = Client.instance('./mzmine.sif', options=options)        
     command_list_0 = """Rscript /Work/R_PARSE_II.R"""
 # doesnt work    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
 #    command_list_0 = """Rscript -e 'source("R_PARSE_II.R"); ParseDTasRTmzML(1,"/Work/III_mzML/""" + file_name + """")'"""    
