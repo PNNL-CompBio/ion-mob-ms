@@ -26,7 +26,8 @@ HPC Setup Commands
 First edit the sample.json file to include absolute paths to your current directory, then choose your run option:   
 
 **Note**: SLURM options in IMD_hpc_in_background.sh will also have to be modified to allow it to run on your own account.   
-
+  
+**Note**: A **minumium of 4 cores is required**, and using more is highly recommended. This can be specified with the SLURM "-n" command.  
   
 **Run Test Data on Current Node**   
 
