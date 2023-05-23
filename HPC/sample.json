@@ -13,7 +13,8 @@
         "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata",
         "AutoCCS Config File": "../test-data/SteppedField/autoCCS_config.xml",
         "Target List File": "../test-data/SteppedField/TargetList_NeutralMass.csv",
-        "mzML Data Folder": "/absolute/path/to/ion-mob-ms/singularity_dev/III_mzML",
-        "Feature Data Folder": "/absolute/path/to/ion-mob-ms/singularity_dev/IV_Features_csv"
+        "mzML Data Folder": "/absolute/path/to/ion-mob-ms/HPC/III_mzML",
+        "Feature Data Folder": "/absolute/path/to/ion-mob-ms/HPC/IV_Features_csv",
+        "AutoCCS Results": "/absolute/path/to/ion-mob-ms/HPC/IV_data"
     }
 ]
