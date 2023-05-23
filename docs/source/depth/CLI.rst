@@ -53,9 +53,9 @@ Either relative or absolute paths can be used to specify data locations.
            "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata",
            "AutoCCS Config File": "../test-data/SteppedField/autoCCS_config.xml",
            "Target List File": "../test-data/SteppedField/TargetList_NeutralMass.csv",
-           "mzML Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/III_mzML",
-           "Feature Data Folder": "/people/jaco059/ion-mob-ms/singularity_dev/IV_Features_csv",
-           "AutoCCS Results": "/people/jaco059/ion-mob-ms/singularity_dev/IV_data"
+           "mzML Data Folder": "/people/UserName/ion-mob-ms/HPC/III_mzML",
+           "Feature Data Folder": "/people/UserName/ion-mob-ms/HPC/IV_Features_csv",
+           "AutoCCS Results": "/people/UserName/ion-mob-ms/HPC/IV_data"
        }
    ]
 
