@@ -6,7 +6,9 @@ module load python/3.7.0
 
 if [ -d "./proteowizard.sandbox" ] 
 then
-    echo "proteowizard.sandbox exists." 
+    echo "proteowizard.sandbox exists. Rebuilding for safety." 
+    rm -r proteowizard.sandbox
+    singularity build --sandbox proteowizard.sandbox proteowizard.def
 else
     echo "proteowizard.sandbox does not exist. Attempting to build."
     singularity build --sandbox proteowizard.sandbox proteowizard.def
