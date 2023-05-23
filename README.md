@@ -5,11 +5,10 @@ The full documentation, instructions on usage, tool descriptions, and troublesho
 
 
 ## Availability
-**Windows** GUI executable **NOT** up to date.   
-**Mac** GUI executable on Zenodo **NOT** up to date.  
+**Windows** GUI executable up to date.   
+**Mac** GUI executable on Zenodo up to date.  
 **Cloud (AWS)** version available.   
 **High Performance Computing (HPC)** version available.   
-Docker Version 4.12x has known issues (exec_run fails). Please use an earlier distribution.   
 
 ## Architecture
 The system is designed to enable users to run individual parts via the command line, using a graphical user interface, or using Nextflow. Currently only the GUI portions are implemented, however we believe that in subsequent versions we will be able to automate the analysis as shown below.
