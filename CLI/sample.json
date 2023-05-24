@@ -10,10 +10,11 @@
     },
     {
         "PreProcessed Data Folder": "../test-data/SteppedField/II_Preprocessed",
-        "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata/*.txt",
+        "IMS Metadata Folder": "../test-data/SteppedField/IV_ImsMetadata",
         "AutoCCS Config File": "../test-data/SteppedField/autoCCS_config.xml",
         "Target List File": "../test-data/SteppedField/TargetList_NeutralMass.csv",
-        "mzML Data Folder": "/home/ec2-user/ion-mob-ms/UserInterfaceV2/III_mzML",
-        "Feature Data Folder": "/home/ec2-user/ion-mob-ms/UserInterfaceV2/IV_Features_csv/*.csv"
+        "mzML Data Folder": "/home/ec2-user/ion-mob-ms/CLI/III_mzML",
+        "Feature Data Folder": "/home/ec2-user/ion-mob-ms/CLI/IV_Features_csv",
+        "AutoCCS Results": "/home/ec2-user/ion-mob-ms/CLI/IV_data"
     }
 ]
