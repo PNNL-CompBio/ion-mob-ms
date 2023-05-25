@@ -19,6 +19,8 @@ import shutil
 import glob
 import tqdm
 from datetime import datetime
+from functools import partial
+import psutil
 
 #add timestamps to print
 old_print = print
@@ -93,6 +95,15 @@ def process(filepath):
     time.sleep(1)
     
     
+def check_memory_and_start_thread(arg):
+    target_memory_limit = 4 * 1024 * 1024 * 1024
+    available_memory = psutil.virtual_memory().free 
+    while available_memory < target_memory_limit:
+        time.sleep(1)  # Wait for 1 second before checking again
+        available_memory = psutil.virtual_memory().free
+    return process(arg)
+
+
     
 def run_container(raw_file_folder,III_mzML_loc,exptype):
     global client,image,local_mem,command_list,save_mem
@@ -147,18 +158,34 @@ def run_container(raw_file_folder,III_mzML_loc,exptype):
     #This generates subprocesses - each subprocess runs a container which runs one file.
     process_num = len(file_list)
     
-    cpu_count = os.cpu_count()
-    if cpu_count > 6:
-        cpu_count -= 2
+#    cpu_count = os.cpu_count()
+#    if cpu_count > 6:
+#        cpu_count -= 2
+#
+#    if process_num > cpu_count:
+#        process_num = cpu_count
+#
+ #   if process_num == 0:
+  #      return save_mem
+   # pool = Pool(processes=process_num)
+#
+ #   for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
+  #      pass
 
+
+
+    cpu_count = os.cpu_count()
     if process_num > cpu_count:
         process_num = cpu_count
 
     if process_num == 0:
         return save_mem
     pool = Pool(processes=process_num)
+    
+    target_memory_limit =  5 * 1024 * 1024 * 1024
+    check_memory_partial = partial(check_memory_and_start_thread)
 
-    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
+    for _ in tqdm.tqdm(pool.imap(check_memory_partial, file_list), total=len(file_list)):
         pass
 
     pool.close()
