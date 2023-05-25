@@ -93,7 +93,7 @@ def process(filepath):
 
 
 def check_memory_and_start_thread(arg):
-    target_memory_limit = 4 * 1024 * 1024 * 1024
+    target_memory_limit = 4 * 1024 * 1024 * 1024 # 4 Gb
     available_memory = psutil.virtual_memory().free 
     while available_memory < target_memory_limit:
         time.sleep(1)  # Wait for 1 second before checking again
@@ -132,24 +132,7 @@ def run_container(mzML_data_folder,Feature_data_loc):
     print(f'found unprocessed files count: {len(file_list)}')
     
     
-    process_num = len(file_list)    
-#    cpu_count = os.cpu_count()
-#    if cpu_count > 6:
- #       cpu_count -= 2
-#
- #   if process_num > cpu_count:
-  #      process_num = cpu_count
-#
- #   if process_num == 0:
-    #    return local_mem
-   # 
-  #  pool = Pool(processes=process_num)
- #   # pool.map(process, file_list)
-#
- #   for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list), leave=None):
-#            pass
-
-
+    process_num = len(file_list)   
     cpu_count = os.cpu_count()
     if process_num > cpu_count:
         process_num = cpu_count
@@ -158,9 +141,7 @@ def run_container(mzML_data_folder,Feature_data_loc):
         return save_mem
     pool = Pool(processes=process_num)
     
-    target_memory_limit =  5 * 1024 * 1024 * 1024
     check_memory_partial = partial(check_memory_and_start_thread)
-
     for _ in tqdm.tqdm(pool.imap(check_memory_partial, file_list), total=len(file_list)):
         pass
 
