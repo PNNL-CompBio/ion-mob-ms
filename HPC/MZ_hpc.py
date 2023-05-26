@@ -22,7 +22,6 @@ import tqdm
 from datetime import datetime
 import random
 import string
-from functools import partial
 import psutil
 
 #Set initial variables,
@@ -73,15 +72,6 @@ def process(input_args):
     myinstance.stop()
     time.sleep(1)
 
-def check_memory_and_start_thread(arg):
-    target_memory_limit = 4 * 1024 * 1024 * 1024 # 4 Gb
-    available_memory = psutil.virtual_memory().free 
-    while available_memory < target_memory_limit:
-        time.sleep(1)  # Wait for 1 second before checking again
-        available_memory = psutil.virtual_memory().free
-    return process(arg)
-
-
 def run_container(mzML_data_folder,Feature_data_loc):
     global local_mem, save_mem
     save_mem = Feature_data_loc
@@ -96,9 +86,6 @@ def run_container(mzML_data_folder,Feature_data_loc):
         shutil.rmtree(local_mem +"_mount")
     os.makedirs((local_mem + "_mount"), exist_ok = True)
 
-
-
-    
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
 
@@ -119,9 +106,7 @@ def run_container(mzML_data_folder,Feature_data_loc):
     
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
-    
-    
-    
+
     
     # Generate a list of unique strings
     N = len(file_list)
@@ -135,19 +120,30 @@ def run_container(mzML_data_folder,Feature_data_loc):
             random_strings.append(new_string)
     process_args = zip(file_list, random_strings)    
     
+    ###
     process_num = len(file_list)   
-    cpu_count = os.cpu_count()
-    if process_num > cpu_count:
-        process_num = cpu_count
+    if process_num > (round(os.cpu_count() * .6) -1):
+        process_num = (round(os.cpu_count() * .6) -1)
 
+    if process_num > (psutil.virtual_memory().available // (1000000000 * 2.5)): 
+        process_num = int(psutil.virtual_memory().available // (1000000000 * 2.5))
     if process_num == 0:
         return save_mem
+    
+    print("Maximum parallel processes determined: ", process_num) 
     pool = Pool(processes=process_num)
     
-    check_memory_partial = partial(check_memory_and_start_thread)
-    for _ in tqdm.tqdm(pool.imap(check_memory_partial, process_args), total=len(file_list), leave=None):
+ #   check_memory_partial = partial(check_memory_and_start_thread)
+    for _ in tqdm.tqdm(pool.imap(process, process_args), total=len(file_list)):
+        time.sleep(1)
+        while psutil.virtual_memory().free < (psutil.virtual_memory().available * .15):
+            time.sleep(10)
+            print("memory near limit. Slowing down.") 
+            time.sleep(10)
         pass
-    
+        
+        
+        
     pool.close()
     pool.join()
     

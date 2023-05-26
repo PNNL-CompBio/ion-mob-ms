@@ -97,14 +97,9 @@ def process(filepath):
     myinstance.stop()
     time.sleep(1)
     
-def check_memory_and_start_thread(arg):
-    target_memory_limit = 4 * 1024 * 1024 * 1024 # 4 Gb
-    available_memory = psutil.virtual_memory().free 
-    while available_memory < target_memory_limit:
-        time.sleep(1)  # Wait for 1 second before checking again
-        available_memory = psutil.virtual_memory().free
-    return process(arg)
-    
+
+
+
 def run_container(raw_file_folder,III_mzML_loc,exptype):
     global local_mem,command_list,save_mem
     
@@ -152,22 +147,28 @@ def run_container(raw_file_folder,III_mzML_loc,exptype):
     unprocessed_names_map = list(set(raw_files_no_ext_map.keys()).difference(set(processed_files_no_ext_map.keys())))
     # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
-    print(f'found unprocessed files count: {len(file_list)}')
+    print(f'Found unprocessed files count: {len(file_list)}')
 
     #This generates subprocesses - each subprocess runs a container which runs one file.
-    process_num = len(file_list)   
-    cpu_count = os.cpu_count()
-    if process_num > cpu_count:
-        process_num = cpu_count
+    process_num = len(file_list)  
+    if process_num > (round(os.cpu_count() * .6) -1):
+        process_num = (round(os.cpu_count() * .6) -1)
 
+    if process_num > (psutil.virtual_memory().available // (1000000000 * 2.2)): 
+        process_num = int(psutil.virtual_memory().available // (1000000000 * 2.2))
     if process_num == 0:
         return save_mem
+    
+    print("Maximum parallel processes determined: ", process_num) 
     pool = Pool(processes=process_num)
     
-    check_memory_partial = partial(check_memory_and_start_thread)
-    for _ in tqdm.tqdm(pool.imap(check_memory_partial, file_list), total=len(file_list)):
+ #   check_memory_partial = partial(check_memory_and_start_thread)
+    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
+        while psutil.virtual_memory().free < (psutil.virtual_memory().available * .2):
+            time.sleep(10)
+            print("memory near limit. Slowing down.") 
+            time.sleep(10)
         pass
-
 
 
     pool.close()
