@@ -90,15 +90,15 @@ def process(filepath):
     MZ_container.stop()
     time.sleep(2)
     MZ_container.remove()
+    return
 
-
-def check_memory_and_start_thread(arg):
-    target_memory_limit = 4 * 1024 * 1024 * 1024 # 4 Gb
-    available_memory = psutil.virtual_memory().free 
-    while available_memory < target_memory_limit:
-        time.sleep(1)  # Wait for 1 second before checking again
-        available_memory = psutil.virtual_memory().free
-    return process(arg)
+#def check_memory_and_start_thread(arg):
+ #   target_memory_limit = 4 * 1024 * 1024 * 1024 # 4 Gb
+  #  available_memory = psutil.virtual_memory().free 
+   # while available_memory < target_memory_limit:
+    #    time.sleep(1)  # Wait for 1 second before checking again
+     #   available_memory = psutil.virtual_memory().free
+#    return process(arg)
 
 def run_container(mzML_data_folder,Feature_data_loc):
     global client,image,local_mem,save_mem,command_list_2
@@ -134,15 +134,22 @@ def run_container(mzML_data_folder,Feature_data_loc):
     
     process_num = len(file_list)   
     cpu_count = os.cpu_count()
-    if process_num > cpu_count:
-        process_num = cpu_count
+    if process_num > cpu_count - 2:
+        process_num = cpu_count -2
 
+    if process_num > (psutil.virtual_memory().available // (1000000000 * 2.5)): 
+        process_num = int(psutil.virtual_memory().available // (1000000000 * 2.5))
     if process_num == 0:
         return save_mem
     pool = Pool(processes=process_num)
     
-    check_memory_partial = partial(check_memory_and_start_thread)
-    for _ in tqdm.tqdm(pool.imap(check_memory_partial, file_list), total=len(file_list)):
+ #   check_memory_partial = partial(check_memory_and_start_thread)
+    for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
+        time.sleep(1)
+        while psutil.virtual_memory().free < (psutil.virtual_memory().available * .15):
+            time.sleep(10)
+            print("memory near limit. Slowing down.") 
+            time.sleep(10)
         pass
 
 
