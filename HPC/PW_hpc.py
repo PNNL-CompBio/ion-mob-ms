@@ -164,10 +164,6 @@ def run_container(raw_file_folder,III_mzML_loc,exptype):
     
  #   check_memory_partial = partial(check_memory_and_start_thread)
     for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
-        while psutil.virtual_memory().free < (psutil.virtual_memory().available * .2):
-            time.sleep(10)
-            print("memory near limit. Slowing down.") 
-            time.sleep(10)
         pass
 
 

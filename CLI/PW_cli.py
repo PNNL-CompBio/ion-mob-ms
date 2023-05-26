@@ -11,7 +11,7 @@ import time
 import platform
 import pathlib
 import threading
-from multiprocessing import Pool, set_start_method
+from multiprocessing import Pool
 import io
 import re
 from pathlib import Path
@@ -19,7 +19,6 @@ import shutil
 import glob
 import tqdm
 from datetime import datetime
-from functools import partial
 import psutil
 
 #add timestamps to print
@@ -93,18 +92,8 @@ def process(filepath):
     time.sleep(2)
     PW_container.remove()
     time.sleep(1)
-    return    
     
-#def check_memory_and_start_thread(arg):
-#    target_memory_limit = 4 * 1024 * 1024 * 1024 # 4Gb
- #   available_memory = psutil.virtual_memory().free 
-  #  while available_memory < target_memory_limit:
-   #     print("memory capped. Waiting 1 second to try again.")
-    #    time.sleep(1)  # Wait for 1 second before checking again
-     #   available_memory = psutil.virtual_memory().free
-#    return process(arg)
-
-
+    
     
 def run_container(raw_file_folder,III_mzML_loc,exptype):
     global client,image,local_mem,command_list,save_mem
@@ -158,20 +147,24 @@ def run_container(raw_file_folder,III_mzML_loc,exptype):
     #If this ever hits the cloud, "the limit does not exist!"
     #This generates subprocesses - each subprocess runs a container which runs one file.
     process_num = len(file_list)
-
-
+    
     cpu_count = os.cpu_count()
-    if process_num > cpu_count:
-        process_num = cpu_count
+    if cpu_count > 6:
+        cpu_count -= 2
+
+    if process_num > (cpu_count -2):
+        process_num = (cpu_count -2)
+        
+    if process_num > (psutil.virtual_memory().available // (1000000000 * 2.2)): 
+        process_num = int(psutil.virtual_memory().available // (1000000000 * 2.2))
 
     if process_num == 0:
         return save_mem
+    
+    print("Maximum parallel processes determined: ", process_num) 
     pool = Pool(processes=process_num)
-#    check_memory_partial = partial(check_memory_and_start_thread)
+
     for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
-        while psutil.virtual_memory().free < 4 * 1024 * 1024 * 1024:
-            time.sleep(5)
-            print("memory capped. Slowing down.") 
         pass
 
     pool.close()

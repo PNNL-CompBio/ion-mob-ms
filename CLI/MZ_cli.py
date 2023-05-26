@@ -141,15 +141,12 @@ def run_container(mzML_data_folder,Feature_data_loc):
         process_num = int(psutil.virtual_memory().available // (1000000000 * 2.5))
     if process_num == 0:
         return save_mem
+    
+    print("Maximum parallel processes determined: ", process_num) 
     pool = Pool(processes=process_num)
     
  #   check_memory_partial = partial(check_memory_and_start_thread)
     for _ in tqdm.tqdm(pool.imap(process, file_list), total=len(file_list)):
-        time.sleep(1)
-        while psutil.virtual_memory().free < (psutil.virtual_memory().available * .15):
-            time.sleep(10)
-            print("memory near limit. Slowing down.") 
-            time.sleep(10)
         pass
 
 
