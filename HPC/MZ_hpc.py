@@ -66,10 +66,9 @@ def process(input_args):
     current_loc = current_loc + "_c_dc_de.csv"
     mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
     mv_loc = mv_loc + "_c_dc_de.csv"
-    time.sleep(2)
     Path(current_loc).rename(mv_loc)
-    time.sleep(1)
     myinstance.stop()
+    shutil.rmtree(tmp_mount_mem)
     time.sleep(1)
 
 def run_container(mzML_data_folder,Feature_data_loc):
