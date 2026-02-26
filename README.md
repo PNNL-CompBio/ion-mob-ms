@@ -1,43 +1,116 @@
-# Ion Mobility Dashboard
-This is a workflow for analyzing Ion Mobility - Mass Spectrometry data. The primary goal is to facilitate the numerous steps required to analyze and interpret this type of data, as it requires numerous steps and file management can be a burden.
+# Ion Mobility Dashboard (IMDash)
 
-The full documentation, instructions on usage, tool descriptions, and troubleshooting tips should be viewed at our [Documentation](https://ionmobility.readthedocs.io/en/latest/background/info.html) site.
+IMDash is a containerized workflow for analyzing Ion Mobility–Mass Spectrometry (IMS-MS) data and generating collision cross-section (CCS) outputs. It packages a sequence of community tools behind a GUI and command-line interfaces, and uses container orchestration (Docker or Singularity) to reduce installation and dependency burden.
+
+The most up-to-date documentation (usage, file specifications, troubleshooting) is located at our [Documentation site](https://ionmobility.readthedocs.io/en/latest/background/info.html).
+
+## Repository Cloning
+
+At this point, when cloning the repository, it is highly reccomended to use a shallow clone using the following command:
+```
+git clone --depth 1 https://github.com/PNNL-CompBio/ion-mob-ms.git
+```
 
 
 ## Availability
-**Windows** GUI executable up to date.   
-**Mac** GUI executable on Zenodo up to date.  
-**Cloud (AWS)** version available.   
-**High Performance Computing (HPC)** version available.   
+
+**Graphical User Interface:**
+- **Desktop GUI (Windows)**: Available (recommended for smaller datasets; see docs for known Docker stability limitations).  
+  Download: `GUI/GUI_windows.exe` in this repository.
+- **Desktop GUI (macOS)**: Archived on Zenodo (Intel/x86 Macs are the primary supported target; see docs for Apple Silicon notes).  
+  Zenodo DOI (v1.1): https://doi.org/10.5281/zenodo.6941767
+  
+**Command line:**
+- **Cloud (AWS) CLI**: Available (Docker-based).
+- **HPC CLI**: Available (Singularity-based; SLURM-oriented templates).
+
+## Supported IMS workflows
+
+IMDash supports multiple IMS acquisition/processing modes (see docs for exact input requirements and required accessory files):
+
+- **DTIMS single-field** (calibrated CCS)
+- **DTIMS stepped-field / multifield** (primary CCS determination workflow)
+- **SLIM / TWIMS-style workflows** (calibration-driven CCS workflows)
+
+## Tools (high-level)
+
+IMDash links multiple command-line tools into a single end-to-end run, with containers handling dependencies:
+
+- **(Recommended) PNNL PreProcessor**: smoothing/QC and multifield file handling; currently run separately from IMDash (not fully integrated).
+- **ProteoWizard (msConvert)**: vendor format → open format conversion (e.g., mzML)
+- **MZmine 2**: feature detection
+- **AutoCCS**: CCS calculation and reporting
+- **Optional/experimental**: DEIMoS feature extraction support (see docs for current caveats)
 
 ## Architecture
-The system is designed to enable users to run individual parts via the command line, using a graphical user interface, or using Nextflow. Currently only the GUI portions are implemented, however we believe that in subsequent versions we will be able to automate the analysis as shown below.
 
+IMDash is designed so users can run:
+1) end-to-end workflows via the **GUI**, or  
+2) automated runs via the **CLI** (Cloud/HPC), while still allowing individual steps to be executed separately when needed.
+3) a future implementation may use nextflow.
 <img src="architecture.png" width="500">
 
-Each mode has separate needs for input files, but runs a combination of the modules depicted below.
-
 ### Containerized framework
-The guiding design principle behind the Ion Mobility Dashboard is to enable the use of existing tools for reproducible analysis of Ion Mobility Mass Spectrometry data. The use of Docker (GUI and Cloud) and Singularity (HPC) enables this abstraction to be flexible as we want to run a series of tools in a scalable manner.
+IMDash uses **Docker** for Desktop/Cloud execution and **Singularity** for HPC execution where Docker is restricted.
 
 ### Task framework
-
-The task framework, shown above in orange, depicts wrapper scripts that run each Docker container. These can also be expanded as more docker containers are added.
+Wrapper scripts run each containerized tool and pass outputs between stages (conversion → feature detection → CCS).
 
 ### Orchestration
-
-The orchestration layer enables the linking of individual tasks together. For example, in our Dashboard we allow for the analysis of Ion Mobility data collected via a single field or stepped field. As such, we must run different tools.
+A Python backend coordinates tool execution, manages intermediate files, and selects the appropriate workflow path (e.g., single-field vs stepped-field).
 
 ### User interface
-The user interface module enables users to upload files directly to the system.
+A desktop GUI supports interactive configuration, file selection, and execution (Docker Desktop must be running before launching the GUI).
 
 ## Installation
-To download and use this tool, please check out our [Documentation](https://ionmobility.readthedocs.io/en/latest/background/info.html) site for more details.
 
-## Contribution
+For full, step-by-step instructions, follow the documentation:
+- https://ionmobility.readthedocs.io/en/latest/index.html
 
-To contribute, please post an issue to the GitHub page. We are eager to include other tools in this framework.
+Quick pointers (see docs for details and troubleshooting):
 
+### Desktop GUI (macOS)
+1. Install Docker Desktop  
+2. Download and unzip the macOS app from Zenodo (v1.1): https://doi.org/10.5281/zenodo.6941767  
+3. Start Docker Desktop, then start the IMDash macOS app
 
-## Summary
-This framework will enable the end-to-end analysis of Ion Mobility MS-MS data.
+### Desktop GUI (Windows)
+1. Install Docker Desktop (+ WSL2 as required)  
+2. Download `GUI/GUI_windows.exe` from this repository  
+3. Start Docker Desktop, then start the Windows GUI executable
+
+### Cloud (AWS) CLI
+The docs include a working template for EC2 setup and running the CLI with a JSON run configuration:
+- https://ionmobility.readthedocs.io/en/latest/getting_started/AWS.html
+
+### HPC CLI (Singularity)
+The docs include Singularity + SLURM-oriented templates for running with a JSON run configuration:
+- https://ionmobility.readthedocs.io/en/latest/getting_started/HPC.html
+
+## Repository layout (common entry points)
+
+- `GUI/` — desktop executables and GUI assets
+- `CLI/` — cloud/desktop command-line entry points
+- `HPC/` — Singularity + scheduler templates
+- `docs/` — documentation source
+- `test-data/` — example inputs for validating installation / ensuring that user data matches the expected inputs.
+
+## Contributing
+
+Contributions are welcome:
+- Please open an issue for bugs, feature requests, or tool-integration proposals.
+- Pull requests are encouraged for documentation improvements, workflow extensions, and bug fixes.
+
+## Citation
+
+If you use IMDash in academic work, please cite the IMDash manuscript (and software archive where appropriate):
+
+**Ion Mobility-mass spectrometry Dashboard (IMDash): an automated, multi-platform computational pipeline to support production of robust and large-scale experimental collision cross-section libraries**
+- Note, submission/publication is currently in progress.
+
+Software archive (macOS GUI v1.1):
+- https://doi.org/10.5281/zenodo.6941767
+
+## License
+
+BSD-2-Clause (see `LICENSE`).
