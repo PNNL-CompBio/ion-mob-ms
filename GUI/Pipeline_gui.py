@@ -1,7 +1,23 @@
 #!/usr/bin/env python3.9
+"""
+Pipeline_gui.py - Ion Mobility Dashboard Pipeline Orchestration for GUI
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    This module manages the complete analysis workflow for the GUI client.
+    It coordinates execution of individual processing tools based on experiment type and configuration.
+    Supports three main experiment types: Single field, SLIM, and Stepped field.
+    
+    Key Features:
+    - JSON-based workflow configuration from GUI
+    - Support for multiple experiment types (Single, SLIM, Stepped)
+    - Flexible tool composition (PW, MZ, DM, AC, PP)
+    - Optional feature annotation
+    - Workflow result tracking
+    - Timestamps for all operations
+"""
 
 import argparse
 import json
@@ -20,17 +36,24 @@ import AC_gui
 from datetime import datetime
 
 
-#add timestamps to print
+
+# Container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
 
-#This manages the individual steps.
-#It receives a json file, which includes the desired tools, and experiment type.
-#It runs through each step until completion or failure.
 
 def execute_workflow(json_file):
+    """
+    Execute complete analysis workflow from GUI based on JSON configuration.
+    
+    Parameters:
+        json_file (str): Path to JSON file containing workflow configuration
+        
+    Returns:
+        list: Results from each processing step [PP, PW, MZ, DM, AC]
+    """
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     f = open(json_file)
@@ -44,13 +67,10 @@ def execute_workflow(json_file):
     AC_results = ""
 
 
-    ## Single Field
+    # Single Field experiment type workflow execution
     if data[0]["ExpType"] == "Single" or data[0]["ExpType"] == "Any":
         print("Json file passed to Pipeline.py")
-        print("Single Field Begins here.")
-        # if "PP" in data[0]["ToolType"]:
-        #     print("PNNL Preprocessor does Filtering and Smoothing")
-        #     PP_results = PP_cli.run_container(data[1]["Raw Data Folder"],data[0]["DriftKernel"],data[0]["LCKernel"],data[0]["MinIntensity"])
+        print("Single Field workflow begins execution.")
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])
@@ -79,20 +99,13 @@ def execute_workflow(json_file):
             AC_results= AC_gui.run_container("single","enhanced",True, data[1]["Calibrant File"], data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"],data[1]["Target List File"], False,data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
 
 
-    ## Slim 
+    # SLIM experiment type workflow execution
     if data[0]["ExpType"] == "SLIM":
         print("Json file passed to Pipeline.py")
-        print("SLIM Begins here.")
-        # if data[1]["Experiment"]
-        # if "PP" in data[0]["ToolType"]:
-        #     print("PNNL Preprocessor does Filtering and Smoothing")
-        #     PP_results = PP_cli.run_container(data[1]["Raw Data Folder"],data[0]["DriftKernel"],data[0]["LCKernel"],data[0]["MinIntensity"])
+        print("SLIM workflow begins execution.")
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])
-        # if "DM" in data[0]["ToolType"]:
-        #     print("Deimos searches for Features")
-        #     DM_results=DM_cli.run_container(data[1]["mzML Data Folder"])
         if "MZ" in data[0]["ToolType"]:
             print("MZMine searches for Features")
             MZ_results = MZ_gui.run_container(data[1]["mzML Data Folder"])
@@ -104,13 +117,10 @@ def execute_workflow(json_file):
             AC_results= AC_gui.run_container("slim","standard",True, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], data[1]["Target List File"], data[1]["Metadata File"],False,data[1]["AutoCCS Config File"])
         
 
-    ## Stepped Field
+    # Stepped Field experiment type workflow execution
     if data[0]["ExpType"] == "Stepped":
         print("Json file passed to Pipeline.py")
-        print("Stepped Field Begins here.")
-        # if data[1]["Experiment"]
-        # if "PP" in data[0]["ToolType"]:
-        #     print("PNNL Preprocessor does Filtering and Smoothing")
+        print("Stepped Field workflow begins execution.")
         if "PW" in data[0]["ToolType"]:
             print("Proteowizard converts Files")
             PW_results = PW_gui.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])

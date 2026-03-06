@@ -1,7 +1,26 @@
 #!/usr/bin/env python3.9
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+MZ_gui.py - MZmine Batch Feature Detection GUI Module
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    Provides graphical interface integration for MZmine batch processing of mzML
+    spectral data files. This module orchestrates Docker container execution of
+    MZmine feature detection with configuration template modification on a per-file
+    basis. Implements intelligent parallel processing with CPU-aware process
+    limiting to prevent resource exhaustion on workstation hardware.
+    
+    Key Features:
+    - Docker-based MZmine execution with persistent volume mounting
+    - Per-file XML configuration template modification using sed commands
+    - Incremental processing to skip already-processed files
+    - CPU-aware parallel processing with configurable process limits
+    - Cross-platform file transfer using tar-based Docker archive methods
+    - Timestamp-stamped logging for execution tracking
+"""
 
 import sys
 import docker
@@ -18,7 +37,7 @@ import stat
 import shutil
 from datetime import datetime
 
-#add timestamps to print
+# Container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
@@ -28,13 +47,22 @@ save_mem = os.path.join(os.getcwd(),"IV_Features_csv")
 client = docker.from_env()
 image = "anubhav0fnu/mzmine:latest"
 
-#This is the command line usage. Nice and simple. Must be run from the MZmine folder. This is in linux!!
-#It first requires modification of a xml batch file (below with sed).
+# MZmine execution command for Docker container environment.
+# Runs bash initialization script followed by feature detection on configured XML batch file.
 command_list_2 = ["bash", "startMZmine_Linux.sh", "/tmp/MZmine_FeatureFinder-batch.xml"]
 
-#Copy file functions
-#if mac
 def copy_a_file(client, src,dst):
+    """
+    Transfer file to Docker container using tar-based archive method.
+    
+    Parameters:
+        client: Docker client instance
+        src (str): Source file path on host machine
+        dst (str): Destination path in format 'container_name:/container/path'
+        
+    Returns:
+        None
+    """
     name, dst = dst.split(':')
     container = client.containers.get(name)
     os.chdir(os.path.dirname(src))
@@ -49,6 +77,17 @@ def copy_a_file(client, src,dst):
     os.remove((src + '.tar'))
 
 def copy_some_files(client, src_list,dst):
+    """
+    Transfer multiple files to Docker container.
+    
+    Parameters:
+        client: Docker client instance
+        src_list (list): List of source file paths
+        dst (str): Base destination path in container
+        
+    Returns:
+        None
+    """
     for src in src_list:
         srcname = os.path.basename(src)
         dst = dst + srcname
@@ -56,6 +95,19 @@ def copy_some_files(client, src_list,dst):
 
 
 def process(filepath):
+    """
+    Process individual mzML file through MZmine feature detection.
+    
+    Creates isolated Docker container for each file, modifies XML configuration
+    template with file-specific path, runs MZmine feature detection, and moves
+    results to permanent storage location.
+    
+    Parameters:
+        filepath (Path): Pathlib Path object to mzML file
+        
+    Returns:
+        None
+    """
     global client,image,local_mem,save_mem,command_list_2
     time.sleep(2)
     file_path = str(filepath.absolute())
@@ -78,20 +130,34 @@ def process(filepath):
     MZ_container.exec_run(cmd=command_list_2)
     print("MzMine completed in container: ", cont_name)
     
+    # Move processed feature CSV from temporary to permanent storage location
     current_loc = (os.path.join(local_mem,os.path.basename(file_path)))
     current_loc = current_loc + "_c_dc_de.csv"
     mv_loc = (os.path.join(save_mem,os.path.basename(file_path)))
     mv_loc = mv_loc + "_c_dc_de.csv"
-    # os.chmod(current_loc,stat.S_IRWXG)
     Path(current_loc).rename(mv_loc)
 
+    # Clean up container resources
     MZ_container.stop()
     time.sleep(2)
     MZ_container.remove()
 
 
-
 def run_container(mzML_data_folder):
+    """
+    Orchestrate batch MZmine processing of mzML files with parallel execution.
+    
+    Creates working directories, identifies unprocessed files by comparing input
+    directory against output directory, and processes files in parallel constrained
+    by available CPU cores. Implements intelligent skipping of already-processed
+    files to enable incremental processing.
+    
+    Parameters:
+        mzML_data_folder (str): Path to directory containing mzML spectral files
+        
+    Returns:
+        str: Path to directory containing feature detection results
+    """
     global client,image,local_mem,save_mem,command_list_2
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)    
@@ -102,25 +168,24 @@ def run_container(mzML_data_folder):
     
     file_list = list(pathlib.Path(mzML_data_folder).glob('*.mzML'))
 
-
-# TODO conditionally execute based on config?
-    # Build a dict of all files in unprocessed-directory of
-    #   KEY: <filename no suffix>
-    #   VALUE: a tuple of (<filepath>, <filename suffix>)
+    # Identify already-processed files to enable incremental processing.
+    # Build dictionary mapping filenames (without suffix) to their full paths.
     raw_files_no_ext_map = {Path(file).with_suffix('').name: (file, Path(file).suffix) for file in file_list}
-    # Get list of already processed file
+    
+    # Get list of already processed files from output directory
     file_list_processed = list(pathlib.Path(save_mem).glob('*'))
-    # Build a dict of all files in already-processed-directory of
-    #   KEY: <filename without suffix>
-    #   VALUE: a tuple of (filepath, suffix)
+    
+    # Build dictionary of processed files for comparison
     processed_files_no_ext_map = {os.path.basename(os.path.splitext(os.path.splitext(Path(file).absolute())[0])[0]): (file, "".join(Path(file).suffixes)) for file in file_list_processed}
-    # find the difference in processed and unprocessed sets built from the keys of both dicts
+    
+    # Find files that have not yet been processed
     unprocessed_names_map = list(set(raw_files_no_ext_map.keys()).difference(set(processed_files_no_ext_map.keys())))
-    # transform difference list of kvps back into list of unprocessed filepaths of type pathlib.Path
+    
+    # Convert filename list back to full filepath list
     file_list = [raw_files_no_ext_map[key][0].with_suffix(raw_files_no_ext_map[key][1]) for key in unprocessed_names_map]
     print(f'found unprocessed files count: {len(file_list)}')
     
-    
+    # Constrain parallelization to available CPU cores minus safety margin
     process_num = len(file_list)    
     cpu_count = os.cpu_count()
     if cpu_count > 6:
@@ -129,16 +194,16 @@ def run_container(mzML_data_folder):
     if process_num > cpu_count:
         process_num = cpu_count
 
+    # Return immediately if no unprocessed files found
     if process_num == 0:
         return local_mem
     
+    # Execute feature detection in parallel using worker process pool
     pool = Pool(processes=process_num)
-    # pool.map(process, file_list)
-
     pool.imap(process, file_list)
-
     pool.close()
     pool.join()
     
+    # Clean up temporary working directory
     shutil.rmtree(local_mem)
     return save_mem

@@ -1,12 +1,28 @@
+"""
+ccs_comparison.py - Collision Cross Section Comparison and Matching Utility
+
+Author: Chang, Christine H <christine.chang@pnnl.gov>
+Maintainer: Gosline, Sara <sara.gosline@pnnl.gov>
+
+Description:
+    Compares experimental ion mobility mass spectrometry data against reference
+    CCS (Collision Cross Section) calibration standards. Performs m/z, drift time,
+    and CCS matching against loaded calibration models with configurable error
+    tolerances for identification and validation of ion species.
+    
+    This utility is typically executed within container environments to perform
+    post-processing validation and comparison of detected features against
+    reference calibration data.
+    
+    Key Features:
+    - Pickle-based CCS calibration model loading
+    - HDF5 file format support for ion mobility data
+    - Configurable m/z and CCS error tolerances  
+    - Peak intensity filtering and quality assessment
+    - Pandas-based data manipulation and matching
+"""
+
 import pickle
-
-import deimos
-import pandas as pd
-import os
-import argparse
-
-# Author: Chang, Christine H <christine.chang@pnnl.gov>
-# Maintainer: Gosline, Sara <sara.gosline@pnnl.gov>
 
 # set match error tolerances
 ERR_MZ = 100.0e-6

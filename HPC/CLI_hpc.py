@@ -1,31 +1,49 @@
 #!/usr/bin/env python3.9
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+CLI_hpc.py - Command Line Interface for HPC Workflow Execution
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    High-performance computing variant of the main CLI interface. Accepts
+    command-line arguments to configure and execute mass spectrometry data
+    processing workflows on HPC infrastructure using Singularity containers.
+    
+    This module interfaces with HPC-optimized tool modules (PW_hpc, Pipeline_V2_hpc)
+    to orchestrate multi-stage workflows including raw data conversion, feature
+    detection, and data analysis. Supports JSON configuration files for batch
+    processing and experimental metadata specification.
+    
+    Key Features:
+    - Argument parsing for command-line workflow configuration
+    - JSON configuration file support for batch execution
+    - Integration with HPC tool modules (PW_hpc, Pipeline_V2_hpc)
+    - Experiment type support (Single Field, SLIM, Stepped Field)
+    - Batch metadata specification for sample annotation
+"""
 
 import argparse
 import subprocess
 import sys
-# import docker
 import os
 import tarfile
 import time
 import platform
 import Pipeline_V2_hpc
 import PW_hpc
-#import MZ_step
-#import PP_step
-#import DM_step
-#import AC_step
 import json
 
 
 if __name__ == '__main__':
-    print("Ion Mobility Dashboard Command Line Interface Starting.")    
+    print("Ion Mobility Dashboard Command Line Interface Starting.")
+    # Initialize argument storage dictionaries
     file_dict = dict()
     param_dict = dict()
 
-    parser = argparse.ArgumentParser(description='Description of your program')
+    # Configure command-line argument parser with workflow options
+    parser = argparse.ArgumentParser(description='HPC Ion Mobility Mass Spectrometry Workflow Control Interface')
     parser.add_argument('-j','--json', help='Prefilled Json File path', nargs='?', const='',default='')
     parser.add_argument('-n','--ExpName', help='Experiment name', nargs='?', const='',default='')
     parser.add_argument('-e','--ExpType', help='Experiment type', nargs='?', const='',default='')
@@ -44,19 +62,14 @@ if __name__ == '__main__':
     parser.add_argument('-o','--AutoCCS', help='AutoCCS Results', nargs='?', const='',default='')
     args = vars(parser.parse_args())
 
-    print("Running Singularity Build Script")
+    print("Running Singularity container build system")
     subprocess.call("./singularity_builder.sh")
 
-
-    #check if json file available. if so use it.
-    
+    # Check if JSON configuration file provided, if so execute workflow
     if args["json"] != '':
-        print("json Found. Starting Workflow")
+        print("JSON configuration found. Starting workflow execution")
         Pipeline_V2_hpc.execute_workflow(args["json"])
-        print("Workflow Complete.")
-   
-    #write json file using parparse inputs
-    #individual tools
+        print("Workflow execution complete.")
     else:
         if args["ToolType"] == ["PW"]:
             if args["PP"] != '':

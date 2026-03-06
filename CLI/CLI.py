@@ -1,12 +1,26 @@
 #!/usr/bin/env python3.9
+"""
+CLI.py - Ion Mobility Dashboard Command Line Interface
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    Main command-line interface entry point for the Ion Mobility Dashboard (IMD).
+    Provides argument parsing and workflow orchestration for ion mobility mass spectrometry
+    data processing. Supports both individual tool execution and complete analysis pipelines.
+    
+    Key Features:
+    - Command-line argument parsing for all tool inputs
+    - JSON-based workflow configuration
+    - Support for single experiments and complete pipelines
+    - Integration with all data processing modules (PW, MZ, DM, AC, PP)
+    - Cross-platform compatibility
+    """
 
 import argparse
 import subprocess
 import sys
-# import docker
 import os
 import tarfile
 import time
@@ -20,38 +34,35 @@ import AC_cli
 import json
 
 if __name__ == '__main__':
-    print("Ion Mobility Dashboard Command Line Interface Starting.")    
+    print("Ion Mobility Dashboard Command Line Interface Starting")
     file_dict = dict()
     param_dict = dict()
 
-    parser = argparse.ArgumentParser(description='Description of your program')
-    parser.add_argument('-j','--json', help='Prefilled Json File path', nargs='?', const='',default='')
-    parser.add_argument('-n','--ExpName', help='Experiment name', nargs='?', const='',default='')
-    parser.add_argument('-e','--ExpType', help='Experiment type', nargs='?', const='',default='')
-    parser.add_argument('-t','--ToolType', help='Tool Type as list', nargs='*')
-    parser.add_argument('-r','--Raw', help='Raw Data Folder', nargs='?', const='',default='')
-    parser.add_argument('-p','--PP', help='PreProcessed Data Folder', nargs='?', const='',default='')
-    parser.add_argument('-m','--mzML', help='mzML Data Folder', nargs='?', const='',default='')
-    parser.add_argument('-f','--FF', help='Feature Data Folder', nargs='?', const='',default='')
-    parser.add_argument('-i','--IMSMeta', help='IMS Metadata Folder', nargs='?', const='',default='')
-    # parser.add_argument('-d','--IMSMetaopt', help='IMS Metadata Folder (optional)', nargs='?', const='',default='')
-    parser.add_argument('-a','--ACConfig', help='AutoCCS Config File', nargs='?', const='',default='')
-    parser.add_argument('-s','--TLF', help='Target List File', nargs='?', const='',default='')
-    # parser.add_argument('-q','--TLFopt', help='Target List File (optional)', nargs='?', const='',default='')
-    parser.add_argument('-z','--MetadataFile', help='Metadata File', nargs='?', const='',default='')
-    parser.add_argument('-c','--Calibrant', help='Calibrant File', nargs='?', const='',default='')
-    parser.add_argument('-o','--AutoCCS', help='AutoCCS Results', nargs='?', const='',default='')
+    # Configure command-line argument parser
+    parser = argparse.ArgumentParser(description='Ion Mobility Dashboard - CLI for mass spectrometry data processing')
+    parser.add_argument('-j', '--json', help='Prefilled JSON configuration file path', nargs='?', const='', default='')
+    parser.add_argument('-n', '--ExpName', help='Experiment name', nargs='?', const='', default='')
+    parser.add_argument('-e', '--ExpType', help='Experiment type (Single, SLIM, Stepped)', nargs='?', const='', default='')
+    parser.add_argument('-t', '--ToolType', help='Tools to execute (PW, MZ, DM, AC, PP)', nargs='*')
+    parser.add_argument('-r', '--Raw', help='Raw data folder path', nargs='?', const='', default='')
+    parser.add_argument('-p', '--PP', help='Preprocessed data folder path', nargs='?', const='', default='')
+    parser.add_argument('-m', '--mzML', help='mzML data folder path', nargs='?', const='', default='')
+    parser.add_argument('-f', '--FF', help='Feature data folder path', nargs='?', const='', default='')
+    parser.add_argument('-i', '--IMSMeta', help='IMS metadata folder path', nargs='?', const='', default='')
+    parser.add_argument('-a', '--ACConfig', help='AutoCCS configuration file path', nargs='?', const='', default='')
+    parser.add_argument('-s', '--TLF', help='Target list file path', nargs='?', const='', default='')
+    parser.add_argument('-z', '--MetadataFile', help='Metadata file path', nargs='?', const='', default='')
+    parser.add_argument('-c', '--Calibrant', help='Calibrant file path', nargs='?', const='', default='')
+    parser.add_argument('-o', '--AutoCCS', help='AutoCCS output results directory', nargs='?', const='', default='')
     args = vars(parser.parse_args())
 
-    #check if json file available. if so use it.
-    
+    # Process JSON configuration file if provided
     if args["json"] != '':
-        print("json Found. Starting Workflow")
+        print("JSON configuration file provided. Starting workflow")
         Pipeline_cli.execute_workflow(args["json"])
-        print("Workflow Complete.")
-   
-    #write json file using parparse inputs
-    #individual tools
+        print("Workflow completed successfully")
+    
+    # Build and execute individual tool workflows from command-line arguments
     else:
         if args["ToolType"] == ["PW"]:
             if args["PP"] != '':

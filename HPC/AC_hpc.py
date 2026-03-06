@@ -1,7 +1,30 @@
 #!/usr/bin/env python3.9
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+AC_hpc.py - AutoCCS Collision Cross Section HPC Module
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    High-performance computing variant of AutoCCS orchestration using Singularity
+    container technology instead of Docker. Manages distributed Singularity container
+    execution for Collision Cross Section (CCS) calculations on HPC environments
+    (SLURM, SGE, PBS, etc.).
+    
+    This module replicates AutoCCS_cli.py functionality but uses Singularity/
+    spython client for HPC infrastructure compatibility with cluster job schedulers.
+    Implements tar-based file transfer and batch command execution within
+    containerized environments.
+    
+    Key Features:
+    - Singularity container orchestration for HPC environments
+    - Batch CCS calculation with configurable parameters
+    - Tar-based file transfer for cross-system compatibility
+    - Parallel processing with configurable process limits
+    - Integration with HPC job scheduling systems (SLURM, SGE, PBS)
+    - Timestamp-stamped logging for execution tracking
+"""
 
 import sys
 import os
@@ -21,25 +44,46 @@ import glob
 import tqdm
 from datetime import datetime
 
-#add timestamps to print
+# Singularity container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
 
-#This step defines the run method of autoCCS.
-
+# R script commands for metadata extraction and feature annotation
 command_0 = """Rscript /Work/R_Metadata_I.R"""
 command_tmp_fix_for_0 = """python3.8 /Work/fix_metadata.py"""
 command_annotate = """Rscript /Work/R_Annotate_features_V.R"""
-# save_mem = os.path.join(os.getcwd(), "IV_data")
 
 
 def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config, autoccs_loc):
+    """
+    Orchestrate Singularity-based AutoCCS container execution on HPC infrastructure.
+    
+    Manages CCS calculation parameter configuration, Singularity image discovery,
+    container execution with volume mounting, and result collection from distributed
+    HPC compute resources. Supports optional feature annotation post-processing.
+    
+    Parameters:
+        exp (str): Experiment identifier for result organization
+        version (str): CCS calculation version/methodology
+        annotate (bool): Whether to perform feature annotation post-processing
+        calibrant_file (str): Path to CCS calibration reference file
+        framemeta_files (list): Paths to frame metadata files
+        feature_files (list): Paths to feature detection output files
+        target_list_file (str): Path to target ions list file
+        raw_file_metadata (str): Path to raw file metadata CSV
+        preP_files: Preprocessed data files
+        autoccs_config (str): AutoCCS configuration file path
+        autoccs_loc (str): Output directory for CCS results
+        
+    Returns:
+        str: Path to results directory containing CCS calculations
+    """
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
     save_mem = autoccs_loc
-#Determine which command line options will be used.
+    # Determine which command line options will be used based on provided parameters
 #This was kept in this longer format because it is easier to modify. 
 #Note: If modifying these... any that use a wildcard, MUST use single quotes
 #such as ('/tmp/FF/*.csv'). If you use double quotes, this will fail. Why? who knows...
@@ -64,10 +108,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
        
     #This prints where the local files are being saved to. (With pyinstaller, this is a temporary folder)
     print("Save memory is: ", autoccs_loc)
-    #Image name
-    # image = "anubhav0fnu/autoccs"    
-    #Make file system
-    
+    # Create required directory structure for AutoCCS processing
     os.makedirs(autoccs_loc + "/PP", exist_ok=True)
     os.makedirs(autoccs_loc +"/CF", exist_ok=True)
     os.makedirs(autoccs_loc +"/TLF", exist_ok=True)
@@ -78,21 +119,12 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     os.makedirs(autoccs_loc +"/CBF", exist_ok=True)
     time.sleep(3)
     print("AutoCCS IV_data filesystem created")
-    #start container
-    #mount local mem (path/IV_data) to /tmp in the container
-    #in the container, all the subdirectories above are in /tmp path
-    #Container is interactive. You can open a terminal (recc: then use bash) and see data & manually run autoCCS.
-    # client = docker.from_env()
-    # print("AutoCCS Container Started")
     
+    # Mount local directory to container /tmp (all subdirectories available in container)
     options = ["--writable-tmpfs","--bind", save_mem +":/tmp"]
     myinstance = Client.instance('./autoccs.sif', options=options)
     AC_container = myinstance.name
     
-    
-    # client.containers.run(image,name="AC_container",volumes={save_mem: {'bind': '/tmp', 'mode': 'rw'}}, detach=True, tty=True)
-    # AC_Container = client.containers.get('AC_container')
-
     print("AC container running")
     shutil.copy(autoccs_config, os.path.join(save_mem,"CF"))
     
@@ -127,10 +159,8 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
         shutil.copy(target_list_file, os.path.join(save_mem,"TLF"))
 
     #single field performs automated metadata extraction.
-    #If this is ever not working, code can be modified to include this. See Notes in UI_V2.py.
-    #slim requires user-generated metadata
-    #stepped field determines metadata from filename.
-
+    # slim requires user-generated metadata file.
+    # stepped field determines metadata from filename patterns.
     if exp == "single":
         Client.execute(myinstance,command_0, options=['--writable-tmpfs'],quiet=False)
         print("Metadata extracted")
