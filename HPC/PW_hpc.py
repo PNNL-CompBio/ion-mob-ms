@@ -1,7 +1,30 @@
 #!/usr/bin/env python3.9
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+PW_hpc.py - Proteowizard Raw Data Conversion HPC Module
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    High-performance computing variant of Proteowizard (msconvert) raw data
+    conversion using Singularity containers. Orchestrates distributed mzML
+    conversion on HPC infrastructure with Singularity-based Wine64 support for
+    Windows application emulation.
+    
+    This module replicates PW_cli.py functionality but uses Singularity/spython
+    client for HPC environment compatibility. Implements per-file container
+    execution with cross-platform file handling and automatic permission
+    correction for read-only file cleanup.
+    
+    Key Features:
+    - Singularity container orchestration for distributed msconvert execution
+    - Wine64 compatibility layer for Windows application support
+    - Per-file container management with volume mounting
+    - Experiment-type aware file filtering (Single Field MS1 filtering)
+    - CPU-aware process limiting for workstation resource management
+    - Incremental processing with automatic skip of converted files
+"""
 
 import sys
 import os
@@ -23,23 +46,15 @@ from datetime import datetime
 from functools import partial
 import psutil
 
-
-
-#Set initial variables,
-#Determine local mem
-
+# Container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
 
-#Set initial variables,
-#Determine local mem
-
-#This is the command that will be run in the container
-#Wine is used because Proteowizard/msconvert is a windows tool.
-
-command_list = ["wine64", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
+# This is the command that will be run in the container via Wine emulation
+# Wine is used because Proteowizard/msconvert is a Windows tool
+command_list = ["wine64", "msconvert", "-e", ".mzML", "-o", "/III_mzML", "placeholder"]
 
 
 def onerror(func, path, exc_info):

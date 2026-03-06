@@ -1,7 +1,22 @@
 #!/usr/bin/env python3.9
+"""
+AC_gui.py - AutoCCS GUI Module
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    This module provides graphical user interface functionality for the AutoCCS tool.
+    It manages Docker container orchestration for automated CCS calculations with GUI support.
+    The module handles various experiment types and supports optional feature annotation.
+    
+    Key Features:
+    - Docker container management for AutoCCS execution via GUI
+    - Support for single, SLIM, and stepped field experiments
+    - Optional feature annotation capabilities
+    - Timestamps for logging
+    - Cross-platform file handling
+"""
 
 import sys
 import docker
@@ -14,28 +29,40 @@ import glob
 import pathlib
 from datetime import datetime
 
-#add timestamps to print
+
+# Container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
 
-#This step defines the run method of autoCCS.
-
+# R script commands for metadata extraction and annotation
 command_0 = """Rscript /R_Metadata_I.R"""
 command_tmp_fix_for_0 = """python3.8 /fix_metadata.py"""
 command_annotate = """Rscript /R_Annotate_features_V.R"""
 save_mem = os.path.join(os.getcwd(), "IV_data")
 
 
-def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_files, target_list_file,raw_file_metadata,preP_files,autoccs_config):
-    cur_dir = os.path.dirname(__file__)
-    os.chdir(cur_dir)
-
-#Determine which command line options will be used.
-#This was kept in this longer format because it is easier to modify. 
-#Note: If modifying these... any that use a wildcard, MUST use single quotes
-#such as ('/tmp/FF/*.csv'). If you use double quotes, this will fail. Why? who knows...
+def run_container(exp, version, annotate, calibrant_file, framemeta_files, feature_files, 
+                  target_list_file, raw_file_metadata, preP_files, autoccs_config):
+    """
+    Orchestrate AutoCCS Docker container execution for GUI.
+    
+    Parameters:
+        exp (str): Experiment type - 'single', 'slim', or 'step'
+        version (str): AutoCCS version - 'standard' or 'enhanced'
+        annotate (bool): Whether to perform feature annotation
+        calibrant_file (str): Path to calibrant file
+        framemeta_files (str): Path to frame metadata files (for enhanced mode)
+        feature_files (str): Path to feature CSV files
+        target_list_file (str): Path to target list file (optional)
+        raw_file_metadata (str): Path to raw file metadata (for SLIM)
+        preP_files (str): Path to preprocessed files
+        autoccs_config (str): Path to AutoCCS configuration file
+        
+    Returns:
+        str: Path to the AutoCCS output directory
+    """
     if version == "standard":
         if exp == "single":
             command_list = ["python3.8","/AutoCCS/autoCCS.py", "--config_file", ("/tmp/CF/" + os.path.basename(autoccs_config)), "--feature_files", '/tmp/FF/*.csv', 
@@ -74,10 +101,7 @@ def run_container(exp,version,annotate,calibrant_file,framemeta_files, feature_f
     image = "anubhav0fnu/autoccs"   
     time.sleep(3)
     print("AutoCCS IV_data filesystem created")
-    #start container
-    #mount local mem (path/IV_data) to /tmp in the container
-    #in the container, all the subdirectories above are in /tmp path
-    #Container is interactive. You can open a terminal (recc: then use bash) and see data & manually run autoCCS.
+    # Initialize Docker client and start container with volume mounts
     client = docker.from_env()
     print("AutoCCS Container Started")
     client.containers.run(image,name="AC_container",volumes={save_mem: {'bind': '/tmp', 'mode': 'rw'}}, detach=True, tty=True)

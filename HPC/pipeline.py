@@ -1,5 +1,30 @@
 #!/usr/bin/python3
 
+"""
+pipeline.py - MinIO-based Workflow Orchestration Pipeline
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    Orchestrates mass spectrometry analysis workflows using MinIO S3-compatible
+    object storage as the data backend. Manages workflow resources, coordinates
+    tool execution, and handles result collection from distributed processing
+    infrastructure. This module is in development and subject to architectural changes.
+    
+    This module integrates MinIO storage with HPC processing tools (Proteowizard
+    and MZmine web modules) to enable scalable cloud-based analysis pipelines
+    with persistent data storage and result tracking.
+    
+    Key Features:
+    - MinIO bucket management for data organization
+    - Workflow coordination with remote storage backends
+    - Integration with PW_web and MZ_web processing modules
+    - Result retrieval and organization from object storage
+    
+    Development Status: In active development - API and functionality subject to change
+"""
+
 from minio import Minio
 # from minio.error import ResponseError
 # import urllib3
@@ -56,105 +81,14 @@ def main():
 
     if "MZ" in steps:
         print("Running Mzmine")
-    #         print("Proteowizard converts Files")
-    #         PW_results = PW_step.run_container("data["ExpType"]")
         MZ_web.run()
-    
-######### Old pipeline
 
-    ## Single Field
-    # if data["ExperimentType"] == "SIF":
-    #     print("Json file passed to Pipeline.py")
-    #     print("Single Field Begins here.")
-    #     # if "PP" in steps:
-    #     #     print("PNNL Preprocessor does Filtering and Smoothing")
-    #         # PP_results = PP_step.run_container(data[1]["Raw Data Folder"],data[0]["DriftKernel"],data[0]["LCKernel"],data[0]["MinIntensity"])
-    #     if "PW" in steps:
-    #         print("Proteowizard converts Files")
-    #         PW_results = PW_step.run_container("data["ExpType"]")
-    #     if "DM" in steps:
-    #         print("Deimos searches for Features")
-    #         DM_results=DM_step.run_container(data[1]["mzML Data Folder"])
-    #     if "MZ" in steps:
-    #         print("MZMine searches for Features")
-    #         print(data[1]["mzML Data Folder"])
-    #         print(data[1])
-    #         MZ_results = MZ_step.run_container(data[1]["mzML Data Folder"])
-    #     if "AC" in steps and "IMS Metadata Folder" not in data[1] and "Target List File" not in data[1]:
-    #         print("AutoCCS finds features through the standard method. \nNo Target list specified, annotations will be skipped.")
-    #         AC_results= AC_step.run_container("single","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], False, False, data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
-        
-    #     if "AC" in steps and "IMS Metadata Folder" not in data[1] and "Target List File" in data[1]:
-    #         AC_results= AC_step.run_container("single","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], data[1]["Target List File"], False, data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
-    #         print("AutoCCS finds features through the standard method. \nTarget list specified, annotations will proceed after AutoCCS.")
-
-    #     if "AC" in steps and "IMS Metadata Folder" in data[1] and "Target List File" not in data[1]:
-    #         print("AutoCCS finds features through the enhanced method. \nNo Target list specified, annotations will be skipped.")
-    #         AC_results= AC_step.run_container("single","enhanced",False, data[1]["Calibrant File"], data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], False, False,data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
-    
-    #     if "AC" in steps and "IMS Metadata Folder" in data[1] and "Target List File" in data[1]:
-    #         print("AutoCCS finds features through the enhanced method. \nTarget list specified, annotations will proceed after AutoCCS.")
-    #         AC_results= AC_step.run_container("single","enhanced",True, data[1]["Calibrant File"], data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"],data[1]["Target List File"], False,data[1]["PreProcessed Data Folder"],data[1]["AutoCCS Config File"])
-
-
-    # ## Slim 
-    # elif data["ExperimentType"] == "SLIM":
-    #     print("Json file passed to Pipeline.py")
-    #     print("SLIM Begins here.")
-    #     # if data[1]["Experiment"]
-    #     if "PP" in steps:
-    #         print("PNNL Preprocessor does Filtering and Smoothing")
-    #         PP_results = PP_step.run_container(data[1]["Raw Data Folder"],data[0]["DriftKernel"],data[0]["LCKernel"],data[0]["MinIntensity"])
-    #     if "PW" in steps:
-    #         print("Proteowizard converts Files")
-    #         PW_results = PW_step.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])
-    #     if "DM" in steps:
-    #         print("Deimos searches for Features")
-    #         DM_results=DM_step.run_container(data[1]["mzML Data Folder"])
-    #     if "MZ" in steps:
-    #         print("MZMine searches for Features")
-    #         MZ_results = MZ_step.run_container(data[1]["mzML Data Folder"])
-    #     if "AC" in steps and "Target List File" not in data[1]:
-    #         print("AutoCCS finds features through the standard method.\nNo Target list specified, annotations will be skipped. ")
-    #         AC_results= AC_step.run_container("slim","standard",False, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], False, data[1]["Metadata File"],False,data[1]["AutoCCS Config File"])
-    #     if "AC" in steps and "Target List File" in data[1]:
-    #         print("AutoCCS finds features through the standard method.\nTarget list specified, annotations will proceed after AutoCCS.")
-    #         AC_results= AC_step.run_container("slim","standard",True, data[1]["Calibrant File"],False, data[1]["Feature Data Folder"], data[1]["Target List File"], data[1]["Metadata File"],False,data[1]["AutoCCS Config File"])
-        
-
-    # ## Stepped Field
-    # elif data["ExperimentType"] == "STF":
-    #     print("Json file passed to Pipeline.py")
-    #     print("Stepped Field Begins here.")
-    #     # if data[1]["Experiment"]
-    #     if "PP" in steps:
-    #         print("PNNL Preprocessor does Filtering and Smoothing")
-    #     if "PW" in steps:
-    #         print("Proteowizard converts Files")
-    #         PW_results = PW_step.run_container(data[1]["PreProcessed Data Folder"],data[0]["ExpType"])
-    #     if "DM" in steps:
-    #         print("Deimos searches for Features")
-    #         DM_results=DM_step.run_container(data[1]["mzML Data Folder"])
-    #     if "MZ" in steps:
-    #         print("MZMine searches for Features")
-    #         print(data[1]["mzML Data Folder"])
-    #         print(data[1])
-    #         MZ_results = MZ_step.run_container(data[1]["mzML Data Folder"])
-    #     if "AC" in steps:
-    #         print("AutoCCS finds features through the enhanced method.")
-    #         AC_results= AC_step.run_container("step","enhanced",False,False, data[1]["IMS Metadata Folder"], data[1]["Feature Data Folder"], data[1]["Target List File"], False,False,data[1]["AutoCCS Config File"])
-    
-
-    # #This required for the GUI to identify which tools were completed.
-    # all_results = [PP_results, PW_results, MZ_results, DM_results, AC_results]
-    # return all_results
-
-######### Old pipeline
-
-
-
-
-
+if __name__ == "__main__":
+    try:
+        main()
+    except:
+        print("failed")
+        pass
 
 
 

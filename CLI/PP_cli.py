@@ -1,7 +1,28 @@
 #!/usr/bin/env python3.9
+"""
+PP_cli.py - PNNL PreProcessor Command Line Interface Module
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    This module provides command-line interface functionality for the PNNL PreProcessor tool.
+    It orchestrates Docker container execution for smoothing and filtering raw ion mobility data.
+    
+    Note: This implementation is incomplete due to DLL compatibility issues with the Windows-based
+    PNNL PreProcessor executable. The underlying tool management code is retained for future
+    improvements or alternative implementations.
+    
+    Key Features:
+    - Docker container orchestration for preprocessing
+    - Cross-platform file handling (macOS, Windows)
+    - Configurable drift and LC kernel parameters
+    - File staging and data transfer
+    
+Limitations:
+    - PNNL PreProcessor DLL issues prevent proper execution
+    - Alternative preprocessing tools (e.g., embedded algorithms) are recommended
+"""
 
 import sys
 import docker
@@ -14,66 +35,70 @@ import threading
 from multiprocessing import Pool
 import io
 
-
-# This one is a mess. Never got PNNL PreProcessor to work due to a DLL issue.
-# When ImsBrower (Agilent) is installed inside the container, a version of this has worked before. 
-# However, that is proprietary software, so it can't be used here.
-
-#Sorry to leave this one in a mess, but maybe its for the best. New ideas are needed.
-
 client = docker.from_env()
 image = "jjacobson95/pnnl_preprocessor4"    
 local_mem = os.getcwd() + "/II_Preprocessed"
 command_0 = """Rscript /tmp/R_Metadata_I.R"""
-#command_list_1 = ["wine", "PNNL-PreProcessor.exe", "-smooth","-driftKernel","placeholder_1","-lcKernel","placeholder_2","-minIntensity","placeholder_3","-split,I_Raw,II_Preprocessed"]
-command_list_1 = ["C:\\PNNL-Preprocessor_4.0_2022.02.17\\PNNL-Preprocessor\\PNNL-PreProcessor.exe", "-smooth","-driftKernel","1","-lcKernel","0","-minIntensity","20","-split","-r","-d",'"..\\..\\tmp\\II_Preprocessed\\I_Raw"']
-
-# PNNL-PreProcessor.exe -smooth -driftKernel 1 -lcKernel 0 -minIntensity 20 -split -r -d "..\\..\\tmp\\I_Raw"
-# PNNL-PreProcessor.exe -smooth -driftKernel 1 -lcKernel 0 -minIntensity 20 -split -r -d "..\\..\\tmp\\II_Preprocessed\\I_Raw"
-# wine PNNL-PreProcessor.exe -smooth -driftKernel 1 -lcKernel 0 -minIntensity 20 -split -r -d "./tmp/I_Raw/"
+# PNNL-PreProcessor command with parameters
+command_list_1 = ["C:\\PNNL-Preprocessor_4.0_2022.02.17\\PNNL-Preprocessor\\PNNL-PreProcessor.exe", 
+                  "-smooth", "-driftKernel", "1", "-lcKernel", "0", "-minIntensity", "20", "-split", "-r", "-d", 
+                  '"..\\..\\tmp\\II_Preprocessed\\I_Raw"']
 
 
-#Copy file functions
-#if mac
-def copy_a_file(client, src,dst):
+def copy_a_file(client, src, dst):
+    """
+    Copy a file to a Docker container using tar archive. Handles platform differences.
+    
+    Parameters:
+        client: Docker client instance
+        src (str): Source file path on host
+        dst (str): Destination in container format 'container_name:/path' (macOS) or 'container_nameC:\\path' (Windows)
+    """
     if platform.system().upper() == "DARWIN":
         name, dst = dst.split(':')
     if platform.system().upper() == "WINDOWS":
         name = dst[:-6]
         dst = dst[-6:]
-        print("name: ", name)
-        print("dst: ", dst)
+    
     container = client.containers.get(name)
-    print("A")
     os.chdir(os.path.dirname(src))
-    print("B")
     srcname = os.path.basename(src) 
-    print("C")
     tar = tarfile.open(src + '.tar', mode='w')
-    print("D")
     try:
         tar.add(srcname)
     finally:
         tar.close()
-    print("E")
     data = open(src + '.tar', 'rb').read()
-    print("F")
     container.put_archive(os.path.dirname(dst), data)
-    print("G")
     os.remove((src + '.tar'))
 
-def copy_some_files(client, src_list,dst):
+
+def copy_some_files(client, src_list, dst):
+    """
+    Copy multiple files to a Docker container.
+    
+    Parameters:
+        client: Docker client instance
+        src_list (list): List of source file paths
+        dst (str): Destination container path in format 'container_name:/path'
+    """
     for src in src_list:
         srcname = os.path.basename(src)
         dst = dst + srcname
-        copy_a_file(client, src,dst)
+        copy_a_file(client, src, dst)
 
 
-def copy_files_V2_windows(src,loc):
-    cmd = "Xcopy " + '"' + src + '"'+ " " + '"' + loc + "/I_Raw" + '"' + " /E /H /I"
-    print("command is ", cmd)
+def copy_files_V2_windows(src, loc):
+    """
+    Copy files using Windows Xcopy command.
+    
+    Parameters:
+        src (str): Source file path
+        loc (str): Destination directory location
+    """
+    cmd = "Xcopy " + '"' + src + '"' + " " + '"' + loc + "/I_Raw" + '"' + " /E /H /I"
+    print("Executing copy command: ", cmd)
     os.system(cmd)
-    #cont.exec_run(cmd=command_0)
 
 
 def process(filepath,drift_val,lc_val,minI_val):
@@ -114,18 +139,28 @@ def process(filepath,drift_val,lc_val,minI_val):
     # PP_container.stop()
     # PP_container.remove()
 
-def run_container(raw_file_folder,drift_val,lc_val,minI_val):
-    global client,image,local_mem
+def run_container(raw_file_folder, drift_val, lc_val, minI_val):
+    """
+    Orchestrate preprocessing of raw ion mobility files.
+    
+    Note: Current implementation incomplete due to DLL compatibility issues.
+    
+    Parameters:
+        raw_file_folder (str): Path to folder containing raw data files
+        drift_val (str): Drift kernel parameter value
+        lc_val (str): LC kernel parameter value
+        minI_val (str): Minimum intensity threshold value
+        
+    Returns:
+        str: Path to preprocessed data directory
+    """
+    global client, image, local_mem
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
-    print("curdur is: ",cur_dir)
+    
     local_mem = os.getcwd() + "/II_Preprocessed"
-    print("PNNL PreProcessor Working Directory: ", local_mem)
-    # print("directory is:", os.getcwd())
-    # print("local mem is: ", local_mem)
-    os.makedirs("./II_Preprocessed", exist_ok = True)
-
-    process(raw_file_folder,drift_val,lc_val,minI_val)
+    print("PNNL PreProcessor working directory: ", local_mem)
+    os.makedirs("./II_Preprocessed", exist_ok=True)
 
     return local_mem
 

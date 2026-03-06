@@ -1,7 +1,30 @@
 #!/usr/bin/env python3.7
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+MZ_hpc.py - MZmine Feature Detection HPC Module
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    High-performance computing variant of MZmine feature detection using Singularity
+    containers. Orchestrates distributed container execution for batch feature
+    detection on HPC infrastructure with per-file isolation and temporary file
+    mounting for memory efficiency.
+    
+    This module replicates MZ_cli.py functionality but uses Singularity/spython
+    client for HPC compatibility. Implements per-file container instances with
+    XML batch file modification and isolated temporary directories to minimize
+    cross-file interference and enable parallel processing.
+    
+    Key Features:
+    - Singularity container orchestration for distributed MZmine execution
+    - Per-file container instances with isolated working directories
+    - Temporary file mounting for memory-efficient processing
+    - XML configuration template modification per input file
+    - CPU-aware parallel processing with configurable worker limits
+    - Incremental processing with automatic skip of completed files
+"""
 
 import sys
 import os
@@ -24,10 +47,7 @@ import random
 import string
 import psutil
 
-#Set initial variables,
-#Determine local mem
- 
-#add timestamps to print
+# Container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
@@ -42,12 +62,13 @@ def process(input_args):
     file_path = str(filepath.absolute())
     file_name = os.path.basename(file_path)
     options = ["--writable-tmpfs","--bind", local_mem + ":/Work/III_mzML", "--bind", tmp_mount_mem+":/Work/tmp"]
-    # options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
     myinstance = Client.instance('./mzmine.sif', options=options)        
+    
+    # R script for data parsing and conversion
     command_list_0 = """Rscript /Work/R_PARSE_II.R"""
-# doesnt work    command_list_0 = """Rscript /Work/R_PARSE_II.R ParseDTasRTmzML 1 /Work/III_mzML/""" + file_name
-#    command_list_0 = """Rscript -e 'source("R_PARSE_II.R"); ParseDTasRTmzML(1,"/Work/III_mzML/""" + file_name + """")'"""    
+    # XML batch configuration modification with file-specific parameters
     command_list_1 = """python MZmine_FeatureFinder_Modifier.py -n """ + file_name
+    # MZmine feature detection execution
     command_list_2 = """bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml"""
     print("command_list_1:", command_list_1)
 
@@ -55,9 +76,6 @@ def process(input_args):
 
     Client.execute(myinstance,command_list_1, options=['--writable-tmpfs'],quiet=False)
     Client.execute(myinstance,command_list_0, options=['--writable-tmpfs'],quiet=False)
-    
-##    shutil.copy(file_path, os.path.join(local_mem))
-
     Client.execute(myinstance,command_list_2, options=['--writable-tmpfs'],quiet=False)
 
     print("Instance complete: ",myinstance,"   ",filepath)

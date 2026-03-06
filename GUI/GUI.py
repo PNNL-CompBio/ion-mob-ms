@@ -1,7 +1,25 @@
 #!/usr/bin/env python3.9
+"""
+GUI.py - Ion Mobility Dashboard Main Graphical User Interface
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    This is the main graphical user interface for the Ion Mobility Dashboard (IMD).
+    It provides a Tkinter-based interface for configuring and executing ion mobility mass spectrometry
+    data processing workflows. The GUI supports both single experiment, SLIM, and stepped field workflows.
+    
+    Key Features:
+    - Comprehensive Tkinter GUI with ThemedTk styling
+    - Workflow and tool selection modes
+    - File/folder browser integration
+    - Parameter configuration for all tools
+    - PDF result visualization
+    - Cross-platform compatibility (Windows, macOS, Linux)
+    - PyInstaller support for standalone executable
+    - Multiprocessing support for background task execution
+"""
 
 from time import sleep
 import tkinter as tk
@@ -31,23 +49,22 @@ import shutil
 
 
 # Initialize application
-#This first line is required to allow this to work with pyinstaller / subprocesses.
-if __name__=="__main__":
-    #This may be needed for pyinstaller.
+if __name__ == "__main__":
+    # Enable multiprocessing support for PyInstaller
     multiprocessing.freeze_support()
-    #Set working directory
+    # Set working directory
     cur_dir = os.path.dirname(__file__)
     os.chdir(cur_dir)
-    # Initialize application     
+    # Initialize Tkinter window
     window = ThemedTk(theme="none")
-    window.title("Ion Mobility Dashboard",)
+    window.title("Ion Mobility Dashboard")
     window.config(bg='#0C74BA')
 
 
-    #initilize variables
+    # Initialize application variables
     label_list = []
     entry_list = []
-    entry_file_dict= {}
+    entry_file_dict = {}
     entry_param_dict = {}
     button_list = []
     global_file_dictionary = {}
@@ -60,9 +77,9 @@ if __name__=="__main__":
     MinIntensity = ""
     ExpType = ""
     ToolType = ""
-    last_tool=""
+    last_tool = ""
     tool_check = ""
-    last_mode=""
+    last_mode = ""
 
     #Modify this list and also "open_file" function to allow for more files types.
     possible_files = ["Raw Data Folder","PreProcessed Data Folder","Feature Data Folder","IMS Metadata Folder","IMS Metadata Folder (optional)",

@@ -1,7 +1,26 @@
 #!/usr/bin/env python3.9
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+PW_gui.py - Proteowizard/msconvert Raw Data Conversion GUI Module
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    Provides graphical interface integration for Proteowizard (msconvert) raw
+    mass spectrometry file conversion to mzML format. This module orchestrates
+    Docker container execution with Wine64 for Windows application emulation.
+    Implements intelligent experiment-type aware file filtering and incremental
+    processing with CPU-aware parallelization.
+    
+    Key Features:
+    - Docker-based msconvert execution with Wine64 compatibility layer
+    - Experiment-type filtering (Single Field mode filters non-MS1 data)
+    - Per-file container management with cross-platform volume mounting
+    - Incremental processing to skip already-converted files
+    - CPU-aware parallel processing with process limit configuration
+    - Access error handling with automatic permission correction (chmod)
+"""
 
 import sys
 import docker
@@ -19,14 +38,13 @@ import shutil
 import glob
 from datetime import datetime
 
-#add timestamps to print
+# Container runtime logging with timestamps
 old_print = print
 def timestamped_print(*args, **kwargs):
   old_print(datetime.now(), *args, **kwargs)
 print = timestamped_print
 
-#Set initial variables,
-#Determine local mem
+# Initialize Docker client and container image
 client = docker.from_env()
 image = "anubhav0fnu/proteowizard"    
 cur_dir = os.path.dirname(__file__)
@@ -34,10 +52,8 @@ os.chdir(cur_dir)
 local_mem = os.path.join(os.getcwd(),"III_mzML_tmp")
 save_mem = os.path.join(os.getcwd(),"III_mzML") 
 
-# command_list = ["wine", "msconvert", "--zlib", "-e",".mzML.gz","-o","/III_mzML", "placeholder"]
-
-#This is the command that will be run in the container
-#Wine is used because Proteowizard/msconvert is a windows tool.
+# msconvert command executed in Docker container using Wine64 compatibility layer.
+# Converts raw mass spectrometry data files to mzML format.
 command_list = ["wine64_anyuser", "msconvert", "-e",".mzML","-o","/III_mzML", "placeholder"]
 
 
@@ -61,6 +77,19 @@ def onerror(func, path, exc_info):
         raise
 
 def process(filepath):
+    """
+    Convert individual raw mass spectrometry file to mzML format.
+    
+    Creates Docker container, transfers file, executes msconvert conversion,
+    retrieves results, and moves to permanent storage location. Handles
+    platform-specific file operations and cleanup.
+    
+    Parameters:
+        filepath (Path): Pathlib Path object to raw data file
+        
+    Returns:
+        None
+    """
     global client,image,local_mem,command_list,save_mem
     file_path = str(filepath.absolute())
     cont_name = ("PW_container_" + os.path.basename(file_path))

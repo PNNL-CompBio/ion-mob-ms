@@ -89,11 +89,17 @@ The docs include Singularity + SLURM-oriented templates for running with a JSON 
 
 ## Repository layout (common entry points)
 
-- `GUI/` — desktop executables and GUI assets
-- `CLI/` — cloud/desktop command-line entry points
-- `HPC/` — Singularity + scheduler templates
-- `docs/` — documentation source
-- `test-data/` — example inputs for validating installation / ensuring that user data matches the expected inputs.
+- `CLI/` — Command-line interfaces for cloud/desktop execution (Python wrapper scripts)
+- `GUI/` — Graphical user interfaces and desktop executables (Tkinter-based GUI)
+- `HPC/` — High-performance computing variants using Singularity containers with SLURM templates
+- `docker/` — Docker utilities including container helper scripts and preprocessing utilities
+- `docs/` — Sphinx-based documentation source and configuration
+- `src/` — R scripts for specialized data processing (metadata extraction, annotation)
+- `test-data/` — Example datasets for testing and validation (SingleField, SLIM, SteppedField workflows)
+- `Post-hoc-scripts/` — R-based analysis templates for post-processing results
+- `web_dev/` — Web development components (Django REST framework backend, React frontend)
+
+See [ARCHITECTURE_GUIDE.md](ARCHITECTURE_GUIDE.md) for detailed module descriptions and [DIRECTORY_GUIDE.md](DIRECTORY_GUIDE.md) for navigating the codebase.
 
 ## Contributing
 

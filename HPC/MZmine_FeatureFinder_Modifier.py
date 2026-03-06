@@ -1,5 +1,29 @@
 #!/usr/bin/env python3.7
 
+"""
+MZmine_FeatureFinder_Modifier.py - MZmine Configuration Template Modifier
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    Utility script for modifying MZmine XML batch processing configuration
+    templates to process individual input files. Substitutes file-specific
+    input paths and R script parameters into configuration template placeholders
+    for per-file batch execution.
+    
+    This script is invoked during HPC-based MZmine processing to customize the
+    batch configuration XML file with the target file path before MZmine
+    execution. Also updates R script parameters for data parsing configuration.
+    
+    Key Features:
+    - Command-line argument parsing for input file specification
+    - XML template placeholder substitution
+    - R script parameter modification  
+    - In-place file modification using fileinput module
+    - Support for multiple file parameter templates
+"""
+
 import fileinput
 import argparse
 

@@ -1,7 +1,30 @@
 #!/usr/bin/env python3.9
 
-# Author: Jeremy Jacobson 
-# Email: jeremy.jacobson@pnnl.gov
+"""
+MZ_web.py - MZmine Web/MinIO Integration Module
+
+Author: Jeremy Jacobson
+Email: jeremy.jacobson@pnnl.gov
+
+Description:
+    Web service integration for MZmine feature detection using MinIO object
+    storage backend. Retrieves mzML input files from MinIO S3-compatible storage
+    and orchestrates Singularity container-based MZmine execution with results
+    management via MinIO. This module is in development and subject to API changes.
+    
+    This module bridges IMDASH web services with high-performance MZmine
+    processing infrastructure, enabling remote feature detection jobs with
+    asynchronous result retrieval from cloud storage.
+    
+    Key Features:
+    - MinIO S3-compatible object storage integration
+    - Remote file retrieval for processing
+    - Singularity container execution
+    - XML batch configuration modification
+    - Parallel feature detection processing
+    
+    Development Status: In active development - API and functionality subject to change
+"""
 
 import sys
 from minio import Minio
@@ -19,30 +42,20 @@ from spython.main import Client
 import glob
 
 
-#Set initial variables,
-#Determine local mem
-
-# sed -i 's/REPLACE_THIS_LINE/        <parameter name="Raw data file names"><file>\/Work\/III_mzML\/Dorrestein_GnPS_P14_G10_msms_POS_01Dec20_Fiji_Infusion_Min50_MA-csum-Min20_1.mzML<\/file><\/parameter>/' /Work/MZmine_FeatureFinder-batch.xml
-# bash /MZmine-2.41.2/startMZmine_Linux.sh /Work/MZmine_FeatureFinder-batch.xml
-
-
 def process(file):
     options = ["--bind", "/vagrant/dev_dockerized/drf/backend/mzMLData:/home/vagrant"]
     myinstance = Client.instance('../mzmine.sif', options=options)
-    print("Instance name: ",myinstance,"   ",file)
-    print("A")
-    Client.execute(myinstance,["mkdir","/home/vagrant/tmp"])
-    print("B")
-    Client.execute(myinstance,["cp","/Work/MZmine_FeatureFinder-batch.xml", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
-    print("C")
-    tmp ="7s/.*/" + """        <parameter name="Raw data file names"><file>\/home\/vagrant\/""" + file + """<\/file><\/parameter>""" + "/"
-    Client.execute(myinstance,["sed","-i",tmp, "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
-    print("D")
-    Client.execute(myinstance,["bash","/MZmine-2.41.2/startMZmine_Linux.sh", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
-    print("E")
-    # # #Client.execute(myinstance,["mv","/Work/IV_Features_csv/*.csv", "/home/vagrant"])
-    print("Instance complete: ",myinstance,"   ",file)
-    # Client.execute(myinstance,["ls /home/vagrant > /home/vagrant/LSOUT"])
+    print("Instance name: ", myinstance, "   ", file)
+    # Create temporary directory for processing
+    Client.execute(myinstance, ["mkdir", "/home/vagrant/tmp"])
+    # Copy batch configuration file to container
+    Client.execute(myinstance, ["cp", "/Work/MZmine_FeatureFinder-batch.xml", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    # Modify batch configuration with file-specific parameters
+    tmp = "7s/.*/" + """        <parameter name="Raw data file names"><file>\/home\/vagrant\/""" + file + """<\/file><\/parameter>""" + "/"
+    Client.execute(myinstance, ["sed", "-i", tmp, "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    # Execute MZmine feature detection
+    Client.execute(myinstance, ["bash", "/MZmine-2.41.2/startMZmine_Linux.sh", "/home/vagrant/MZmine_FeatureFinder-batch.xml"])
+    print("Instance complete: ", myinstance, "   ", file)
 
 def run():
     minio_client = Minio("localhost:9000", access_key="minio", secret_key="minio123", secure=False)
@@ -63,7 +76,6 @@ def run():
     pool.close()
     pool.join()
     print("All MZmine instances complete")
-    # mzML_files = [os.path.basename(x) for x in glob.glob('//vagrant/dev_dockerized/drf/backend/TEST_pipeline/PreProccessed_Data/*.mzML')]
     print("Cleaning residual files")
     print("Returning mzML files to minio")
     os.system("mkdir /vagrant/dev_dockerized/drf/backend/IV_Features_csv")
@@ -81,13 +93,8 @@ def run():
     minio_client.fput_object(
         "ion-mob-upload", "Feature_Zipfile", "/vagrant/dev_dockerized/drf/backend/Feature_Zipfile",
     )
-    print("aaa")
-    
     os.system("rm -r /vagrant/dev_dockerized/drf/backend/mzMLData* /vagrant/dev_dockerized/drf/backend/IV_Features_csv* /vagrant/dev_dockerized/drf/backend/Feature_Zipfile")
-    print("\n_________________\MZmine Complete.\n_________________\n")
-    # OUTPUT= tarfile.open("mzML_Zipfile","w")
-    # OUTPUT.add('//vagrant/dev_dockerized/drf/backend/TEST_pipeline/mzML_Files')
-    # OUTPUT.close()
+    print("\n_________________\nMZmine Complete.\n_________________\n")
 
 
 
@@ -163,45 +170,5 @@ def run():
 #     # print("local mem is: ", local_mem)
 #     os.makedirs("./III_mzML", exist_ok = True)
 
-    # file_list = list(pathlib.Path(raw_file_folder).glob('*'))
-    # print("TYPE:  ", type(file_list))
-
-    #test for mac
-
-    # file_list = list(pathlib.Path(raw_file_folder).glob('*'))
-
-    # # if singlefield...
-    # # if exptype == "Single":
-
-    # #If Single field data is not Singlefield (determined by suffix), this will do something.
-    # if exptype == "Single":
-    #     print('Note: Running Single-Field Workflow, any files that do not contain ms1 data will be removed.')
-    #     filtered_files =[]
-    #     for item in file_list:
-    #         ms_level = "no_suffix"
-    #         raw_item = "{}".format(item)
-    #         try:
-    #             print("raw_item is:", raw_item)
-    #             ms_level = re.search(r'\_([0-9]+)\.d', raw_item).group(1)
-    #             print("ms level of ", raw_item, " is ", ms_level)
-    #         except:
-    #             pass
-    #         if ms_level == "1" or ms_level == "no_suffix":
-    #             filtered_files.append(item)
-    #         else:
-    #             print("File not included due to ms level indicated by naming suffix (..._2-#).d,: ", item)
-    #     file_list = filtered_files
-
-    # #This limits containers to 10 at a time. This is important for running locally.
-    # #If this ever hits the cloud, "the limit does not exist!"
-    # #This generates subprocesses - each subprocess runs a container which runs one file.
-    # process_num = len(file_list)
-    # if process_num > 10:
-    #     process_num = 10
-
-    # pool = Pool(processes=process_num)
-    # pool.map(process, file_list)
-
-    # pool.close()
-    # pool.join()
-    # return local_mem
+    # NOTE: Old run_container function implementation replaced by current MinIO-based approach
+    # See git history for previous file list filtering and parallel processing logic
